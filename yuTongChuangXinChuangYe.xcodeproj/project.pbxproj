@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		F0110639216F15E10042F070 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F0110638216F15E10042F070 /* AppDelegate.m */; };
-		F011063C216F15E10042F070 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F011063B216F15E10042F070 /* ViewController.m */; };
 		F011063F216F15E10042F070 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F011063D216F15E10042F070 /* Main.storyboard */; };
 		F0110641216F15E40042F070 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0110640216F15E40042F070 /* Assets.xcassets */; };
 		F0110644216F15E40042F070 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0110642216F15E40042F070 /* LaunchScreen.storyboard */; };
 		F0110647216F15E40042F070 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F0110646216F15E40042F070 /* main.m */; };
 		F0110651216F15E40042F070 /* yuTongChuangXinChuangYeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F0110650216F15E40042F070 /* yuTongChuangXinChuangYeTests.m */; };
 		F011065C216F15E40042F070 /* yuTongChuangXinChuangYeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F011065B216F15E40042F070 /* yuTongChuangXinChuangYeUITests.m */; };
+		F011066C216F46000042F070 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F011066B216F46000042F070 /* LoginViewController.m */; };
+		F0110678216F4AF70042F070 /* RegistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0110677216F4AF70042F070 /* RegistViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,8 +39,6 @@
 		F0110634216F15E10042F070 /* yuTongChuangXinChuangYe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yuTongChuangXinChuangYe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0110637216F15E10042F070 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F0110638216F15E10042F070 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		F011063A216F15E10042F070 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		F011063B216F15E10042F070 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		F011063E216F15E10042F070 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F0110640216F15E40042F070 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F0110643216F15E40042F070 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -51,6 +50,11 @@
 		F0110657216F15E40042F070 /* yuTongChuangXinChuangYeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = yuTongChuangXinChuangYeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F011065B216F15E40042F070 /* yuTongChuangXinChuangYeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = yuTongChuangXinChuangYeUITests.m; sourceTree = "<group>"; };
 		F011065D216F15E40042F070 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F011066A216F46000042F070 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		F011066B216F46000042F070 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		F011066F216F46EC0042F070 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		F0110676216F4AF70042F070 /* RegistViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RegistViewController.h; sourceTree = "<group>"; };
+		F0110677216F4AF70042F070 /* RegistViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RegistViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,15 +105,23 @@
 		F0110636216F15E10042F070 /* yuTongChuangXinChuangYe */ = {
 			isa = PBXGroup;
 			children = (
+				F0110675216F4A780042F070 /* Images */,
+				F0110674216F4A5C0042F070 /* 咨询 */,
+				F0110673216F4A530042F070 /* 服务 */,
+				F0110672216F4A460042F070 /* 大厅 */,
+				F0110671216F4A370042F070 /* 华山论剑 */,
+				F0110670216F4A2C0042F070 /* 我的 */,
+				F011066E216F46AB0042F070 /* Tools */,
+				F011066D216F469B0042F070 /* ThirdParts */,
+				F0110669216F45D90042F070 /* Login&Regist */,
 				F0110637216F15E10042F070 /* AppDelegate.h */,
 				F0110638216F15E10042F070 /* AppDelegate.m */,
-				F011063A216F15E10042F070 /* ViewController.h */,
-				F011063B216F15E10042F070 /* ViewController.m */,
 				F011063D216F15E10042F070 /* Main.storyboard */,
 				F0110640216F15E40042F070 /* Assets.xcassets */,
 				F0110642216F15E40042F070 /* LaunchScreen.storyboard */,
 				F0110645216F15E40042F070 /* Info.plist */,
 				F0110646216F15E40042F070 /* main.m */,
+				F011066F216F46EC0042F070 /* PrefixHeader.pch */,
 			);
 			path = yuTongChuangXinChuangYe;
 			sourceTree = "<group>";
@@ -130,6 +142,73 @@
 				F011065D216F15E40042F070 /* Info.plist */,
 			);
 			path = yuTongChuangXinChuangYeUITests;
+			sourceTree = "<group>";
+		};
+		F0110669216F45D90042F070 /* Login&Regist */ = {
+			isa = PBXGroup;
+			children = (
+				F011066A216F46000042F070 /* LoginViewController.h */,
+				F011066B216F46000042F070 /* LoginViewController.m */,
+				F0110676216F4AF70042F070 /* RegistViewController.h */,
+				F0110677216F4AF70042F070 /* RegistViewController.m */,
+			);
+			path = "Login&Regist";
+			sourceTree = "<group>";
+		};
+		F011066D216F469B0042F070 /* ThirdParts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ThirdParts;
+			sourceTree = "<group>";
+		};
+		F011066E216F46AB0042F070 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		F0110670216F4A2C0042F070 /* 我的 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "我的";
+			sourceTree = "<group>";
+		};
+		F0110671216F4A370042F070 /* 华山论剑 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "华山论剑";
+			sourceTree = "<group>";
+		};
+		F0110672216F4A460042F070 /* 大厅 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "大厅";
+			sourceTree = "<group>";
+		};
+		F0110673216F4A530042F070 /* 服务 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "服务";
+			sourceTree = "<group>";
+		};
+		F0110674216F4A5C0042F070 /* 咨询 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "咨询";
+			sourceTree = "<group>";
+		};
+		F0110675216F4A780042F070 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -262,9 +341,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F011063C216F15E10042F070 /* ViewController.m in Sources */,
 				F0110647216F15E40042F070 /* main.m in Sources */,
 				F0110639216F15E10042F070 /* AppDelegate.m in Sources */,
+				F0110678216F4AF70042F070 /* RegistViewController.m in Sources */,
+				F011066C216F46000042F070 /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,14 +517,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C477DVDLMR;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/yuTongChuangXinChuangYe/PrefixHeader.pch";
 				INFOPLIST_FILE = yuTongChuangXinChuangYe/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiyeji.yuTongChuangXinChuangYe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -454,14 +537,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C477DVDLMR;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/yuTongChuangXinChuangYe/PrefixHeader.pch";
 				INFOPLIST_FILE = yuTongChuangXinChuangYe/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiyeji.yuTongChuangXinChuangYe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
