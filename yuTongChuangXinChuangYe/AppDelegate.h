@@ -7,12 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "RDVTabBarController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong,nonatomic) RDVTabBarController *tabBarController;
 
+-(void)setupViewControllers;
+- (void)displayLoginVC;
 
 @end
 

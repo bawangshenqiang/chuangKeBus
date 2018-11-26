@@ -7,26 +7,262 @@
 //
 
 #import "AppDelegate.h"
+#import "LoginViewController.h"
+#import "InformationFirstViewController.h"
+#import "ServeFirstViewController.h"
+#import "HallFirstViewController.h"
+#import "HuaShanFightViewController.h"
+#import "MyInfoViewController.h"
+#import "RDVTabBarItem.h"
 
+#import <AVFoundation/AVFoundation.h>
 
-@interface AppDelegate ()
+#import "lzhThirdPartLoginClass.h"
+#import "WXApi.h"
+
+#import "JPUSHService.h"
+// iOS10注册APNs所需头文件
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+#import <UserNotifications/UserNotifications.h>
+#endif
+
+/** 接收到消息的标记 */
+extern BOOL receiveMessage;
+/** 推送设置里面的开关控制 */
+BOOL receiveComment;
+BOOL receivePraise;
+BOOL collected;
+
+@interface AppDelegate ()<WXApiDelegate,JPUSHRegisterDelegate>
 
 @end
 
 @implementation AppDelegate
 
+static NSString *appKey = @"786ccf4ff91944dd7f2970c2";
+static NSString *channel = @"";//@"Ad Hoc",@"App Store";
+static BOOL isProduction = NO;//YES//NO
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    
+    if (@available(iOS 11.0, *)) {
+        UITableView.appearance.estimatedRowHeight = 0;
+        UITableView.appearance.estimatedSectionFooterHeight = 0;
+        UITableView.appearance.estimatedSectionHeaderHeight = 0;
+    }
+    //控制推送设置
+    NSArray *pushArr=[[NSUserDefaults standardUserDefaults] objectForKey:@"pushArr"];
+    if (pushArr==nil) {
+        NSMutableArray *mutaArr=[NSMutableArray arrayWithObjects:@"comment",@"praise",@"collect", nil];
+        [[NSUserDefaults standardUserDefaults] setObject:mutaArr forKey:@"pushArr"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    NSArray *arr=[[NSUserDefaults standardUserDefaults] objectForKey:@"pushArr"];
+    if ([arr containsObject:@"comment"]) {
+        receiveComment=YES;
+    }else{
+        receiveComment=NO;
+    }
+    if ([arr containsObject:@"praise"]) {
+        receivePraise=YES;
+    }else{
+        receivePraise=NO;
+    }
+    if ([arr containsObject:@"collect"]) {
+        collected=YES;
+    }else{
+        collected=NO;
+    }
+    
+    //极光推送
+    JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
+    entity.types = JPAuthorizationOptionNone|JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSound;
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+        // 可以添加自定义categories
+        // NSSet<UNNotificationCategory *> *categories for iOS10 or later
+        // NSSet<UIUserNotificationCategory *> *categories for iOS8 and iOS9
+    }
+    [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
+    
+    // notice: 2.1.5版本的SDK新增的注册方法，改成可上报IDFA，如果没有使用IDFA直接传nil
+    // 如需继续使用pushConfig.plist文件声明appKey等配置内容，请依旧使用[JPUSHService setupWithOption:launchOptions]方式初始化。
+    [JPUSHService setupWithOption:launchOptions appKey:appKey
+                          channel:channel
+                 apsForProduction:isProduction
+            advertisingIdentifier:nil];
+    
+    //2.1.9版本新增获取registration id block接口。
+    [JPUSHService registrationIDCompletionHandler:^(int resCode, NSString *registrationID) {
+        if(resCode == 0){
+            //[SJTool showAlertWithText:@"成功"];
+            //NSLog(@"registrationID获取成功：%@",registrationID);
+            [[NSUserDefaults standardUserDefaults] setObject:registrationID forKey:@"RegistID"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }else{
+        //uid: 15780924909
+        //registrationID:1114a89792817d226ec
+            NSLog(@"registrationID获取失败，code：%d",resCode);
+        }
+    }];
+    //极光自定义消息必须实现
+    //NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    //[defaultCenter addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
+    
+    // iOS 10以下，杀死应用后重新进入程序
+    NSDictionary* remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (remoteNotification ==nil) {
+        //1.点击icon进入应用
+        
+    }else{
+        //2.点击通知消息进入应用
+        receiveMessage=YES;
+        if ([remoteNotification[@"module"] isEqualToString:@""]) {
+            
+        }
+    }
+    //
+    [self customNaviBar];
+    
+    [self setupViewControllers];
+    
+    
+    [lzhThirdPartLoginClass initThirdPartyLogin:self];
     
     
     return YES;
+}
+//9.0前的方法，为了适配低版本 保留
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    
+    return [WXApi handleOpenURL:url delegate:self];
+}
+-(BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options{
+    
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
+-(void)setupViewControllers{
+    
+    InformationFirstViewController *homeVC=[[InformationFirstViewController alloc]init];
+    UINavigationController *homeNavi=[[UINavigationController alloc]initWithRootViewController:homeVC];
+    
+    ServeFirstViewController *openLotteryVC = [[ServeFirstViewController alloc] init];
+    UINavigationController *openLotteryNavi=[[UINavigationController alloc]initWithRootViewController:openLotteryVC];
+    
+    HallFirstViewController *hallVC=[[HallFirstViewController alloc]init];
+    UINavigationController *hallNavi=[[UINavigationController alloc]initWithRootViewController:hallVC];
+    
+    HuaShanFightViewController *guessHappyVC=[[HuaShanFightViewController alloc]init];
+    UINavigationController *guessHappyNavi=[[UINavigationController alloc]initWithRootViewController:guessHappyVC];
+    
+    MyInfoViewController *userInfoVC = [[MyInfoViewController alloc] init];
+    UINavigationController *userInfoNavi=[[UINavigationController alloc]initWithRootViewController:userInfoVC];
+    
+    
+    
+    self.tabBarController = [[RDVTabBarController alloc] init];
+    
+    [self.tabBarController setViewControllers:@[homeNavi,openLotteryNavi,hallNavi,guessHappyNavi,userInfoNavi]];
+    [self.tabBarController tabBar].backgroundView.backgroundColor=[UIColor whiteColor];
+    self.tabBarController.selectedIndex=2;
+    [self customizeTabBarForController:self.tabBarController];
+    self.window.rootViewController=self.tabBarController;
+}
+- (void)displayLoginVC{
+    LoginViewController *loginVC = [[LoginViewController alloc]init];
+    UINavigationController *loginNavi=[[UINavigationController alloc]initWithRootViewController:loginVC];
+    self.window.rootViewController=loginNavi;
+}
+
+
+-(void)customizeTabBarForController:(RDVTabBarController *)tabBarController{
+    
+    if (IsIphoneX_series) {
+        [tabBarController.tabBar setHeight:83];
+    }else{
+        [tabBarController.tabBar setHeight:49];
+    }
+    
+    
+    UIImage *finishedImage = [UIImage imageNamed:@"tabbar_selected_background"];
+    UIImage *unfinishedImage = [UIImage imageNamed:@"tabbar_normal_background"];
+    NSArray *tabBarItemImages = @[@"hall_information", @"hall_serve", @"hall_hall",@"hall_huashan",@"hall_mine"];
+    NSArray *tabBarItemTitles = @[@"资讯", @"服务",@"大厅",@"华山论剑",@"我的"];
+    NSDictionary *unSelectedTitle=@{NSFontAttributeName: [UIFont systemFontOfSize:12],
+                                    NSForegroundColorAttributeName: [UIColor colorWithHexString:@"#989898"]};
+    NSDictionary *selectedTitle=@{NSFontAttributeName: [UIFont systemFontOfSize:12],
+                                  NSForegroundColorAttributeName: [UIColor colorWithHexString:@"#068ee1"]};
+    
+    NSInteger index = 0;
+    
+    for (RDVTabBarItem *item in [[tabBarController tabBar] items]) {
+        
+        [item setBackgroundSelectedImage:finishedImage withUnselectedImage:unfinishedImage];
+        
+        UIImage *selectedimage = [UIImage imageNamed:[NSString stringWithFormat:@"%@_nor",
+                                                      [tabBarItemImages objectAtIndex:index]]];
+        UIImage *unselectedimage = [UIImage imageNamed:[NSString stringWithFormat:@"%@",
+                                                        [tabBarItemImages objectAtIndex:index]]];
+        [item setFinishedSelectedImage:selectedimage withFinishedUnselectedImage:unselectedimage];
+        
+        item.unselectedTitleAttributes=unSelectedTitle;
+        item.selectedTitleAttributes=selectedTitle;
+        
+        [item setTitle:[tabBarItemTitles objectAtIndex:index]];
+        
+        
+        index++;
+    }
+    
+    
+    
+}
+
+-(void)customNaviBar{
+    
+    NSDictionary *textAttributes = @{
+                                     
+                                     NSFontAttributeName : [UIFont systemFontOfSize:20],
+                                     
+                                     NSForegroundColorAttributeName : [UIColor whiteColor]
+                                     
+                                     };//[UIColor blackColor]
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:textAttributes];
+    
+    //返回按钮的箭头颜色
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    
+    //导航栏的背景色
+    [[UINavigationBar appearance] setBarTintColor:kThemeColor];//kThemeColor//[UIColor whiteColor]
+    [[UINavigationBar appearance] setTranslucent:NO];
+    
+    //调整返回按钮当中文字的位置.（我们只要返回按钮的那个图片，但是不要上面的文字，移走文字就好了）
+    //UIBarButtonItem *item = [UIBarButtonItem appearance];
+    //[item setBackButtonTitlePositionAdjustment:UIOffsetMake(0, -(kStatusBarHeight+44)) forBarMetrics:UIBarMetricsDefault];
+    [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-1000, 0) forBarMetrics:UIBarMetricsDefault];
+    
+    //去掉下边的线
+    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc]init] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+    
+    //状态条白色字体
+    //[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
 }
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+    [application setApplicationIconBadgeNumber:0];
+    [JPUSHService resetBadge];
 }
 
 
@@ -48,6 +284,130 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+//极光自定义消息必须实现
+//- (void)networkDidReceiveMessage:(NSNotification *)notification {
+//    NSDictionary * userInfo = [notification userInfo];
+//    NSString *content = [userInfo valueForKey:@"content"];
+//    NSString *messageID = [userInfo valueForKey:@"_j_msgid"];
+//    NSDictionary *extras = [userInfo valueForKey:@"extras"];
+//    NSString *customizeField1 = [extras valueForKey:@"module"]; //服务端传递的 Extras 附加字段，key 是自己定义的
+//    NSLog(@"Extras 附加字段:module=%@",customizeField1);
+//}
+
+
+- (void)application:(UIApplication *)application
+didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    
+    /// Required - 注册 DeviceToken
+    [JPUSHService registerDeviceToken:deviceToken];
+}
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    //Optional
+    NSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
+}
+#pragma mark- JPUSHRegisterDelegate
+
+// iOS 12 Support
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center openSettingsForNotification:(UNNotification *)notification API_AVAILABLE(ios(12.0)){
+    
+    receiveMessage=YES;
+    
+    if (notification && [notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        //从通知界面直接进入应用
+        
+    }else{
+        //从通知设置界面进入应用
+        
+    }
+    
+    [JPUSHService resetBadge];
+}
+// iOS 10 Support
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler  API_AVAILABLE(ios(10.0)){
+    // Required
+    NSDictionary * userInfo = notification.request.content.userInfo;
+    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        [JPUSHService handleRemoteNotification:userInfo];
+        
+        NSLog(@"iOS10 前台收到远程通知:%@", userInfo);
+        
+        //RDVTabBarController *rdvVC=(RDVTabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        //UINavigationController *selectVC =(UINavigationController *)rdvVC.selectedViewController;
+        
+        receiveMessage=YES;
+        
+        if([Account sharedAccount]){
+            [Account sharedAccount].message++;
+        }
+        
+    }
+    completionHandler(UNNotificationPresentationOptionSound);
+    [JPUSHService resetBadge];
+}
+
+// iOS 10 Support
+/// 程序运行于前台，后台 或杀死 点击推送通知 都会走这个方法
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler  API_AVAILABLE(ios(10.0)){
+    
+    NSDictionary * userInfo = response.notification.request.content.userInfo;
+    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        
+        [JPUSHService handleRemoteNotification:userInfo];
+        NSLog(@"iOS10 收到远程通知:%@", userInfo);
+        receiveMessage=YES;
+        
+        NSArray *pushArr=[[NSUserDefaults standardUserDefaults] objectForKey:@"pushArr"];
+        if([userInfo[@"module"] isEqualToString:@"comment"]&&[pushArr containsObject:@"comment"]){
+        }
+        if([userInfo[@"module"] isEqualToString:@"praise"]&&[pushArr containsObject:@"praise"]){
+        }
+        if([userInfo[@"module"] isEqualToString:@"collect"]&&[pushArr containsObject:@"collect"]){
+        }
+    }
+    
+    [JPUSHService resetBadge];
+    
+    completionHandler();  // 系统要求执行这个方法
+    
+//    {
+//        "_j_business" = 1;
+//        "_j_msgid" = 9007199992917938;
+//        "_j_uid" = 15780924909;
+//        aps =     {
+//            alert = "\U6d4b\U8bd5222";
+//            badge = 1;
+//            sound = default;
+//        };
+//        module = project;
+//    }
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    
+    // Required, iOS 7 Support
+    [JPUSHService handleRemoteNotification:userInfo];
+    
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 10.0) {
+        NSLog(@"iOS 7以上 10以下 系统收到通知:%@", [SJTool logDic:userInfo]);
+        
+        receiveMessage=YES;
+        if (application.applicationState==UIApplicationStateActive) {
+            // iOS 10以下，前台
+            
+        }else{
+            // iOS 10以下，后台，且进程未终结
+            
+        }
+        if([Account sharedAccount]){
+            [Account sharedAccount].message++;
+        }
+        
+    }
+    
+    [JPUSHService resetBadge];
+    
+    completionHandler(UIBackgroundFetchResultNewData);
 }
 
 

@@ -1,0 +1,6 @@
+framework module Pods_yuTongChuangXinChuangYe {
+  umbrella header "Pods-yuTongChuangXinChuangYe-umbrella.h"
+
+  export *
+  module * { export * }
+}

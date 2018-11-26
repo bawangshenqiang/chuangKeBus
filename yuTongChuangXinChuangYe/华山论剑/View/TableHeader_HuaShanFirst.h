@@ -1,0 +1,18 @@
+//
+//  TableHeader_HuaShanFirst.h
+//  yuTongChuangXinChuangYe
+//
+//  Created by Vdigit on 2018/10/17.
+//  Copyright © 2018年 qiyeji. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface TableHeader_HuaShanFirst : UIView
+@property(nonatomic,copy)void (^fourBtnClickBlock)(NSInteger index);
+
+@end
+
+NS_ASSUME_NONNULL_END
