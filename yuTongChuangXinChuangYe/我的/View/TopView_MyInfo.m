@@ -35,6 +35,7 @@
         [self.headerIV addGestureRecognizer:tap];
         [self addSubview:self.headerIV];
         //
+        
         self.nameLab=[[UILabel alloc]initWithFrame:CGRectMake(self.headerIV.right+10, self.headerIV.y, 180, 20)];
         self.nameLab.backgroundColor=[UIColor clearColor];
         self.nameLab.center=CGPointMake(self.nameLab.centerX, self.headerIV.centerY);
