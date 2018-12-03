@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)UIButton *cancleBtn;
 @property(nonatomic,strong)UIButton *sureBtn;
 @property(nonatomic,copy)void (^sureBtnBlock)(void);
+
+@property(nonatomic,strong)CAGradientLayer *gradientLayer;
+
 @end
 
 NS_ASSUME_NONNULL_END

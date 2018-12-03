@@ -147,8 +147,8 @@
                 self.itunesURLString=@"";
                 self.newestVersionLab.text=@"已更新至最新版本";
                 [self.updateBtn setTitle:@"已是最新版本" forState:UIControlStateNormal];
-                [SVProgressHUD setMinimumDismissTimeInterval:1];
-                [SVProgressHUD showErrorWithStatus:@"查询失败！" ];
+                //[SVProgressHUD setMinimumDismissTimeInterval:1];
+                //[SVProgressHUD showErrorWithStatus:@"查询失败！" ];
             }
         }else{
             
@@ -156,8 +156,8 @@
             self.itunesURLString=@"";
             self.newestVersionLab.text=@"已更新至最新版本";
             [self.updateBtn setTitle:@"已是最新版本" forState:UIControlStateNormal];
-            [SVProgressHUD setMinimumDismissTimeInterval:1];
-            [SVProgressHUD showErrorWithStatus:@"查询失败！" ];
+            //[SVProgressHUD setMinimumDismissTimeInterval:1];
+            //[SVProgressHUD showErrorWithStatus:@"查询失败！" ];
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

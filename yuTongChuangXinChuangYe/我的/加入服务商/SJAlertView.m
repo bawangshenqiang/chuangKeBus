@@ -22,19 +22,22 @@
         self.bigView=[[UIView alloc]initWithFrame:CGRectMake(60, 0, kScreenWidth-120, frame.size.height)];
         self.bigView.center=CGPointMake(self.bigView.centerX, kScreenHeight/2);
         
+        //
+        self.gradientLayer = [CAGradientLayer layer];
+        self.gradientLayer.colors = @[(__bridge id)[UIColor colorWithHexString:@"0384dd"].CGColor, (__bridge id)[UIColor colorWithHexString:@"0ca4eb"].CGColor, (__bridge id)[UIColor colorWithHexString:@"0384dd"].CGColor];
+        self.gradientLayer.locations = @[@0.0, @0.5, @1.0];
+        self.gradientLayer.startPoint = CGPointMake(0, 0);
+        self.gradientLayer.endPoint = CGPointMake(1.0, 0);
+        self.gradientLayer.frame = self.bigView.frame;
+        self.gradientLayer.cornerRadius=5;
+        self.gradientLayer.masksToBounds=YES;
+        [self.shadeView.layer addSublayer:self.gradientLayer];
+        
         self.bigView.layer.cornerRadius=5;
         self.bigView.layer.masksToBounds=YES;
-        self.bigView.backgroundColor=kThemeColor;
+        //self.bigView.backgroundColor=kThemeColor;
         [self.shadeView addSubview:self.bigView];
         
-        //
-//        CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-//        gradientLayer.colors = @[(__bridge id)[UIColor colorWithHexString:@"0384dd"].CGColor, (__bridge id)[UIColor colorWithHexString:@"0ca4eb"].CGColor, (__bridge id)[UIColor colorWithHexString:@"0384dd"].CGColor];
-//        gradientLayer.locations = @[@0.0, @0.5, @1.0];
-//        gradientLayer.startPoint = CGPointMake(0, 0);
-//        gradientLayer.endPoint = CGPointMake(1.0, 0);
-//        gradientLayer.frame = self.bigView.frame;
-//        [self.layer addSublayer:gradientLayer];
         //
         self.topLab=[[UILabel alloc]initWithFrame:CGRectMake(15, 0, self.bigView.width-25, 40)];
         self.topLab.backgroundColor=[UIColor clearColor];
@@ -76,9 +79,8 @@
         [self.sureBtn addTarget:self action:@selector(sureClick) forControlEvents:UIControlEventTouchUpInside];
         [self.bigView addSubview:self.sureBtn];
         
-        
-        
-        self.bigView.transform=CGAffineTransformMakeScale(0.01, 0.01);
+        //
+        self.shadeView.transform=CGAffineTransformMakeScale(0.01, 0.01);
         [self show];
     }
     return self;
@@ -94,15 +96,17 @@
     [self dismiss];
 }
 -(void)show{
+    
     [UIView animateWithDuration:0.5 animations:^{
-        self.bigView.transform=CGAffineTransformMakeScale(1, 1);
+        self.shadeView.transform=CGAffineTransformMakeScale(1, 1);
+        
     }];
 }
 -(void)dismiss{
     [UIView animateWithDuration:0.5 animations:^{
-        self.bigView.transform=CGAffineTransformIdentity;
-        
+        self.shadeView.transform=CGAffineTransformMakeScale(0.01, 0.01);
     } completion:^(BOOL finished) {
+        [self.gradientLayer removeFromSuperlayer];
         [self.bigView removeFromSuperview];
         [self.shadeView removeFromSuperview];
     }];

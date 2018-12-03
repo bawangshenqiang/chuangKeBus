@@ -54,11 +54,12 @@
     UILabel *leftLab=[[UILabel alloc]initWithFrame:CGRectMake(10, 0, 100, 40)];
     leftLab.textColor=[UIColor colorWithHexString:@"#323232"];
     leftLab.text=@"反馈类型";
-    leftLab.font=[UIFont systemFontOfSize:15];
+    leftLab.font=[UIFont systemFontOfSize:16];
     [scrollView addSubview:leftLab];
     //
     self.choseStyle=[[LMJDropdownMenu alloc]init];
     self.choseStyle.frame=CGRectMake(scrollView.width-110, 0, 100, 40);
+    self.choseStyle.mainBtn.titleLabel.font=[UIFont systemFontOfSize:16];
     [self.choseStyle setMenuTitles:@[@"使用问题",@"产品建议",@"BUG提交"] rowHeight:40];
     self.choseStyle.delegate = self;
     [scrollView addSubview:self.choseStyle];
@@ -68,7 +69,7 @@
     [scrollView addSubview:line1];
     //
     self.textView=[[UITextView alloc]initWithFrame:CGRectMake(10, line1.bottom+10, scrollView.width-20, 200)];
-    self.textView.font=[UIFont systemFontOfSize:14];
+    self.textView.font=[UIFont systemFontOfSize:16];
     self.textView.textColor=[UIColor colorWithHexString:@"#989898"];
     UILabel *placeHolderLabel = [[UILabel alloc] init];
     placeHolderLabel.text = @"请详细描述您对产品的建议或遇到的问题";
@@ -76,7 +77,7 @@
     placeHolderLabel.textColor = [UIColor lightGrayColor];
     [placeHolderLabel sizeToFit];
     [self.textView addSubview:placeHolderLabel];
-    placeHolderLabel.font = [UIFont systemFontOfSize:14];
+    placeHolderLabel.font = [UIFont systemFontOfSize:16];
     [_textView setValue:placeHolderLabel forKey:@"_placeholderLabel"];
     [self.textView setInputAccessoryView:[SJTool backToolBarView]];
     [scrollView addSubview:self.textView];
