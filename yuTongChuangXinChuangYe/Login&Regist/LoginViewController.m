@@ -166,6 +166,7 @@ extern BOOL receiveMessage;
          {
              
              
+             
              NSLog(@"uid=%@",user.uid);
              NSLog(@"%@",user.credential);
              NSLog(@"token=%@",user.credential.token);
@@ -191,11 +192,15 @@ extern BOOL receiveMessage;
 
 -(void)thirdPartyLogin:(NSString*)openId cName:(NSString *)cname headImg:(NSString *)headImg{
     
+    
      NSDictionary *param=@{@"openid":openId,@"ip":@""};
      [TDHttpTools loginWXWithParams:param success:^(id response) {
          NSDictionary *dic=[SJTool dictionaryWithResponse:response];
          NSLog(@"%@",[SJTool logDic:dic]);
          if ([dic[@"code"] intValue]==200) {
+             
+             [ShareSDK cancelAuthorize:SSDKPlatformTypeWechat];
+             
              NSString *token=dic[@"data"][@"token"];
              NSNumber *userId=dic[@"data"][@"userId"];
              [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"TOKEN"];

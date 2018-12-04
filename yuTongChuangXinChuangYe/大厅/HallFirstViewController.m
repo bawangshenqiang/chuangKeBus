@@ -227,7 +227,7 @@ BOOL receiveMessage;
     return _tableView;
 }
 -(UIView *)head{
-    self.header=[[TableHeader_HallFirst alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 238*kBaseHeight)];
+    self.header=[[TableHeader_HallFirst alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 235*kBaseHeight)];//238*kBaseHeight
     self.header.cycleScrollView.delegate=self;
     WS(weakSelf);
     [self.header setThreeBtnClickBlock:^(NSInteger index) {

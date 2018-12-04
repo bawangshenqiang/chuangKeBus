@@ -18,7 +18,7 @@
         [self addSubview:topBackground];
        //
         UIView *bottomBackground=[[UIView alloc]initWithFrame:CGRectMake(0, topBackground.bottom, frame.size.width, 44)];
-        bottomBackground.backgroundColor=[UIColor whiteColor];
+        bottomBackground.backgroundColor=kThemeColor;//[UIColor whiteColor];
         [self addSubview:bottomBackground];
         //
         UIButton *outBig=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -30,7 +30,7 @@
         outBig.titleLabel.font=[UIFont systemFontOfSize:13];
         
         outBig.backgroundColor=RGBAColor(247, 247, 247, 1);
-        outBig.layer.cornerRadius=5;
+        outBig.layer.cornerRadius=2;
         outBig.layer.masksToBounds=YES;
         [outBig addTarget:self action:@selector(choseClick) forControlEvents:UIControlEventTouchUpInside];
         [bottomBackground addSubview:outBig];
@@ -57,8 +57,8 @@
         outBig.imageView.sd_layout
         .leftSpaceToView(outBig, 8)
         .topSpaceToView(outBig, 8)
-        .widthIs(13)
-        .heightIs(13);
+        .widthIs(14)
+        .heightIs(14);
         
         outBig.titleLabel.sd_layout
         .leftSpaceToView(outBig.imageView, 9)
