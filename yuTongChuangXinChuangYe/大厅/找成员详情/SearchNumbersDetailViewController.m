@@ -11,6 +11,7 @@
 #import "SearchNumbersDetailBottomView.h"
 #import "SearchNumbersViewController.h"
 #import "LoginViewController.h"
+#import "CaredMemberViewController.h"
 
 @interface SearchNumbersDetailViewController ()<WKNavigationDelegate>
 
@@ -141,7 +142,18 @@
             UINavigationController *loginNavi=[[UINavigationController alloc]initWithRootViewController:loginVC];
             [weakSelf presentViewController:loginNavi animated:YES completion:nil];
         }else{
-            [weakSelf caredATeam];
+            CaredMemberViewController *caredVC=[CaredMemberViewController new];
+            caredVC.Id=weakSelf.Id;
+            UINavigationController *navi=[[UINavigationController alloc]initWithRootViewController:caredVC];
+            [caredVC setCallBackBlock:^{
+                if (weakSelf.bottomView.interestBtn.isSelected==NO) {
+                    weakSelf.bottomView.interestBtn.selected=YES;
+                    int count=[weakSelf.bottomView.interestLab.text intValue];
+                    weakSelf.bottomView.interestLab.text=[NSString stringWithFormat:@"%d",count+1];
+                }
+            }];
+            [weakSelf presentViewController:navi animated:YES completion:nil];
+            //[weakSelf caredATeam];
         }
     }];
     [self.bottomView setSharedBtnBlock:^{

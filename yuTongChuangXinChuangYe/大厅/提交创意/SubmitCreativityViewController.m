@@ -116,7 +116,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         return;
     }
     photo=[NSString stringWithFormat:@"data@image/jpg;base64,%@",photo];
-    NSDictionary *param=@{@"id":@(self.ideaId),@"user_token":user_token,@"title":cell0.textField.text,@"description":cell1.textField.text,@"background":self.background,@"services":self.services,@"patterns":self.patterns,@"categoryId":@(self.catogaryID),@"cover":photo,@"linker":cell1_0.textField.text,@"linkphone":cell1_1.textField.text,@"ispublic":@(0)};
+    NSDictionary *param=@{@"id":@(self.ideaId),@"user_token":user_token,@"title":cell0.textField.text,@"description":cell1.textField.text,@"background":self.background,@"services":self.services,@"patterns":self.patterns,@"categoryId":@(self.catogaryID),@"cover":photo,@"linker":cell1_0.textField.text,@"linkphone":cell1_1.textField.text,@"ispublic":@(1)};
     
     [TDHttpTools submitCreativityWithParams:param success:^(id response) {
         NSDictionary *dic=[SJTool dictionaryWithResponse:response];
@@ -241,12 +241,28 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 }
                 if (indexPath.row==2) {
                     cell.textLabel.text=@"创意背景";
+                    if (self.background.length) {
+                        cell.detailTextLabel.text=@"已完成";
+                    }else{
+                        cell.detailTextLabel.text=@"待填写";
+                    }
                 }else if (indexPath.row==3){
                     cell.textLabel.text=@"产品介绍";
+                    if (self.services.length) {
+                        cell.detailTextLabel.text=@"已完成";
+                    }else{
+                        cell.detailTextLabel.text=@"待填写";
+                    }
                 }else{
                     cell.textLabel.text=@"商业模式";
+                    if (self.patterns.length) {
+                        cell.detailTextLabel.text=@"已完成";
+                    }else{
+                        cell.detailTextLabel.text=@"待填写";
+                    }
                 }
                 cell.textLabel.font=[UIFont systemFontOfSize:16];
+                
                 return cell;
             }
                 break;
@@ -301,8 +317,9 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         UITableViewHeaderFooterView *header=[tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
         if (!header) {
             header=[[UITableViewHeaderFooterView alloc]initWithReuseIdentifier:@"header"];
-            header.contentView.backgroundColor=[UIColor whiteColor];
-            UILabel *lab=[[UILabel alloc]initWithFrame:CGRectMake(15, 0, kScreenWidth-30, 20)];
+            header.contentView.backgroundColor=kBackgroundColor;//[UIColor whiteColor];
+            UILabel *lab=[[UILabel alloc]initWithFrame:CGRectMake(15, 5, kScreenWidth-30, 20)];
+            lab.backgroundColor=kBackgroundColor;
             lab.font=[UIFont systemFontOfSize:12];
             lab.textColor=[UIColor colorWithHexString:@"#989898"];
             lab.text=@"以下内容将严格保密，不做展示";
@@ -314,14 +331,14 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     return head;
 }
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
-    view.tintColor=[UIColor whiteColor];
+    view.tintColor=kBackgroundColor;//[UIColor whiteColor];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     if (section==0) {
         return 0.01;
     }
-    return 20;
+    return 30;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -340,6 +357,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 WS(weakSelf);
                 [editVC setCallBackBlock:^(NSString * _Nonnull string) {
                     weakSelf.background=string;
+                    [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 }];
                 [self.navigationController pushViewController:editVC animated:YES];
             }
@@ -353,6 +371,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 WS(weakSelf);
                 [editVC setCallBackBlock:^(NSString * _Nonnull string) {
                     weakSelf.services=string;
+                    [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 }];
                 [self.navigationController pushViewController:editVC animated:YES];
             }
@@ -366,6 +385,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 WS(weakSelf);
                 [editVC setCallBackBlock:^(NSString * _Nonnull string) {
                     weakSelf.patterns=string;
+                    [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 }];
                 [self.navigationController pushViewController:editVC animated:YES];
             }

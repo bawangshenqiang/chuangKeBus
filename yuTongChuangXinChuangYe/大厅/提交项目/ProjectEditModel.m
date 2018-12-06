@@ -21,6 +21,9 @@
         self.content=dic[@"content"];
         self.linker=dic[@"linker"];
         self.linkphone=dic[@"linkphone"];
+        
+        self.status=[dic[@"status"] intValue];
+        self.username=dic[@"username"];
     }
     return self;
 }

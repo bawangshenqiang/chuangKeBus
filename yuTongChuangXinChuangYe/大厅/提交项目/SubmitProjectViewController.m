@@ -27,7 +27,9 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 @property(nonatomic,strong)ProjectEditModel *model;
 @property(nonatomic,strong)NSString *content;
 @property(nonatomic,strong)CustomPickerView *appealPickerView;
-//@property(nonatomic,assign)int appeal;
+@property(nonatomic,assign)int status;
+@property(nonatomic,strong)NSString *username;
+
 @end
 
 @implementation SubmitProjectViewController
@@ -37,7 +39,8 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     self.view.backgroundColor=[UIColor whiteColor];
     self.title=@"提交你的项目";
     self.content=@"";
-    //self.appeal=0;
+    self.status=0;
+    self.username=@"";
     
     [self.view addSubview:self.tableView];
     //注册观察键盘的变化
@@ -60,6 +63,8 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 self.content=self.model.content;
                 //NSLog(@"%@",self.content);
                 self.catogaryID=self.model.categoryId;
+                self.status=self.model.status;
+                self.username=self.model.username;
             }else{
                 [SJTool showAlertWithText:dic[@"msg"]];
             }
@@ -110,7 +115,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     }
     photo=[NSString stringWithFormat:@"data@image/jpg;base64,%@",photo];
     
-    NSDictionary *param=@{@"id":@(self.projectId),@"user_token":user_token,@"title":cell0.textField.text,@"description":cell1.textField.text,@"content":self.content,@"appeal":cell2.textField.text,@"categoryId":@(self.catogaryID),@"cover":photo,@"linker":cell1_0.textField.text,@"linkphone":cell1_1.textField.text,@"ispublic":@(0),@"planname":@"",@"planfile":@""};
+    NSDictionary *param=@{@"id":@(self.projectId),@"user_token":user_token,@"title":cell0.textField.text,@"description":cell1.textField.text,@"content":self.content,@"appeal":cell2.textField.text,@"categoryId":@(self.catogaryID),@"cover":photo,@"linker":cell1_0.textField.text,@"linkphone":cell1_1.textField.text,@"planname":@"",@"planfile":@"",@"status":@(self.status),@"username":self.username};
     
     [TDHttpTools submitProjectWithParams:param success:^(id response) {
         NSDictionary *dic=[SJTool dictionaryWithResponse:response];

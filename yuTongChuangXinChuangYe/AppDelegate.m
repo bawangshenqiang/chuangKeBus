@@ -169,6 +169,9 @@ static BOOL isProduction = NO;//YES//NO
     self.tabBarController = [[RDVTabBarController alloc] init];
     
     [self.tabBarController setViewControllers:@[homeNavi,openLotteryNavi,hallNavi,guessHappyNavi,userInfoNavi]];
+    UIView *line=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 0.4)];
+    line.backgroundColor=RGBAColor(165, 165, 165, 0.5);
+    [[self.tabBarController tabBar].backgroundView addSubview:line];
     [self.tabBarController tabBar].backgroundView.backgroundColor=[UIColor whiteColor];
     self.tabBarController.selectedIndex=2;
     [self customizeTabBarForController:self.tabBarController];
@@ -190,8 +193,8 @@ static BOOL isProduction = NO;//YES//NO
     }
     
     
-    UIImage *finishedImage = [UIImage imageNamed:@"tabbar_selected_background"];
-    UIImage *unfinishedImage = [UIImage imageNamed:@"tabbar_normal_background"];
+    //UIImage *finishedImage = [UIImage imageNamed:@"tabbar_selected_background"];
+    //UIImage *unfinishedImage = [UIImage imageNamed:@"tabbar_normal_background"];
     NSArray *tabBarItemImages = @[@"hall_information", @"hall_serve", @"hall_hall",@"hall_huashan",@"hall_mine"];
     NSArray *tabBarItemTitles = @[@"资讯", @"服务",@"大厅",@"华山论剑",@"我的"];
     NSDictionary *unSelectedTitle=@{NSFontAttributeName: [UIFont systemFontOfSize:12],
@@ -203,7 +206,7 @@ static BOOL isProduction = NO;//YES//NO
     
     for (RDVTabBarItem *item in [[tabBarController tabBar] items]) {
         
-        [item setBackgroundSelectedImage:finishedImage withUnselectedImage:unfinishedImage];
+        //[item setBackgroundSelectedImage:finishedImage withUnselectedImage:unfinishedImage];
         
         UIImage *selectedimage = [UIImage imageNamed:[NSString stringWithFormat:@"%@_nor",
                                                       [tabBarItemImages objectAtIndex:index]]];

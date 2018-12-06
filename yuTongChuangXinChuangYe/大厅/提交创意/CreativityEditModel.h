@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *patterns;
 @property(nonatomic,strong)NSString *linker;
 @property(nonatomic,strong)NSString *linkphone;
+
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 @end
 

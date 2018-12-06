@@ -89,8 +89,10 @@
                 });
                 if (self.dataArr.count<=0) {
                     self.noDataView.hidden=NO;
+                    self.bottomBtn.hidden=NO;
                 }else{
                     self.noDataView.hidden=YES;
+                    self.bottomBtn.hidden=YES;
                 }
             } failure:^(NSError *error) {
                 NSLog(@"%@",error);
@@ -121,8 +123,10 @@
                 });
                 if (self.dataArr.count<=0) {
                     self.noDataView.hidden=NO;
+                    self.bottomBtn.hidden=NO;
                 }else{
                     self.noDataView.hidden=YES;
+                    self.bottomBtn.hidden=YES;
                 }
             } failure:^(NSError *error) {
                 NSLog(@"%@",error);
@@ -153,8 +157,10 @@
                 });
                 if (self.dataArr.count<=0) {
                     self.noDataView.hidden=NO;
+                    self.bottomBtn.hidden=NO;
                 }else{
                     self.noDataView.hidden=YES;
+                    self.bottomBtn.hidden=YES;
                 }
             } failure:^(NSError *error) {
                 NSLog(@"%@",error);
@@ -185,8 +191,10 @@
                 });
                 if (self.dataArr.count<=0) {
                     self.noDataView.hidden=NO;
+                    self.bottomBtn.hidden=NO;
                 }else{
                     self.noDataView.hidden=YES;
+                    self.bottomBtn.hidden=YES;
                 }
             } failure:^(NSError *error) {
                 NSLog(@"%@",error);
@@ -349,19 +357,20 @@
     self.bottomBtn.layer.shadowOpacity=0.5;
     self.bottomBtn.layer.shadowOffset=CGSizeMake(0, 2);
     [self.bottomBtn addTarget:self action:@selector(bottomClick) forControlEvents:UIControlEventTouchUpInside];
+    self.bottomBtn.hidden=YES;
     [self.view addSubview:self.bottomBtn];
     switch (self.index) {
         case 0:
             [self.bottomBtn setTitle:@"提交创意" forState:UIControlStateNormal];
             break;
         case 1:
-            [self.bottomBtn setTitle:@"提交新项目" forState:UIControlStateNormal];
+            [self.bottomBtn setTitle:@"提交项目" forState:UIControlStateNormal];
             break;
         case 2:
-            [self.bottomBtn setTitle:@"寻找新成员" forState:UIControlStateNormal];
+            [self.bottomBtn setTitle:@"寻找成员" forState:UIControlStateNormal];
             break;
         default:
-            [self.bottomBtn setTitle:@"提交新服务需求" forState:UIControlStateNormal];
+            [self.bottomBtn setTitle:@"提交服务需求" forState:UIControlStateNormal];
             break;
     }
     
@@ -384,13 +393,13 @@
             [self.bottomBtn setTitle:@"提交创意" forState:UIControlStateNormal];
             break;
         case 1:
-            [self.bottomBtn setTitle:@"提交新项目" forState:UIControlStateNormal];
+            [self.bottomBtn setTitle:@"提交项目" forState:UIControlStateNormal];
             break;
         case 2:
-            [self.bottomBtn setTitle:@"寻找新成员" forState:UIControlStateNormal];
+            [self.bottomBtn setTitle:@"寻找成员" forState:UIControlStateNormal];
             break;
         default:
-            [self.bottomBtn setTitle:@"提交新服务需求" forState:UIControlStateNormal];
+            [self.bottomBtn setTitle:@"提交服务需求" forState:UIControlStateNormal];
             break;
     }
     [self getNewDataWith:index];

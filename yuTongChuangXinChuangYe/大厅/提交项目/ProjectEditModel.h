@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *content;
 @property(nonatomic,strong)NSString *linker;
 @property(nonatomic,strong)NSString *linkphone;
+@property(nonatomic,assign)int status;
+@property(nonatomic,strong)NSString *username;
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 @end
 

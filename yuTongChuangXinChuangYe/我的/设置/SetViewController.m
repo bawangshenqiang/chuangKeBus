@@ -32,6 +32,8 @@
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    [self.tableView reloadData];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -52,6 +54,9 @@
     return _tableView;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if ([Account sharedAccount]==nil) {
+        return 2;
+    }
     return 3;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -214,6 +219,7 @@
             self.alertView=[[SJAlertView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 170)];
             self.alertView.topLab.text=@"退出登录";
             self.alertView.detailLab.text=@"确认要退出当前账号?";
+            WS(weakSelf);
             [self.alertView setSureBtnBlock:^{
                 NSLog(@"点击确认");
                 [[Account sharedAccount] logout];
@@ -225,7 +231,7 @@
                         NSLog(@"极光清除别名失败");
                     }
                 } seq:2];
-                
+                [weakSelf.tableView reloadData];
                 [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"TOKEN"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 [SJTool showAlertWithText:@"已退出登录"];

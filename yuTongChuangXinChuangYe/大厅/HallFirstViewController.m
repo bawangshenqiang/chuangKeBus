@@ -31,6 +31,7 @@
 #import "LoginViewController.h"
 #import "PolicyDetailViewController.h"
 #import "HotServeSecondCell_ServeFirst.h"
+#import "TodayHotCell_Hall.h"
 
 BOOL receiveMessage;
 
@@ -240,17 +241,57 @@ BOOL receiveMessage;
     return self.header;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 3;
+    return 4;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section==0) {
+        return 1;
+    }else if (section==1) {
         return 2;
+    }else{
+        return 3;
     }
-    return 3;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.section) {
         case 0:
+        {
+            static NSString *cellId1_0=@"cellIdentifier1_0";
+            TodayHotCell_Hall *cell=[tableView dequeueReusableCellWithIdentifier:cellId1_0];
+            if (!cell) {
+                cell=[[TodayHotCell_Hall alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId1_0];
+                cell.selectionStyle=UITableViewCellSelectionStyleNone;
+            }
+//            if (self.todayHotData.count>0) {
+//                NSMutableArray *arr=[NSMutableArray array];
+//                for (Hall_HomeTodayHotModel *model in self.todayHotData) {
+//                    [arr addObject:model.title];
+//                }
+//                cell.rollingLab.textArray=arr;
+//                cell.rollingLab.speed = 2;
+//
+//            }
+//
+//            [cell.rollingLab setLabelClickBlock:^(NSInteger index) {
+//                NSLog(@"%d",(int)index);
+//            }];
+            if (self.todayHotData.count>0) {
+                NSMutableArray *arr=[NSMutableArray array];
+                for (Hall_HomeTodayHotModel *model in self.todayHotData) {
+                    [arr addObject:model.title];
+                }
+                cell.scrollLab.textDataArr=arr;
+                [cell.scrollLab startScrollBottomToTop];
+            }
+            WS(weakSelf);
+            [cell.scrollLab setLabelClickBlock:^(NSInteger index) {
+                //NSLog(@"%d",(int)index);
+                [weakSelf todayHotJumpWith:weakSelf.todayHotData[index]];
+            }];
+            return cell;
+        }
+            break;
+        case 1:
         {
             if (indexPath.row==0) {
                 static NSString *cellId1_1=@"cellIdentifier1_1";
@@ -288,7 +329,7 @@ BOOL receiveMessage;
             }
         }
             break;
-        case 1:
+        case 2:
         {
             static NSString *cellId2=@"cellIdentifier2";
             HuaShanTitleCell_HallFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId2];
@@ -325,12 +366,14 @@ BOOL receiveMessage;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0) {
+        return 60;
+    }else if (indexPath.section==1) {
         if (indexPath.row==0) {
             return 85;
         }else{
             return 215;
         }
-    }else if (indexPath.section==1){
+    }else if (indexPath.section==2){
 //        NSArray *texts=@[@"《区块链金融大师班》————15亿准独角兽区块链创业团队领衔主讲",@"《区块链金融大师班》————15亿准独角兽区块链",@"《区块链金融大师班》————15亿准独角兽区块链创业团队领衔主讲《区块链金融大师班》————15亿准独角兽区块链创业团队领衔主讲《区块链金融大师班》————15亿准独角兽区块链创业团队领衔主讲"];
 //        CGFloat height=[tableView cellHeightForIndexPath:indexPath model:texts[indexPath.row] keyPath:@"titleText" cellClass:[HuaShanTitleCell_HallFirst class] contentViewWidth:kScreenWidth];
 //        return height;
@@ -344,15 +387,21 @@ BOOL receiveMessage;
     return 100;
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    SectionHeader_HallFirst *header=[tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
-    if (!header) {
-        header=[[SectionHeader_HallFirst alloc]initWithReuseIdentifier:@"header"];
+    if (section==0) {
+        UIView *view=[UIView new];
+        return view;
+    }else{
+        SectionHeader_HallFirst *header=[tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
+        if (!header) {
+            header=[[SectionHeader_HallFirst alloc]initWithReuseIdentifier:@"header"];
+        }
+        NSArray *images=@[@"hall_hottest",@"hall_forum",@"hall_star"];
+        NSArray *titles=@[@"今日最热",@"华山论剑",@"明星项目"];
+        header.leftIV.image=[UIImage imageNamed:images[section-1]];
+        header.titleLab.text=titles[section-1];
+        return header;
     }
-    NSArray *images=@[@"hall_hottest",@"hall_forum",@"hall_star"];
-    NSArray *titles=@[@"今日最热",@"华山论剑",@"明星项目"];
-    header.leftIV.image=[UIImage imageNamed:images[section]];
-    header.titleLab.text=titles[section];
-    return header;
+    
 }
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
     view.tintColor=kBackgroundColor;
@@ -361,6 +410,9 @@ BOOL receiveMessage;
     view.tintColor=kBackgroundColor;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (section==0) {
+        return 10;
+    }
     return 40;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -417,11 +469,13 @@ BOOL receiveMessage;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0) {
+        
+    }else if (indexPath.section==1) {
         if (indexPath.row==0) {
             Hall_HomeTodayHotModel *model=self.todayHotData.firstObject;
             [self todayHotJumpWith:model];
         }
-    }else if (indexPath.section==1){
+    }else if (indexPath.section==2){
         HuaShanDetailViewController *detailVC=[HuaShanDetailViewController new];
         HuaShanListModel *model=self.huaShanData[indexPath.row];
         detailVC.postId=model.Id;

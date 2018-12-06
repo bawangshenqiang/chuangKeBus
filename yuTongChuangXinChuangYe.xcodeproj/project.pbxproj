@@ -152,6 +152,14 @@
 		F0096C652178992C007AC8A0 /* system_select.png in Resources */ = {isa = PBXBuildFile; fileRef = F0096C622178992B007AC8A0 /* system_select.png */; };
 		F0096C662178992C007AC8A0 /* system_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0096C632178992B007AC8A0 /* system_select@2x.png */; };
 		F0096C672178992C007AC8A0 /* system_select@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0096C642178992C007AC8A0 /* system_select@3x.png */; };
+		F00B9FB821B64A64002990AB /* SectionHeader_HallSecond.m in Sources */ = {isa = PBXBuildFile; fileRef = F00B9FB721B64A64002990AB /* SectionHeader_HallSecond.m */; };
+		F00B9FBB21B668C7002990AB /* TodayHotCell_Hall.m in Sources */ = {isa = PBXBuildFile; fileRef = F00B9FBA21B668C7002990AB /* TodayHotCell_Hall.m */; };
+		F00B9FE621B6696F002990AB /* YFRollingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F00B9FE421B6696F002990AB /* YFRollingLabel.m */; };
+		F00B9FEA21B687B3002990AB /* LMJScrollTextView2.m in Sources */ = {isa = PBXBuildFile; fileRef = F00B9FE921B687B3002990AB /* LMJScrollTextView2.m */; };
+		F00BDE7221B7B04800B1D58A /* CaredMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F00BDE7121B7B04800B1D58A /* CaredMemberViewController.m */; };
+		F00BDE7521B7B77F00B1D58A /* AnimatTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F00BDE7421B7B77F00B1D58A /* AnimatTextFieldCell.m */; };
+		F00BDE7821B7C04900B1D58A /* AnimatTextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F00BDE7721B7C04900B1D58A /* AnimatTextViewCell.m */; };
+		F00BDE7B21B7C4C700B1D58A /* ContentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F00BDE7A21B7C4C700B1D58A /* ContentModel.m */; };
 		F00D476E21A5345200EA432F /* hall_forum.png in Resources */ = {isa = PBXBuildFile; fileRef = F00D476521A5344F00EA432F /* hall_forum.png */; };
 		F00D476F21A5345200EA432F /* hall_forum@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F00D476621A5345000EA432F /* hall_forum@3x.png */; };
 		F00D477021A5345200EA432F /* hall_star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F00D476721A5345000EA432F /* hall_star@2x.png */; };
@@ -842,6 +850,22 @@
 		F0096C622178992B007AC8A0 /* system_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = system_select.png; sourceTree = "<group>"; };
 		F0096C632178992B007AC8A0 /* system_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "system_select@2x.png"; sourceTree = "<group>"; };
 		F0096C642178992C007AC8A0 /* system_select@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "system_select@3x.png"; sourceTree = "<group>"; };
+		F00B9FB621B64A64002990AB /* SectionHeader_HallSecond.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SectionHeader_HallSecond.h; sourceTree = "<group>"; };
+		F00B9FB721B64A64002990AB /* SectionHeader_HallSecond.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SectionHeader_HallSecond.m; sourceTree = "<group>"; };
+		F00B9FB921B668C7002990AB /* TodayHotCell_Hall.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayHotCell_Hall.h; sourceTree = "<group>"; };
+		F00B9FBA21B668C7002990AB /* TodayHotCell_Hall.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayHotCell_Hall.m; sourceTree = "<group>"; };
+		F00B9FE421B6696F002990AB /* YFRollingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YFRollingLabel.m; sourceTree = "<group>"; };
+		F00B9FE521B6696F002990AB /* YFRollingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YFRollingLabel.h; sourceTree = "<group>"; };
+		F00B9FE821B687B3002990AB /* LMJScrollTextView2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMJScrollTextView2.h; sourceTree = "<group>"; };
+		F00B9FE921B687B3002990AB /* LMJScrollTextView2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMJScrollTextView2.m; sourceTree = "<group>"; };
+		F00BDE7021B7B04800B1D58A /* CaredMemberViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaredMemberViewController.h; sourceTree = "<group>"; };
+		F00BDE7121B7B04800B1D58A /* CaredMemberViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaredMemberViewController.m; sourceTree = "<group>"; };
+		F00BDE7321B7B77F00B1D58A /* AnimatTextFieldCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimatTextFieldCell.h; sourceTree = "<group>"; };
+		F00BDE7421B7B77F00B1D58A /* AnimatTextFieldCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnimatTextFieldCell.m; sourceTree = "<group>"; };
+		F00BDE7621B7C04900B1D58A /* AnimatTextViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimatTextViewCell.h; sourceTree = "<group>"; };
+		F00BDE7721B7C04900B1D58A /* AnimatTextViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnimatTextViewCell.m; sourceTree = "<group>"; };
+		F00BDE7921B7C4C700B1D58A /* ContentModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentModel.h; sourceTree = "<group>"; };
+		F00BDE7A21B7C4C700B1D58A /* ContentModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentModel.m; sourceTree = "<group>"; };
 		F00D476521A5344F00EA432F /* hall_forum.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hall_forum.png; sourceTree = "<group>"; };
 		F00D476621A5345000EA432F /* hall_forum@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hall_forum@3x.png"; sourceTree = "<group>"; };
 		F00D476721A5345000EA432F /* hall_star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hall_star@2x.png"; sourceTree = "<group>"; };
@@ -1932,6 +1956,24 @@
 			path = "建议反馈";
 			sourceTree = "<group>";
 		};
+		F00B9FE321B66962002990AB /* YFRollingLabel */ = {
+			isa = PBXGroup;
+			children = (
+				F00B9FE521B6696F002990AB /* YFRollingLabel.h */,
+				F00B9FE421B6696F002990AB /* YFRollingLabel.m */,
+			);
+			path = YFRollingLabel;
+			sourceTree = "<group>";
+		};
+		F00B9FE721B687B3002990AB /* LMJScrollTextView2 */ = {
+			isa = PBXGroup;
+			children = (
+				F00B9FE821B687B3002990AB /* LMJScrollTextView2.h */,
+				F00B9FE921B687B3002990AB /* LMJScrollTextView2.m */,
+			);
+			path = LMJScrollTextView2;
+			sourceTree = "<group>";
+		};
 		F011062B216F15E10042F070 = {
 			isa = PBXGroup;
 			children = (
@@ -2023,6 +2065,8 @@
 		F011066D216F469B0042F070 /* ThirdParts */ = {
 			isa = PBXGroup;
 			children = (
+				F00B9FE721B687B3002990AB /* LMJScrollTextView2 */,
+				F00B9FE321B66962002990AB /* YFRollingLabel */,
 				F0F7BEB821796703004F30FD /* LMJDropdownMenu */,
 				F031D93821703036004475E3 /* MJRefresh */,
 				F031D96721703036004475E3 /* RDVTabBarController */,
@@ -2275,6 +2319,14 @@
 				F01E466E21893F39000E2DD5 /* SearchNumbersDetailViewController.m */,
 				F01E46792189814E000E2DD5 /* SearchNumbersDetailBottomView.h */,
 				F01E467A2189814E000E2DD5 /* SearchNumbersDetailBottomView.m */,
+				F00BDE7021B7B04800B1D58A /* CaredMemberViewController.h */,
+				F00BDE7121B7B04800B1D58A /* CaredMemberViewController.m */,
+				F00BDE7321B7B77F00B1D58A /* AnimatTextFieldCell.h */,
+				F00BDE7421B7B77F00B1D58A /* AnimatTextFieldCell.m */,
+				F00BDE7621B7C04900B1D58A /* AnimatTextViewCell.h */,
+				F00BDE7721B7C04900B1D58A /* AnimatTextViewCell.m */,
+				F00BDE7921B7C4C700B1D58A /* ContentModel.h */,
+				F00BDE7A21B7C4C700B1D58A /* ContentModel.m */,
 			);
 			path = "找成员详情";
 			sourceTree = "<group>";
@@ -2880,6 +2932,10 @@
 				F0096C2E21783360007AC8A0 /* GotoSearchPeopleCell.m */,
 				F0043CE7218FD5710019E465 /* Hall_CreativityListCell.h */,
 				F0043CE8218FD5710019E465 /* Hall_CreativityListCell.m */,
+				F00B9FB621B64A64002990AB /* SectionHeader_HallSecond.h */,
+				F00B9FB721B64A64002990AB /* SectionHeader_HallSecond.m */,
+				F00B9FB921B668C7002990AB /* TodayHotCell_Hall.h */,
+				F00B9FBA21B668C7002990AB /* TodayHotCell_Hall.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3915,6 +3971,7 @@
 				F0297E8621912462004FEFA2 /* ProjectEditModel.m in Sources */,
 				F031D98021703037004475E3 /* MJRefreshBackGifFooter.m in Sources */,
 				F0FCF5C021757109005AB67B /* HotImageCell_HallFirst.m in Sources */,
+				F00B9FB821B64A64002990AB /* SectionHeader_HallSecond.m in Sources */,
 				F01502C92187F9CF00A85026 /* BottomView_Publish.m in Sources */,
 				F004CFD0217EEDF50007ABDF /* FastInforListCell.m in Sources */,
 				F020B216217E004B00944C81 /* BusinessHotViewController.m in Sources */,
@@ -3975,6 +4032,7 @@
 				F00E01AB218C3D3200EA17C7 /* Hall_HomeTodayHotModel.m in Sources */,
 				F031D99D217030DA004475E3 /* UIImage+color.m in Sources */,
 				F031D98E21703037004475E3 /* RDVTabBarItem.m in Sources */,
+				F00BDE7221B7B04800B1D58A /* CaredMemberViewController.m in Sources */,
 				F0E4214B219C2757007A29C7 /* SystemMessageDetailViewController.m in Sources */,
 				F0F5499D21805724005565FB /* ProjectModel_ChuangYe.m in Sources */,
 				F01E4681218998D4000E2DD5 /* PolicyDetailViewController.m in Sources */,
@@ -3987,6 +4045,7 @@
 				F028199821871BD5007A71BC /* PullDownCell_Publish.m in Sources */,
 				F031D98821703037004475E3 /* NSBundle+MJRefresh.m in Sources */,
 				F031D9A3217030F0004475E3 /* GetLabelWidthAndHeight.m in Sources */,
+				F00B9FBB21B668C7002990AB /* TodayHotCell_Hall.m in Sources */,
 				F031D99E217030DA004475E3 /* UIColor+Hex.m in Sources */,
 				F02EC2ED219974CE0095CA14 /* NoDataView.m in Sources */,
 				F004CFE9217F1FAC0007ABDF /* SystemHallSecondCell.m in Sources */,
@@ -4000,6 +4059,7 @@
 				F02819762186FA23007A71BC /* PublishThemeViewController.m in Sources */,
 				F028194221869707007A71BC /* JoinServerViewController.m in Sources */,
 				F031D98121703037004475E3 /* MJRefreshBackNormalFooter.m in Sources */,
+				F00B9FE621B6696F002990AB /* YFRollingLabel.m in Sources */,
 				F031D97821703037004475E3 /* MJRefreshAutoFooter.m in Sources */,
 				F0043CF221901F160019E465 /* CreativityEditModel.m in Sources */,
 				F0F5499721804B75005565FB /* ChuangYiCellTopView.m in Sources */,
@@ -4012,6 +4072,7 @@
 				F00E01B1218C4A7B00EA17C7 /* HomePageImgModel.m in Sources */,
 				F031D97C21703037004475E3 /* MJRefreshHeader.m in Sources */,
 				F0FE1AFD218A8EA300CDC2A5 /* HistorySearchCell.m in Sources */,
+				F00B9FEA21B687B3002990AB /* LMJScrollTextView2.m in Sources */,
 				F0043CE9218FD5710019E465 /* Hall_CreativityListCell.m in Sources */,
 				F02EC2DF219959D10095CA14 /* CustomSharedView.m in Sources */,
 				F011066C216F46000042F070 /* LoginViewController.m in Sources */,
@@ -4048,9 +4109,11 @@
 				F031D99F217030DA004475E3 /* NSDate+Extension.m in Sources */,
 				F004CFB5217EBA530007ABDF /* PolicyTopView.m in Sources */,
 				F004CFEC217F28EB0007ABDF /* SectionHeader_SystemHall.m in Sources */,
+				F00BDE7521B7B77F00B1D58A /* AnimatTextFieldCell.m in Sources */,
 				F004CFB8217ECE4B0007ABDF /* PolicyListCell.m in Sources */,
 				F0FE1B06218A8FBB00CDC2A5 /* SearchViewController.m in Sources */,
 				F0FE1AFF218A8EA300CDC2A5 /* HotSerachCell.m in Sources */,
+				F00BDE7B21B7C4C700B1D58A /* ContentModel.m in Sources */,
 				F031D9A0217030DA004475E3 /* TDHttpTools.m in Sources */,
 				F031D97221703037004475E3 /* SDCollectionViewCell.m in Sources */,
 				F0F549AC218073F8005565FB /* TeamCell_ChuangYe.m in Sources */,
@@ -4074,6 +4137,7 @@
 				F0F28A8621815A1B00937C77 /* CommentModel_Publish.m in Sources */,
 				F01502D92187FE1400A85026 /* TextViewCell_Publish.m in Sources */,
 				F031D97321703037004475E3 /* SDCycleScrollView.m in Sources */,
+				F00BDE7821B7C04900B1D58A /* AnimatTextViewCell.m in Sources */,
 				F0297E8F21917002004FEFA2 /* TeamEditModel.m in Sources */,
 				F028197E21870748007A71BC /* SubmitServeNeedViewController.m in Sources */,
 				F0FCF63A2175F776005AB67B /* TableHeader_ServeFirst.m in Sources */,

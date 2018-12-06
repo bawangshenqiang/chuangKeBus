@@ -48,7 +48,7 @@ extern BOOL receiveMessage;
     
     self.titleLab=[[UILabel alloc]initWithFrame:CGRectMake(0, backIV.bottom+10, kScreenWidth, 20)];
     self.titleLab.textAlignment=NSTextAlignmentCenter;
-    self.titleLab.text=@"宇通账号绑定";
+    self.titleLab.text=@"创客巴士账号绑定";
     self.titleLab.textColor=[UIColor colorWithHexString:@"#323232"];
     self.titleLab.font=[UIFont systemFontOfSize:16];
     [self.view addSubview:self.titleLab];
@@ -93,7 +93,7 @@ extern BOOL receiveMessage;
     //
     UIButton *loginBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     loginBtn.frame=CGRectMake(50, self.customTF3.bottom+40*kBaseHeight, kScreenWidth-100, 40);
-    [loginBtn setTitle:@"注册并绑定" forState:UIControlStateNormal];
+    [loginBtn setTitle:@"绑定账号" forState:UIControlStateNormal];
     [loginBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     loginBtn.backgroundColor=kThemeColor;
     loginBtn.titleLabel.font=[UIFont systemFontOfSize:20];
@@ -102,6 +102,19 @@ extern BOOL receiveMessage;
     [loginBtn addTarget:self action:@selector(loginBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:loginBtn];
     
+    UILabel *annotation=[[UILabel alloc]init];
+    annotation.text=@"如您还没有创客巴士账号，系统将自动为您注册并绑定";
+    annotation.numberOfLines=0;
+    annotation.font=[UIFont systemFontOfSize:10];
+    annotation.textColor=[UIColor colorWithHexString:@"#989898"];
+    [self.view addSubview:annotation];
+    annotation.sd_layout
+    .leftEqualToView(loginBtn)
+    .topSpaceToView(loginBtn, 10*kBaseHeight)
+    .widthIs(kScreenWidth-100)
+    .autoHeightRatio(0);
+    
+    /**
     //用户协议、隐私政策
     self.agree=[UIButton buttonWithType:UIButtonTypeCustom];
     self.agree.frame=CGRectMake(loginBtn.left, loginBtn.bottom+10*kBaseHeight, 10, 10);
@@ -154,6 +167,7 @@ extern BOOL receiveMessage;
     .leftSpaceToView(lab2, 0)
     .topEqualToView(lab2);
     [btn2 setupAutoSizeWithHorizontalPadding:0 buttonHeight:10];
+    */
 }
 #pragma mark 用户协议、隐私
 -(void)userAgreement_2{
@@ -169,10 +183,10 @@ extern BOOL receiveMessage;
 }
 #pragma mark 登录
 -(void)loginBtnClick{
-    if (!self.agree.selected) {
-        [SJTool showAlertWithText:@"请选择同意用户协议"];
-        return;
-    }
+//    if (!self.agree.selected) {
+//        [SJTool showAlertWithText:@"请选择同意用户协议"];
+//        return;
+//    }
     if (!self.customTF1.textField.text.length) {
         [SJTool showAlertWithText:@"请输入手机号"];
         return;
