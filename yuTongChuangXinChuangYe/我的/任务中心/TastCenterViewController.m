@@ -33,6 +33,7 @@
     self.navigationController.navigationBar.titleTextAttributes=@{NSFontAttributeName : [UIFont systemFontOfSize:20],NSForegroundColorAttributeName : [UIColor whiteColor]};
 }
 -(void)getData{
+    
     NSString *token=[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"];
     if (token==nil) {
         token=@"";
