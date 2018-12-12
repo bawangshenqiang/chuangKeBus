@@ -80,6 +80,16 @@ typedef void (^CompleteBlock)();
 //指定宽度按比例缩放
 +(UIImage *) imageCompressForWidth:(UIImage *)sourceImage targetWidth:(CGFloat)defineWidth;
 
+//1、等比例压缩 裁剪出的图片是以asize最小值为边框的正方形图片
+//修改图片尺寸 同比缩放
++ (UIImage *)thumbnailWithImageWithoutScale:(UIImage *)image size:(CGSize)asize;
+
+//2、简单粗暴地图片裁剪方法 裁剪出的图片尺寸按照size的尺寸，但图片可能会被拉伸
++ (UIImage *)thumbnailWithImage:(UIImage *)image size:(CGSize)asize;
+
+//3、裁剪出的图片尺寸按照size的尺寸，但图片不拉伸，但多余部分会被裁减掉
++ (UIImage *)thumbnailNotStretchWithImage:(UIImage *)originalImage size:(CGSize)size;
+
 //获取当前时间戳 （以毫秒为单位）
 +(NSString *)getNowTimeTimestamp3;
 

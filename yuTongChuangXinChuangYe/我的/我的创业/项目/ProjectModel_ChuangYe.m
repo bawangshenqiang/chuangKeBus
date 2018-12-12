@@ -16,7 +16,16 @@
         self.title=dic[@"title"];
         self.flagStr=dic[@"category"];
         self.times=dic[@"create_time"];
-        self.projectId=[dic[@"projectId"] intValue];
+        if ([dic.allKeys containsObject:@"projectId"]) {
+            self.projectId=[dic[@"projectId"] intValue];
+        }
+        if ([dic.allKeys containsObject:@"id"]) {
+            self.projectId=[dic[@"id"] intValue];
+        }
+        self.status=dic[@"status"];
+        self.instructor=dic[@"instructor"];
+        self.linkphone=dic[@"linkphone"];
+        self.descriptions=dic[@"description"];
         self.checkModels=[NSMutableArray array];
         if ([dic.allKeys containsObject:@"approves"]) {
             for (NSDictionary *dict in dic[@"approves"]) {

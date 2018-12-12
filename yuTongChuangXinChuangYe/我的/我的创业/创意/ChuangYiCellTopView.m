@@ -13,7 +13,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _leftIV=[[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 105, 75)];
+        _leftIV=[[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 115, 75)];
         [self addSubview:_leftIV];
         //
         _rightLab=[[UILabel alloc]initWithFrame:CGRectMake(self.leftIV.right+10, 10, frame.size.width-self.leftIV.right-20, 60)];

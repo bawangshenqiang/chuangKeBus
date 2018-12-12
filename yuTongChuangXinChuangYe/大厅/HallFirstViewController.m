@@ -9,7 +9,8 @@
 #import "HallFirstViewController.h"
 #import "CustomNavi.h"
 #import "TableHeader_HallFirst.h"
-#import "SectionHeader_HallFirst.h"
+//#import "SectionHeader_HallFirst.h"
+#import "SectionHeader_HallSecond.h"
 #import "HotImageCell_HallFirst.h"
 #import "HotTitleCell_HallFirst.h"
 #import "HuaShanTitleCell_HallFirst.h"
@@ -32,6 +33,12 @@
 #import "PolicyDetailViewController.h"
 #import "HotServeSecondCell_ServeFirst.h"
 #import "TodayHotCell_Hall.h"
+#import "CourseCell_Hall.h"
+#import "StarCourseModel_Serve.h"
+#import "InformationListModel.h"
+#import "InformationListCell.h"
+#import "ProviderCell_Hall.h"
+#import "Hall_CreativityListCell.h"
 
 BOOL receiveMessage;
 
@@ -44,6 +51,9 @@ BOOL receiveMessage;
 @property(nonatomic,strong)NSMutableArray *todayHotData;
 @property(nonatomic,strong)NSMutableArray *starProjectData;
 
+@property(nonatomic,strong)NSMutableArray *courseData;
+@property(nonatomic,strong)NSMutableArray *informationData;
+@property(nonatomic,strong)NSMutableArray *providerData;
 @end
 
 @implementation HallFirstViewController
@@ -72,6 +82,24 @@ BOOL receiveMessage;
     }
     return _starProjectData;
 }
+-(NSMutableArray *)courseData{
+    if (!_courseData) {
+        _courseData=[NSMutableArray array];
+    }
+    return _courseData;
+}
+-(NSMutableArray *)informationData{
+    if (!_informationData) {
+        _informationData=[NSMutableArray array];
+    }
+    return _informationData;
+}
+-(NSMutableArray *)providerData{
+    if (!_providerData) {
+        _providerData=[NSMutableArray array];
+    }
+    return _providerData;
+}
 -(void)getData{
     
     NSString *timestamp=[SJTool getNowTimeTimestamp3];
@@ -89,23 +117,39 @@ BOOL receiveMessage;
         [self.huaShanData removeAllObjects];
         [self.starProjectData removeAllObjects];
         
+        [self.courseData removeAllObjects];
+        [self.informationData removeAllObjects];
+        [self.providerData removeAllObjects];
+        
         if ([dic[@"code"] intValue]==200) {
             NSDictionary *data=dic[@"data"];
             for (NSDictionary *dict in data[@"carousels"]) {
                 HomePageImgModel *model=[[HomePageImgModel alloc]initWithDictionary:dict];
                 [self.cyccleImagesData addObject:model];
             }
-            for (NSDictionary *dict in data[@"newpush"]) {
+            for (NSDictionary *dict in data[@"todayhots"]) {//newpush
                 Hall_HomeTodayHotModel *model=[[Hall_HomeTodayHotModel alloc]initWithDictionary:dict];
                 [self.todayHotData addObject:model];
             }
-            for (NSDictionary *dict in data[@"recpost"]) {
-                HuaShanListModel *model=[[HuaShanListModel alloc]initWithDictionary:dict];
-                [self.huaShanData addObject:model];
-            }
+//            for (NSDictionary *dict in data[@"recpost"]) {
+//                HuaShanListModel *model=[[HuaShanListModel alloc]initWithDictionary:dict];
+//                [self.huaShanData addObject:model];
+//            }
             for (NSDictionary *dict in data[@"projects"]) {
-                Hall_HomeStarProject *model=[[Hall_HomeStarProject alloc]initWithDictionary:dict];
+                SearchCreativityListModel *model=[[SearchCreativityListModel alloc]initWithDictionary:dict];
                 [self.starProjectData addObject:model];
+            }
+            for (NSDictionary *dict in data[@"courses"]) {
+                StarCourseModel_Serve *model=[[StarCourseModel_Serve alloc]initWithDictionary:dict];
+                [self.courseData addObject:model];
+            }
+            for (NSDictionary *dict in data[@"informations"]) {
+                InformationListModel *model=[[InformationListModel alloc]initWithDictionary:dict];
+                [self.informationData addObject:model];
+            }
+            for (NSDictionary *dict in data[@"providers"]) {
+                StarCourseModel_Serve *model=[[StarCourseModel_Serve alloc]initWithDictionary:dict];
+                [self.providerData addObject:model];
             }
             
             NSMutableArray *imgArr=[NSMutableArray array];
@@ -241,15 +285,22 @@ BOOL receiveMessage;
     return self.header;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 4;
+    return 5;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section==0) {
-        return 1;
-    }else if (section==1) {
-        return 2;
+//    if (section==0) {
+//        return 1;
+//    }else if (section==1) {
+//        return 2;
+//    }else{
+//        return 3;
+//    }
+    if (section==1) {
+        return self.starProjectData.count;
+    }else if (section==3){
+        return self.informationData.count;
     }else{
-        return 3;
+        return 1;
     }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -293,71 +344,136 @@ BOOL receiveMessage;
             break;
         case 1:
         {
-            if (indexPath.row==0) {
-                static NSString *cellId1_1=@"cellIdentifier1_1";
-                HotServeSecondCell_ServeFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId1_1];
-                if (!cell) {
-                    cell=[[HotServeSecondCell_ServeFirst alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId1_1];
-                    cell.backgroundColor=kBackgroundColor;
-                    cell.selectionStyle=UITableViewCellSelectionStyleNone;
-                }
-                if (self.todayHotData.count>0) {
-                    Hall_HomeTodayHotModel *model=self.todayHotData.firstObject;
-                    cell.hallModel=model;
-                    
-                }
-                
-                return cell;
-            }else{
-                static NSString *cellId1_2=@"cellIdentifier1_2";
-                HotTitleCell_HallFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId1_2];
-                if (!cell) {
-                    cell=[[HotTitleCell_HallFirst alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId1_2];
-                    cell.backgroundColor=kBackgroundColor;
-                    cell.selectionStyle=UITableViewCellSelectionStyleNone;
-                }
-                if (self.todayHotData.count>0) {
-                    NSMutableArray *arr=[self.todayHotData mutableCopy];
-                    [arr removeObjectAtIndex:0];
-                    cell.models=arr;
-                    WS(weakSelf);
-                    [cell setTitleClickBlock:^(Hall_HomeTodayHotModel * _Nonnull model) {
-                        [weakSelf todayHotJumpWith:model];
-                    }];
-                }
-                return cell;
+//            if (indexPath.row==0) {
+//                static NSString *cellId1_1=@"cellIdentifier1_1";
+//                HotServeSecondCell_ServeFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId1_1];
+//                if (!cell) {
+//                    cell=[[HotServeSecondCell_ServeFirst alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId1_1];
+//                    cell.backgroundColor=kBackgroundColor;
+//                    cell.selectionStyle=UITableViewCellSelectionStyleNone;
+//                }
+//                if (self.todayHotData.count>0) {
+//                    Hall_HomeTodayHotModel *model=self.todayHotData.firstObject;
+//                    cell.hallModel=model;
+//
+//                }
+//
+//                return cell;
+//            }else{
+//                static NSString *cellId1_2=@"cellIdentifier1_2";
+//                HotTitleCell_HallFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId1_2];
+//                if (!cell) {
+//                    cell=[[HotTitleCell_HallFirst alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId1_2];
+//                    cell.backgroundColor=kBackgroundColor;
+//                    cell.selectionStyle=UITableViewCellSelectionStyleNone;
+//                }
+//                if (self.todayHotData.count>0) {
+//                    NSMutableArray *arr=[self.todayHotData mutableCopy];
+//                    [arr removeObjectAtIndex:0];
+//                    cell.models=arr;
+//                    WS(weakSelf);
+//                    [cell setTitleClickBlock:^(Hall_HomeTodayHotModel * _Nonnull model) {
+//                        [weakSelf todayHotJumpWith:model];
+//                    }];
+//                }
+//                return cell;
+//            }
+            static NSString *cellId1=@"cellIdentifier1";
+            Hall_CreativityListCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId1];
+            if (!cell) {
+                cell=[[Hall_CreativityListCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId1];
+                cell.backgroundColor=kBackgroundColor;
+                cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
+            if (self.starProjectData.count>0) {
+                cell.model=self.starProjectData[indexPath.row];
+            }
+            return cell;
         }
             break;
         case 2:
         {
+//            static NSString *cellId2=@"cellIdentifier2";
+//            HuaShanTitleCell_HallFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId2];
+//            if (!cell) {
+//                cell=[[HuaShanTitleCell_HallFirst alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId2];
+//                cell.backgroundColor=kBackgroundColor;
+//                cell.selectionStyle=UITableViewCellSelectionStyleNone;
+//            }
+//            if (self.huaShanData.count>0) {
+//                HuaShanListModel *model=self.huaShanData[indexPath.row];
+//                cell.model=model;
+//            }
+//
+//            return cell;
             static NSString *cellId2=@"cellIdentifier2";
-            HuaShanTitleCell_HallFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId2];
+            CourseCell_Hall *cell=[tableView dequeueReusableCellWithIdentifier:cellId2];
             if (!cell) {
-                cell=[[HuaShanTitleCell_HallFirst alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId2];
+                cell=[[CourseCell_Hall alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId2];
+                cell.backgroundColor=[UIColor whiteColor];
+                cell.selectionStyle=UITableViewCellSelectionStyleNone;
+            }
+            if (self.courseData.count>0) {
+                
+                cell.courseData=self.courseData;
+            }
+            WS(weakSelf);
+            [cell setBtnClickBlock:^(NSInteger index) {
+                //NSLog(@"%@",model.title);
+                VideoDetailViewController *videoDetail=[VideoDetailViewController new];
+                videoDetail.courseId=(int)index;
+                [weakSelf.navigationController pushViewController:videoDetail animated:YES];
+            }];
+            return cell;
+        }
+            break;
+        case 3:
+        {
+            NSString *cellId=@"cellIdentifier3";
+            InformationListCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!cell) {
+                cell=[[InformationListCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
                 cell.backgroundColor=kBackgroundColor;
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
-            if (self.huaShanData.count>0) {
-                HuaShanListModel *model=self.huaShanData[indexPath.row];
-                cell.model=model;
+            if (self.informationData.count>0) {
+                cell.model=self.informationData[indexPath.row];
             }
-            
             return cell;
         }
             break;
         default:
         {
-            static NSString *cellId3=@"cellIdentifier3";
-            StarProjectCell_HallFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId3];
+//            static NSString *cellId3=@"cellIdentifier3";
+//            StarProjectCell_HallFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId3];
+//            if (!cell) {
+//                cell=[[StarProjectCell_HallFirst alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId3];
+//                cell.backgroundColor=kBackgroundColor;
+//                cell.selectionStyle=UITableViewCellSelectionStyleNone;
+//            }
+//            if (self.starProjectData.count>0) {
+//                cell.model_starProject=self.starProjectData[indexPath.row];
+//            }
+//            return cell;
+            static NSString *cellId=@"cellIdentifier4";
+            ProviderCell_Hall *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
             if (!cell) {
-                cell=[[StarProjectCell_HallFirst alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId3];
+                cell=[[ProviderCell_Hall alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
                 cell.backgroundColor=kBackgroundColor;
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
-            if (self.starProjectData.count>0) {
-                cell.model_starProject=self.starProjectData[indexPath.row];
+            if (self.providerData.count>0) {
+                
+                cell.providerData=self.providerData;
             }
+            WS(weakSelf);
+            [cell setBtnClickBlock:^(NSInteger index) {
+                
+                ServerDetailViewController *detailVC=[ServerDetailViewController new];
+                
+                detailVC.providerId=index;
+                [weakSelf.navigationController pushViewController:detailVC animated:YES];
+            }];
             return cell;
         }
             break;
@@ -365,39 +481,45 @@ BOOL receiveMessage;
     return nil;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    if (indexPath.section==0) {
+//        return 60;
+//    }else if (indexPath.section==1) {
+//        if (indexPath.row==0) {
+//            return 85;
+//        }else{
+//            return 215;
+//        }
+//    }else if (indexPath.section==2){
+//        if (self.huaShanData.count>0) {
+//            HuaShanListModel *model=self.huaShanData[indexPath.row];
+//            CGFloat height=[tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[HuaShanTitleCell_HallFirst class] contentViewWidth:kScreenWidth];
+//            return height;
+//        }
+//
+//    }
+//    return 100;
     if (indexPath.section==0) {
         return 60;
-    }else if (indexPath.section==1) {
-        if (indexPath.row==0) {
-            return 85;
-        }else{
-            return 215;
-        }
     }else if (indexPath.section==2){
-//        NSArray *texts=@[@"《区块链金融大师班》————15亿准独角兽区块链创业团队领衔主讲",@"《区块链金融大师班》————15亿准独角兽区块链",@"《区块链金融大师班》————15亿准独角兽区块链创业团队领衔主讲《区块链金融大师班》————15亿准独角兽区块链创业团队领衔主讲《区块链金融大师班》————15亿准独角兽区块链创业团队领衔主讲"];
-//        CGFloat height=[tableView cellHeightForIndexPath:indexPath model:texts[indexPath.row] keyPath:@"titleText" cellClass:[HuaShanTitleCell_HallFirst class] contentViewWidth:kScreenWidth];
-//        return height;
-        if (self.huaShanData.count>0) {
-            HuaShanListModel *model=self.huaShanData[indexPath.row];
-            CGFloat height=[tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[HuaShanTitleCell_HallFirst class] contentViewWidth:kScreenWidth];
-            return height;
-        }
-        
+        return 150;
+    }else if (indexPath.section==4){
+        return 140;
+    }else{
+        return 100;
     }
-    return 100;
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     if (section==0) {
         UIView *view=[UIView new];
         return view;
     }else{
-        SectionHeader_HallFirst *header=[tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
+        SectionHeader_HallSecond *header=[tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
         if (!header) {
-            header=[[SectionHeader_HallFirst alloc]initWithReuseIdentifier:@"header"];
+            header=[[SectionHeader_HallSecond alloc]initWithReuseIdentifier:@"header"];
         }
-        NSArray *images=@[@"hall_hottest",@"hall_forum",@"hall_star"];
-        NSArray *titles=@[@"今日最热",@"华山论剑",@"明星项目"];
-        header.leftIV.image=[UIImage imageNamed:images[section-1]];
+        //NSArray *images=@[@"hall_hottest",@"hall_forum",@"hall_star"];
+        NSArray *titles=@[@"明星项目",@"课程",@"行业热点",@"服务商"];//@[@"今日最热",@"华山论剑",@"明星项目"];
+        //header.leftIV.image=[UIImage imageNamed:images[section-1]];
         header.titleLab.text=titles[section-1];
         return header;
     }
@@ -413,16 +535,16 @@ BOOL receiveMessage;
     if (section==0) {
         return 10;
     }
-    return 40;
+    return 45;//40;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (section==0) {
-        return 8;
-    }
+//    if (section==0) {
+//        return 8;
+//    }
     return 0.01;
 }
 -(void)todayHotJumpWith:(Hall_HomeTodayHotModel *)model{
-    NSLog(@"%@",model.module);//model.Id
+    //NSLog(@"%@",model.module);//model.Id
     //今日最热根据标签分类跳转不同的详情页,传id
     [self jumpWithId:model.Id module:model.module];
 }
@@ -471,21 +593,18 @@ BOOL receiveMessage;
     if (indexPath.section==0) {
         
     }else if (indexPath.section==1) {
-        if (indexPath.row==0) {
-            Hall_HomeTodayHotModel *model=self.todayHotData.firstObject;
-            [self todayHotJumpWith:model];
-        }
-    }else if (indexPath.section==2){
-        HuaShanDetailViewController *detailVC=[HuaShanDetailViewController new];
-        HuaShanListModel *model=self.huaShanData[indexPath.row];
-        detailVC.postId=model.Id;
-        [self.navigationController pushViewController:detailVC animated:YES];
-    }else{
         CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
         detailVC.index=1;
-        Hall_HomeStarProject *model=self.starProjectData[indexPath.row];
+        SearchCreativityListModel *model=self.starProjectData[indexPath.row];
         detailVC.Id=model.Id;
         [self.navigationController pushViewController:detailVC animated:YES];
+    }else if (indexPath.section==3){
+        InformationListModel *model=self.informationData[indexPath.row];
+        BusinessHotDetailViewController *detailVC=[BusinessHotDetailViewController new];
+        detailVC.Id=model.Id;
+        [self.navigationController pushViewController:detailVC animated:YES];
+    }else{
+        
     }
     
 }

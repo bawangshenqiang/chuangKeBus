@@ -12,7 +12,12 @@
 -(instancetype)initWithDictionary:(NSDictionary *)dic{
     if (self=[super init]) {
         self.cover=dic[@"cover"];
-        self.label=dic[@"label"];
+        if ([dic.allKeys containsObject:@"label"]) {
+            self.label=dic[@"label"];
+        }
+        if ([dic.allKeys containsObject:@"category"]) {
+            self.label=dic[@"category"];
+        }
         self.title=dic[@"title"];
         self.Id=[dic[@"id"] intValue];
         self.create_time=dic[@"create_time"];

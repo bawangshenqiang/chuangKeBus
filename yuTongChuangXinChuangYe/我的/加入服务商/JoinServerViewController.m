@@ -16,13 +16,15 @@
 #import "EditPageViewController.h"
 #import "JoinServerModel.h"
 #import "SJPickerView.h"
+#import "ClipViewController.h"
+#import "UIImage+fixOrientation.h"
 
 typedef NS_ENUM(NSInteger,ChosePhotoType) {
     ChosePhotoTypeAlbum,//相册
     ChosePhotoTypeCamera//相机
 };
 
-@interface JoinServerViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
+@interface JoinServerViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,ClipVCDelegate>
 @property(nonatomic,strong)UITableView *tableView;
 @property (strong, nonatomic) UIAlertController *actionSheet;
 @property(nonatomic,assign)int imageCellFlag;
@@ -509,20 +511,52 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     
-    AddSinglePhotoCell *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.imageCellFlag inSection:0]];
+    
     
     
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    image=[SJTool imageCompressForWidth:image targetWidth:kScreenWidth];
-    
-    __weak typeof(cell) weakCell = cell;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        weakCell.currentIma.image=image;
-        weakCell.currentIma.contentMode=UIViewContentModeScaleAspectFill;
-    });
+    //image=[SJTool imageCompressForWidth:image targetWidth:kScreenWidth];
     
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    if (self.imageCellFlag==1) {
+        
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+            [self clipImage:[image fixOrientation]];
+        }];
+        
+    }else if (self.imageCellFlag==2){
+        AddSinglePhotoCell *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.imageCellFlag inSection:0]];
+        __weak typeof(cell) weakCell = cell;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakCell.currentIma.image=image;
+            weakCell.currentIma.contentMode=UIViewContentModeScaleAspectFill;
+        });
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+#pragma mark - 去裁剪
+- (void)clipImage:(UIImage *)img{
+    
+    ClipViewController * clipVC;
+    clipVC = [[ClipViewController alloc]initWithImage:img clipSize:CGSizeMake(320,160)];
+    clipVC.clipType = SQUARECLIP;
+    clipVC.delegate = self;
+    
+    UINavigationController *naviVC = [[UINavigationController alloc]initWithRootViewController:clipVC];
+    [self presentViewController:naviVC animated:YES completion:nil];
+    
+}
+
+
+#pragma mark - CardClipVCDelegate
+-(void)clipViewController:(ClipViewController *)clipViewController finishClipImage:(UIImage *)editImage
+{
+    
+    AddSinglePhotoCell *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.imageCellFlag inSection:0]];
+    
+    cell.currentIma.image=editImage;
     
 }
 -(NSString *)getPhotoString:(int)imageCellFlag{

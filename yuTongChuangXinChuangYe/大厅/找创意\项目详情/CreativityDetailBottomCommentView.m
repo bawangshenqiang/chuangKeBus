@@ -14,7 +14,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor=kBackgroundColor;
-        
+        /**
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissKeyboard:) name:@"DismissKeyBoard" object:nil];
         //
         self.textView=[[UITextView alloc]initWithFrame:CGRectMake(15, 15, frame.size.width-80-30-5, 30)];
@@ -36,9 +36,26 @@
         self.textView.layer.borderColor=[UIColor colorWithHexString:@"#cccccc"].CGColor;
         self.textView.layer.masksToBounds=YES;
         [self addSubview:self.textView];
+        */
+        //
+        self.falseTV=[UIButton buttonWithType:UIButtonTypeCustom];
+        self.falseTV.frame=CGRectMake(15, 15, frame.size.width-80-30-5, 30);
+        self.falseTV.backgroundColor=[UIColor whiteColor];
+        self.falseTV.layer.cornerRadius=5;
+        self.falseTV.layer.borderWidth=0.5;
+        self.falseTV.layer.borderColor=[UIColor colorWithHexString:@"#cccccc"].CGColor;
+        self.falseTV.layer.masksToBounds=YES;
+        [self.falseTV setTitle:@"写评论" forState:UIControlStateNormal];
+        [self.falseTV setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+        self.falseTV.titleLabel.font=[UIFont systemFontOfSize:14];
+        self.falseTV.contentHorizontalAlignment=UIControlContentHorizontalAlignmentLeft;
+        [self.falseTV addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.falseTV];
+        
+        
         //
         self.praiseBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-        self.praiseBtn.frame=CGRectMake(self.textView.right+5, 15, 30, 30);
+        self.praiseBtn.frame=CGRectMake(self.falseTV.right+5, 15, 30, 30);
         [self.praiseBtn setImage:[UIImage imageNamed:@"project_snap"] forState:UIControlStateNormal];
         [self.praiseBtn setImage:[UIImage imageNamed:@"project_snap_nor"] forState:UIControlStateSelected];
         [self.praiseBtn addTarget:self action:@selector(praiseBtnClick) forControlEvents:UIControlEventTouchUpInside];
@@ -50,32 +67,37 @@
         [self.sharedBtn addTarget:self action:@selector(sharedBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.sharedBtn];
         //
-        self.submitBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-        self.submitBtn.frame=CGRectMake(self.textView.right+5, 15, 80, 30);
-        [self.submitBtn setTitle:@"发表" forState:UIControlStateNormal];
-        [self.submitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.submitBtn.backgroundColor=kThemeColor;
-        self.submitBtn.layer.cornerRadius=5;
-        self.submitBtn.layer.masksToBounds=YES;
-        [self.submitBtn addTarget:self action:@selector(submitClick) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.submitBtn];
-        self.submitBtn.hidden=YES;
+//        self.submitBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+//        self.submitBtn.frame=CGRectMake(self.falseTV.right+5, 15, 80, 30);
+//        [self.submitBtn setTitle:@"发表" forState:UIControlStateNormal];
+//        [self.submitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        self.submitBtn.backgroundColor=kThemeColor;
+//        self.submitBtn.layer.cornerRadius=5;
+//        self.submitBtn.layer.masksToBounds=YES;
+//        [self.submitBtn addTarget:self action:@selector(submitClick) forControlEvents:UIControlEventTouchUpInside];
+//        [self addSubview:self.submitBtn];
+//        self.submitBtn.hidden=YES;
     }
     
     return self;
 }
--(void)submitClick{
-    if (!self.textView.text.length) {
-        [SJTool showAlertWithText:@"评论不能为空"];
-        return;
+-(void)btnClick{
+    if (self.btnJumpBlock) {
+        self.btnJumpBlock();
     }
-    
-    if (self.submitBtnBlock) {
-        self.submitBtnBlock(self.textView.text);
-    }
-    [self.textView endEditing:YES];
-    self.textView.text=@"";
 }
+//-(void)submitClick{
+//    if (!self.textView.text.length) {
+//        [SJTool showAlertWithText:@"评论不能为空"];
+//        return;
+//    }
+//
+//    if (self.submitBtnBlock) {
+//        self.submitBtnBlock(self.textView.text);
+//    }
+//    [self.textView endEditing:YES];
+//    self.textView.text=@"";
+//}
 -(void)praiseBtnClick{
     //self.praiseBtn.selected=!self.praiseBtn.isSelected;
     if (self.praiseBtnBlock) {
@@ -99,12 +121,13 @@
     self.sharedBtn.hidden=NO;
     self.submitBtn.hidden=YES;
 }
--(void)dismissKeyboard:(NSNotification *)noti{
-    [self.textView endEditing:YES];
-}
--(void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+//-(void)dismissKeyboard:(NSNotification *)noti{
+//    [self.textView endEditing:YES];
+//}
+//-(void)dealloc{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
+//}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

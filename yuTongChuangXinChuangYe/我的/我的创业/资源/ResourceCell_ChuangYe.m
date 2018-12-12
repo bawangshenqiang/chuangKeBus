@@ -11,86 +11,107 @@
 @implementation ResourceCell_ChuangYe
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.outBig=[[UIView alloc]init];
         self.outBig.backgroundColor=[UIColor whiteColor];
-//        self.leftIV.image=[UIImage imageNamed:@"entrepreneurship"];
-//        self.topLab.text=@"这家公司要用设计+AI创新新时代！这家公司要用设计+AI创新新时代！";
-//        self.bottomLab.text=@"用终局思维看待AI时代，也就是“万物有生”的时代，其本质即服务。";
-//        self.separatorLine.backgroundColor=RGBAColor(145, 165, 165, 0.5);
-//        self.needExplain.text=@"需求说明：为查看您的需求，请耐心等待为查看您的需求，请耐心等待为查看您的需求，请耐心等待";
-//        
+        self.outBig.layer.cornerRadius=4;
+        self.outBig.layer.masksToBounds=YES;
+        [self.contentView addSubview:self.outBig];
+        //
+        self.leftIV=[[UIImageView alloc]init];
+        [self.outBig addSubview:self.leftIV];
+        //
+        self.nameBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        [self.nameBtn setTitleColor:[UIColor colorWithHexString:@"#323232"] forState:UIControlStateNormal];
+        self.nameBtn.titleLabel.font=[UIFont systemFontOfSize:13];
+        self.nameBtn.contentHorizontalAlignment=UIControlContentHorizontalAlignmentLeft;
+        [self.nameBtn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.outBig addSubview:self.nameBtn];
+        //
+        self.statusLab=[[UILabel alloc]init];
+        self.statusLab.font=[UIFont systemFontOfSize:13];
+        self.statusLab.textAlignment=NSTextAlignmentRight;
+        self.statusLab.textColor=RGBAColor(238, 160, 75, 1);
+        [self.outBig addSubview:self.statusLab];
+        //
+        self.needExplain=[[UILabel alloc]init];
+        self.needExplain.numberOfLines=3;
+        self.needExplain.font=[UIFont systemFontOfSize:15];
+        [self.outBig addSubview:self.needExplain];
+        //
+        self.progressLab=[[UILabel alloc]init];
+        self.progressLab.font=[UIFont systemFontOfSize:15];
+        self.progressLab.textColor=kThemeColor;//RGBAColor(55, 105, 182, 1);
+        [self.outBig addSubview:self.progressLab];
+        //
+        self.timeLab=[[UILabel alloc]init];
+        self.timeLab.font=[UIFont systemFontOfSize:13];
+        self.timeLab.textAlignment=NSTextAlignmentRight;
+        self.timeLab.textColor=[UIColor colorWithHexString:@"#323232"];
+        [self.outBig addSubview:self.timeLab];
+        //
+        self.leftIV.sd_layout
+        .leftSpaceToView(self.outBig, 15)
+        .topSpaceToView(self.outBig, 15)
+        .widthIs(30)
+        .heightIs(30);
+        self.leftIV.sd_cornerRadius=@(15);
+        //
+        self.nameBtn.sd_layout
+        .leftSpaceToView(self.leftIV, 15)
+        .topEqualToView(self.leftIV);
+        [self.nameBtn setupAutoSizeWithHorizontalPadding:0 buttonHeight:30];
+        //
+        self.statusLab.sd_layout
+        .rightSpaceToView(self.outBig, 15)
+        .topEqualToView(self.nameBtn)
+        .widthIs(70)
+        .heightIs(30);
+        //
+        self.needExplain.sd_layout
+        .topSpaceToView(self.nameBtn, 15)
+        .leftEqualToView(self.nameBtn)
+        .widthIs(kScreenWidth-24-60-15)
+        .autoHeightRatio(0);
+        [self.needExplain setMaxNumberOfLinesToShow:3];
+        //
+        self.progressLab.sd_layout
+        .leftEqualToView(self.nameBtn)
+        .topSpaceToView(self.needExplain, 15)
+        .widthIs(kScreenWidth-24-60-85)
+        .heightIs(30);
+        //
+        self.timeLab.sd_layout
+        .rightSpaceToView(self.outBig, 15)
+        .topEqualToView(self.progressLab)
+        .widthIs(70)
+        .heightIs(30);
+        //
+        self.outBig.sd_layout
+        .leftSpaceToView(self.contentView, 12)
+        .topSpaceToView(self.contentView, 12)
+        .widthIs(kScreenWidth-24);
+        [self.outBig setupAutoHeightWithBottomView:self.progressLab bottomMargin:10];
+        
+        
     }
     return self;
 }
--(void)setModel:(ResourceModel_ChuangYe *)model{
+-(void)btnClick{
+    if (self.btnClickBlock) {
+        self.btnClickBlock(_model.providerId);
+    }
+}
+-(void)setModel:(ResourceModel_ChuangYe_second *)model{
     _model=model;
-    [self.leftIV sd_setImageWithURL:[NSURL URLWithString:_model.logo] placeholderImage:[UIImage imageNamed:@"entrepreneurship"]];
-    self.topLab.text=_model.title;
-    self.bottomLab.text=_model.descriptions;
-    self.separatorLine.backgroundColor=RGBAColor(145, 165, 165, 0.5);
+    [self.leftIV sd_setImageWithURL:[NSURL URLWithString:_model.logo] placeholderImage:nil];
+    [self.nameBtn setTitle:[NSString stringWithFormat:@"%@ >",_model.title] forState:UIControlStateNormal];
+    self.statusLab.text=_model.pstatus;
     self.needExplain.text=_model.demand;
+    self.progressLab.text=@"查看服务进度 >>";
+    self.timeLab.text=_model.create_time;
+    [self setupAutoHeightWithBottomView:self.outBig bottomMargin:0];
 }
--(UIView *)outBig{
-    if (!_outBig) {
-        _outBig=[[UIView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth-20, 130)];
-        _outBig.layer.cornerRadius=5;
-        _outBig.layer.masksToBounds=YES;
-        [self.contentView addSubview:_outBig];
-    }
-    return _outBig;
-}
--(UIImageView *)leftIV{
-    if (!_leftIV) {
-        _leftIV=[[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 130, 60)];
-        [self.outBig addSubview:_leftIV];
-    }
-    return _leftIV;
-}
--(UILabel *)topLab{
-    if (!_topLab) {
-        _topLab=[[UILabel alloc]initWithFrame:CGRectMake(self.leftIV.right+10, 10, self.outBig.width-self.leftIV.right-20, 20)];
-        //_topLab.numberOfLines=3;
-        _topLab.font=[UIFont systemFontOfSize:16];
-        [self.outBig addSubview:_topLab];
-    }
-    return _topLab;
-}
--(UILabel *)bottomLab{
-    if (!_bottomLab) {
-        _bottomLab=[[UILabel alloc]initWithFrame:CGRectMake(self.leftIV.right+10, self.topLab.bottom, self.topLab.width, 40)];
-        _bottomLab.numberOfLines=2;
-        _bottomLab.font=[UIFont systemFontOfSize:14];
-        _bottomLab.textColor=[UIColor lightGrayColor];
-        [self.outBig addSubview:_bottomLab];
-    }
-    return _bottomLab;
-}
--(UIView *)separatorLine{
-    if (!_separatorLine) {
-        _separatorLine=[[UIView alloc]init];
-        _separatorLine.backgroundColor=RGBAColor(145, 165, 165, 0.5);
-        [self.outBig addSubview:_separatorLine];
-        _separatorLine.sd_layout
-        .leftEqualToView(self.leftIV)
-        .rightEqualToView(self.topLab)
-        .topSpaceToView(self.leftIV, 9.5)
-        .heightIs(0.5);
-    }
-    return _separatorLine;
-}
--(UILabel *)needExplain{
-    if (!_needExplain) {
-        _needExplain=[[UILabel alloc]init];
-        _needExplain.numberOfLines=2;
-        _needExplain.font=[UIFont systemFontOfSize:14];
-        [self.outBig addSubview:_needExplain];
-        _needExplain.sd_layout
-        .leftEqualToView(self.leftIV)
-        .topSpaceToView(self.separatorLine, 5)
-        .rightEqualToView(self.topLab)
-        .heightIs(40);
-    }
-    return _needExplain;
-}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

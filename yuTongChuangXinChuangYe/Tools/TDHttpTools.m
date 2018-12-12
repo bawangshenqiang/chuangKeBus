@@ -455,7 +455,7 @@
  */
 +(void)hallHomeWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
     
-    NSString *urlString=[NSString stringWithFormat:@"%@data/hall",kSERVER_HTTP_DXE];
+    NSString *urlString=[NSString stringWithFormat:@"%@data/hall2",kSERVER_HTTP_DXE];
     [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
         if (success) {
             success(response);
@@ -504,6 +504,22 @@
 +(void)searchNumbersListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
     
     NSString *urlString=[NSString stringWithFormat:@"%@data/team",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  小贴士列表
+ */
++(void)tipsListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@data/tip/list",kSERVER_HTTP_DXE];
     [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
         if (success) {
             success(response);
@@ -727,7 +743,7 @@
  */
 +(void)myProviderListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
     
-    NSString *urlString=[NSString stringWithFormat:@"%@user/providerdemand",kSERVER_HTTP_DXE];
+    NSString *urlString=[NSString stringWithFormat:@"%@user/userdemand",kSERVER_HTTP_DXE];
     [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
         if (success) {
             success(response);
@@ -1623,7 +1639,39 @@
  */
 +(void)getHatchPersonWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
     
-    NSString *urlString=[NSString stringWithFormat:@"%@user/instructor",kSERVER_HTTP_DXE];
+    NSString *urlString=[NSString stringWithFormat:@"%@user/idearecord",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  项目审核记录列表
+ */
++(void)projectAuditListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/projectrecordlist",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  任务中心
+ */
++(void)taskCenterWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/job",kSERVER_HTTP_DXE];
     [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
         if (success) {
             success(response);

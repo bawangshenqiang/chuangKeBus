@@ -13,13 +13,15 @@
 #import "SJPickerView.h"
 #import "CreativityEditModel.h"
 #import "EditPageViewController.h"
+#import "ClipViewController.h"
+#import "UIImage+fixOrientation.h"
 
 typedef NS_ENUM(NSInteger,ChosePhotoType) {
     ChosePhotoTypeAlbum,//相册
     ChosePhotoTypeCamera//相机
 };
 
-@interface SubmitCreativityViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
+@interface SubmitCreativityViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,ClipVCDelegate>
 @property(nonatomic,strong)UITableView *tableView;
 @property (strong, nonatomic) UIAlertController *actionSheet;
 @property(nonatomic,strong)SJPickerView *catogaryView;
@@ -28,13 +30,15 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 @property(nonatomic,strong)NSString *background;//创意背景
 @property(nonatomic,strong)NSString *services;//产品介绍
 @property(nonatomic,strong)NSString *patterns;//商业模式
-
+@property(nonatomic,strong)NSString *intro;//简介
+@property(nonatomic,strong)NSDictionary *saveDic;//存到草稿里面的内容
 @end
 
 @implementation SubmitCreativityViewController
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.navigationItem setHidesBackButton:YES animated:YES];
     
 }
 - (void)viewDidLoad {
@@ -44,6 +48,10 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     self.background=@"";
     self.services=@"";
     self.patterns=@"";
+    self.intro=@"";
+    
+    UIBarButtonItem *leftBar=[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"fanhui"] style:UIBarButtonItemStylePlain target:self action:@selector(backToHomepage)];
+    self.navigationItem.leftBarButtonItem=leftBar;
     
     [self.view addSubview:self.tableView];
     //注册观察键盘的变化
@@ -52,6 +60,16 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     
     
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"提交" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarClick)];
+    
+    NSDictionary *dic=[NSDictionary dictionaryWithContentsOfFile:kChuangYiPath];
+    if (dic!=nil) {
+        self.saveDic=dic;
+        self.catogaryID=[self.saveDic[@"catogaryID"] intValue];
+        self.background=self.saveDic[@"background"];
+        self.services=self.saveDic[@"services"];
+        self.patterns=self.saveDic[@"patterns"];
+        self.intro=self.saveDic[@"ideaDescription"];
+    }
     
     if (self.isRevise) {
         //修改
@@ -68,6 +86,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 self.services=self.model.services;
                 self.patterns=self.model.patterns;
                 self.catogaryID=self.model.categoryId;
+                self.intro=self.model.descriptions;
             }else{
                 [SJTool showAlertWithText:dic[@"msg"]];
             }
@@ -76,17 +95,76 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         }];
     }
 }
+-(void)backToHomepage{
+    ApplySecondCell *cell0=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (cell0.textField.text.length>0) {
+        [self showAlert];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+-(void)showAlert{
+    UIAlertController *alert=[UIAlertController alertControllerWithTitle:@"退出编辑" message:@"编辑的内容还未保存，确定退出吗" preferredStyle:UIAlertControllerStyleActionSheet];
+    WS(weakSelf);
+    [alert addAction:[UIAlertAction actionWithTitle:@"保存为草稿" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf saveDraft];
+        
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    }]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+-(void)saveDraft{
+    ApplySecondCell *cell0=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    //ApplySecondCell *cell1=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    ApplySecondCell *cell1_0=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+    ApplySecondCell *cell1_1=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
+    NSString *ideaName=@"";
+    if (cell0.textField.text.length) {
+        ideaName=cell0.textField.text;
+    }
+//    NSString *ideaDescription=@"";
+//    if (cell1.textField.text.length) {
+//        ideaDescription=cell1.textField.text;
+//    }
+    NSString *name=@"";
+    if (cell1_0.textField.text.length) {
+        name=cell1_0.textField.text;
+    }
+    NSString *telephone=@"";
+    if (cell1_1.textField.text.length) {
+        telephone=cell1_1.textField.text;
+    }
+    ApplyThirdCell *cell5=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:5 inSection:0]];
+    NSString *hangYeCategory=cell5.bottomLab.text;
+    AddSinglePhotoCell *cell6=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:6 inSection:0]];
+    NSData *photo=UIImageJPEGRepresentation(cell6.currentIma.image, 1.0);
+    NSDictionary *saveDic=@{@"ideaName":ideaName,@"ideaDescription":self.intro,@"name":name,@"telephone":telephone,@"hangYeCategory":hangYeCategory,@"photo":photo,@"background":self.background,@"services":self.services,@"patterns":self.patterns,@"catogaryID":@(self.catogaryID)};
+    
+    
+    BOOL save=[saveDic writeToFile:kChuangYiPath atomically:YES];
+    if (save) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
 -(void)rightBarClick{
     NSString *user_token=[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"];
     ApplySecondCell *cell0=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    ApplySecondCell *cell1=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    //ApplySecondCell *cell1=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     ApplySecondCell *cell1_0=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
     ApplySecondCell *cell1_1=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
     if (!cell0.textField.text.length) {
         [SJTool showAlertWithText:@"请填写名称"];
         return;
     }
-    if (!cell1.textField.text.length) {
+//    if (!cell1.textField.text.length) {
+//        [SJTool showAlertWithText:@"请填写简介"];
+//        return;
+//    }
+    if (!self.intro.length) {
         [SJTool showAlertWithText:@"请填写简介"];
         return;
     }
@@ -116,7 +194,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         return;
     }
     photo=[NSString stringWithFormat:@"data@image/jpg;base64,%@",photo];
-    NSDictionary *param=@{@"id":@(self.ideaId),@"user_token":user_token,@"title":cell0.textField.text,@"description":cell1.textField.text,@"background":self.background,@"services":self.services,@"patterns":self.patterns,@"categoryId":@(self.catogaryID),@"cover":photo,@"linker":cell1_0.textField.text,@"linkphone":cell1_1.textField.text,@"ispublic":@(1)};
+    NSDictionary *param=@{@"id":@(self.ideaId),@"user_token":user_token,@"title":cell0.textField.text,@"description":self.intro,@"background":self.background,@"services":self.services,@"patterns":self.patterns,@"categoryId":@(self.catogaryID),@"cover":photo,@"linker":cell1_0.textField.text,@"linkphone":cell1_1.textField.text,@"ispublic":@(1)};
     
     [TDHttpTools submitCreativityWithParams:param success:^(id response) {
         NSDictionary *dic=[SJTool dictionaryWithResponse:response];
@@ -156,7 +234,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     if (indexPath.section==0) {
         switch (indexPath.row) {
             case 0:
-            case 1:
+            //case 1:
             {
                 NSString *cellID=@"cellIdentifier1";
                 ApplySecondCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
@@ -168,16 +246,23 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 if (indexPath.row==0) {
                     cell.topLab.text=@"创意名称";
                     cell.textField.placeholder=@"如新能源电池回收";
+                    if (self.saveDic) {
+                        cell.textField.text=self.saveDic[@"ideaName"];
+                    }
                     if (self.model) {
                         cell.textField.text=self.model.title;
                     }
-                }else{
-                    cell.topLab.text=@"创意简介";
-                    cell.textField.placeholder=@"如通过锂电池梯次利用和回收拆解的核心技术，提升电池回收利用率";
-                    if (self.model) {
-                        cell.textField.text=self.model.descriptions;
-                    }
                 }
+//                else{
+//                    cell.topLab.text=@"创意简介";
+//                    cell.textField.placeholder=@"如通过锂电池梯次利用和回收拆解的核心技术，提升电池回收利用率";
+//                    if (self.saveDic) {
+//                        cell.textField.text=self.saveDic[@"ideaDescription"];
+//                    }
+//                    if (self.model) {
+//                        cell.textField.text=self.model.descriptions;
+//                    }
+//                }
                 cell.showCountLab.hidden=NO;
                 cell.textField.delegate=self;
                 return cell;
@@ -194,6 +279,9 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                     cell.selectionStyle=UITableViewCellSelectionStyleNone;
                 }
                 cell.topLab.text=@"上传宣传图";
+                if (self.saveDic) {
+                    cell.currentIma.image=[UIImage imageWithData:self.saveDic[@"photo"]];
+                }
                 if (self.model) {
                     cell.imageUrl=self.model.cover;
                 }
@@ -218,16 +306,22 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 }
                 cell.bottomLab.textColor=[UIColor colorWithHexString:@"#cccccc"];
                 cell.topLab.text=@"行业分类";
-                if (self.model) {
-                    cell.bottomLab.text=self.model.category;
-                    cell.bottomLab.textColor=[UIColor colorWithHexString:@"#323232"];
+                if (self.saveDic) {
+                    cell.bottomLab.text=self.saveDic[@"hangYeCategory"];
+                    if (![cell.bottomLab.text isEqualToString:@"请选择行业"]) {
+                        cell.bottomLab.textColor=[UIColor colorWithHexString:@"#323232"];
+                    }
                 }else{
                     cell.bottomLab.text=@"请选择行业";
                 }
-                
+                if (self.model) {
+                    cell.bottomLab.text=self.model.category;
+                    cell.bottomLab.textColor=[UIColor colorWithHexString:@"#323232"];
+                }
                 return cell;
             }
                 break;
+            case 1:
             case 2:
             case 3:
             case 4:
@@ -239,7 +333,14 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                     cell.separatorInset=UIEdgeInsetsMake(0, 15, 0, 15); cell.selectionStyle=UITableViewCellSelectionStyleNone;
                     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
                 }
-                if (indexPath.row==2) {
+                if (indexPath.row==1) {
+                    cell.textLabel.text=@"创意简介";
+                    if (self.intro.length) {
+                        cell.detailTextLabel.text=@"已完成";
+                    }else{
+                        cell.detailTextLabel.text=@"待填写";
+                    }
+                }else if (indexPath.row==2) {
                     cell.textLabel.text=@"创意背景";
                     if (self.background.length) {
                         cell.detailTextLabel.text=@"已完成";
@@ -262,7 +363,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                     }
                 }
                 cell.textLabel.font=[UIFont systemFontOfSize:16];
-                
+                cell.detailTextLabel.font=[UIFont systemFontOfSize:16];
                 return cell;
             }
                 break;
@@ -281,6 +382,9 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
             case 0:
                 cell.topLab.text=@"联系人";
                 cell.textField.placeholder=@"请输入真实姓名";
+                if (self.saveDic) {
+                    cell.textField.text=self.saveDic[@"name"];
+                }
                 if (self.model) {
                     cell.textField.text=self.model.linker;
                 }
@@ -288,6 +392,9 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
             case 1:
                 cell.topLab.text=@"联系电话";
                 cell.textField.placeholder=@"请输入常用手机号";
+                if (self.saveDic) {
+                    cell.textField.text=self.saveDic[@"telephone"];
+                }
                 if (self.model) {
                     cell.textField.text=self.model.linkphone;
                 }
@@ -304,7 +411,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0 && indexPath.row==6) {
         return 105;
-    }else if (indexPath.section==0 && (indexPath.row==2 || indexPath.row==3 || indexPath.row==4)){
+    }else if (indexPath.section==0 && (indexPath.row==1 || indexPath.row==2 || indexPath.row==3 || indexPath.row==4)){
         return 44;
     }else{
         return 60;
@@ -348,6 +455,21 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0) {
         switch (indexPath.row) {
+            case 1:
+            {
+                EditPageViewController *editVC=[EditPageViewController new];
+                editVC.title=@"创意简介";
+                editVC.oldString=self.intro;
+                editVC.isIntro=YES;
+                editVC.countControl=YES;
+                WS(weakSelf);
+                [editVC setCallBackBlock:^(NSString * _Nonnull string) {
+                    weakSelf.intro=string;
+                    [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                }];
+                [self.navigationController pushViewController:editVC animated:YES];
+            }
+                break;
             case 2:
             {
                 EditPageViewController *editVC=[EditPageViewController new];
@@ -453,7 +575,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 -(void)chosePhoto:(ChosePhotoType)type{
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
     imagePickerController.delegate = self;
-    //imagePickerController.allowsEditing = YES;
+    imagePickerController.allowsEditing = NO;
     if (type==ChosePhotoTypeAlbum) {
         imagePickerController.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;
     }else if (type==ChosePhotoTypeCamera){
@@ -469,20 +591,33 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     
-    AddSinglePhotoCell *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:6 inSection:0]];
-    
-    
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    image=[SJTool imageCompressForWidth:image targetWidth:kScreenWidth];
     
-    __weak typeof(cell) weakCell = cell;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        weakCell.currentIma.image=image;
-        weakCell.currentIma.contentMode=UIViewContentModeScaleAspectFill;
-    });
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+        [self clipImage:[image fixOrientation]];
+    }];
     
+}
+#pragma mark - 去裁剪
+- (void)clipImage:(UIImage *)img{
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    ClipViewController * clipVC;
+    clipVC = [[ClipViewController alloc]initWithImage:img clipSize:CGSizeMake(330,210)];
+    clipVC.clipType = SQUARECLIP;
+    clipVC.delegate = self;
+    
+    UINavigationController *naviVC = [[UINavigationController alloc]initWithRootViewController:clipVC];
+    [self presentViewController:naviVC animated:YES completion:nil];
+    
+}
+
+
+#pragma mark - CardClipVCDelegate
+-(void)clipViewController:(ClipViewController *)clipViewController finishClipImage:(UIImage *)editImage
+{
+    AddSinglePhotoCell *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:6 inSection:0]];
+    cell.currentIma.image=editImage;
     
 }
 -(NSString *)getPhotoString{
@@ -515,7 +650,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     NSInteger strLength = textField.text.length - range.length + string.length;
     
     ApplySecondCell *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    ApplySecondCell *cell1=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    //ApplySecondCell *cell1=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     
     if ([textField isEqual:cell.textField]) {
         if (strLength > 15){
@@ -525,15 +660,16 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         NSMutableAttributedString *attriStr=[[NSMutableAttributedString alloc]initWithString:str];
         [attriStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:8] range:NSMakeRange(str.length-2, 2)];
         cell.showCountLab.attributedText=attriStr;
-    }else if([textField isEqual:cell1.textField]){
-        if (strLength > 50){
-            return NO;
-        }
-        NSString *str=[NSString stringWithFormat:@"%d/50",(int)strLength];
-        NSMutableAttributedString *attriStr=[[NSMutableAttributedString alloc]initWithString:str];
-        [attriStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:8] range:NSMakeRange(str.length-2, 2)];
-        cell1.showCountLab.attributedText=attriStr;
     }
+//    else if([textField isEqual:cell1.textField]){
+//        if (strLength > 50){
+//            return NO;
+//        }
+//        NSString *str=[NSString stringWithFormat:@"%d/50",(int)strLength];
+//        NSMutableAttributedString *attriStr=[[NSMutableAttributedString alloc]initWithString:str];
+//        [attriStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:8] range:NSMakeRange(str.length-2, 2)];
+//        cell1.showCountLab.attributedText=attriStr;
+//    }
     
     
     return YES;

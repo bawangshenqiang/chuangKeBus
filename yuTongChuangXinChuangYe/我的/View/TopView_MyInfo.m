@@ -109,10 +109,10 @@
         bottomV.layer.masksToBounds=YES;
         [self addSubview:bottomV];
         //
-        NSArray *titleArr2=@[@"我的收藏",@"我的发表",@"我的消息"];
-        NSArray *imageArray2=@[@"mine_collect",@"mine_publish",@"mine_news"];
+        NSArray *titleArr2=@[@"我的收藏",@"我的发表",@"我的消息",@"任务中心"];
+        NSArray *imageArray2=@[@"mine_collect",@"mine_publish",@"mine_news",@"mine_collect"];
         UIView *lastView2=nil;
-        for (int i=0; i<3; i++) {
+        for (int i=0; i<4; i++) {
             UIButton *btn=[UIButton buttonWithType:UIButtonTypeCustom];
             [btn setImage:[UIImage imageNamed:imageArray2[i]] forState:UIControlStateNormal];
             [btn setTitle:titleArr2[i] forState:UIControlStateNormal];
@@ -126,7 +126,7 @@
             btn.sd_layout
             .leftSpaceToView(lastView2, 0)
             .topSpaceToView(bottomV, 0)
-            .widthIs(bottomV.width/3)
+            .widthIs(bottomV.width/4)
             .heightIs(65);
             btn.imageView.sd_layout
             .centerXEqualToView(btn)
@@ -151,7 +151,7 @@
                 [bottomV addSubview:self.mesCountLab];
                 self.mesCountLab.sd_layout
                 .topEqualToView(btn.imageView)
-                .centerXIs(bottomV.width*5/6+15)
+                .centerXIs(bottomV.width*5/8+15)
                 .widthIs(12)
                 .heightIs(12);
                 self.mesCountLab.sd_cornerRadius=@(2);

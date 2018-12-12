@@ -17,6 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *flagStr;
 @property(nonatomic,strong)NSString *times;
 @property(nonatomic,assign)int projectId;
+@property(nonatomic,strong)NSString *instructor;
+@property(nonatomic,strong)NSString *linkphone;
+@property(nonatomic,strong)NSString *status;
+@property(nonatomic,strong)NSString *descriptions;
+
 @property(nonatomic,strong)NSMutableArray <ProjectCheckModel_ChuangYe *> *checkModels;
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 @end

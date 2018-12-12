@@ -134,15 +134,18 @@
     }];
     [self.tableView.mj_header beginRefreshing];
     
-    UIButton *submitBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    submitBtn.frame=CGRectMake(kScreenWidth-75, self.tableView.bottom-75, 50, 50);
-    [submitBtn setBackgroundImage:[UIImage imageNamed:@"huashan_publish"] forState:UIControlStateNormal];
-    submitBtn.layer.shadowColor=[UIColor lightGrayColor].CGColor;
-    submitBtn.layer.shadowOffset=CGSizeMake(0, 3);
-    submitBtn.layer.shadowRadius=3;
-    submitBtn.layer.shadowOpacity=1;
-    [submitBtn addTarget:self action:@selector(submitClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:submitBtn];
+    if ([self.title isEqualToString:@"创意交流"]) {
+        UIButton *submitBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        submitBtn.frame=CGRectMake(kScreenWidth-75, self.tableView.bottom-75, 50, 50);
+        [submitBtn setBackgroundImage:[UIImage imageNamed:@"huashan_publish"] forState:UIControlStateNormal];
+        submitBtn.layer.shadowColor=[UIColor lightGrayColor].CGColor;
+        submitBtn.layer.shadowOffset=CGSizeMake(0, 3);
+        submitBtn.layer.shadowRadius=3;
+        submitBtn.layer.shadowOpacity=1;
+        [submitBtn addTarget:self action:@selector(submitClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:submitBtn];
+    }
+    
     
 }
 -(void)submitClick{

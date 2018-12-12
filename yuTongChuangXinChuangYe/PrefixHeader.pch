@@ -68,6 +68,9 @@ space = par;\
 
 #define kAccountPath [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/AccountInfo.plist"]
 #define kPushArrayPath [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/PushInfo.txt"]
+#define kChuangYiPath [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/ChuangYi.plist"]
+#define kXiangMuPath [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/XiangMu.plist"]
+#define kTeamPath [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Team.plist"]
 
 //设备ID
 #define  VENDER_IDENTIFIER [[UIDevice currentDevice].identifierForVendor UUIDString]

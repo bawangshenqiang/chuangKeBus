@@ -14,6 +14,8 @@
         self.status=dic[@"status"];
         self.note=dic[@"note"];
         self.state=[dic[@"state"] intValue];
+        self.suggestion=dic[@"suggestion"];
+        self.suggestionfile=dic[@"suggestionfile"];
     }
     return self;
 }

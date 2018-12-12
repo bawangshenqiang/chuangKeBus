@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *oldString;
 @property(nonatomic,copy)void (^callBackBlock)(NSString *string);
 @property(nonatomic,assign)BOOL isIntro;
+@property(nonatomic,assign)BOOL countControl;
 @end
 
 NS_ASSUME_NONNULL_END

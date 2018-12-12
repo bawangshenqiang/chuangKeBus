@@ -14,7 +14,7 @@
 #import "SubmitCreativityViewController.h"
 #import "LoginViewController.h"
 #import "SubmitProjectViewController.h"
-
+#import "CommentSubmitViewController.h"
 
 @interface CreativityAndProjectDetailViewController ()<UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate,
 WKNavigationDelegate>
@@ -288,21 +288,40 @@ WKNavigationDelegate>
     self.bottomView=[[CreativityDetailBottomCommentView alloc]initWithFrame:CGRectMake(0, kTableViewHeight-60, kScreenWidth, 60)];
     [self.view addSubview:self.bottomView];
     WS(weakSelf);
-    [self.bottomView setSubmitBtnBlock:^(NSString *string){
-        //NSLog(@"发表的内容:%@",string);
+    [self.bottomView setBtnJumpBlock:^{
         if ([Account sharedAccount]==nil) {
             LoginViewController *loginVC = [[LoginViewController alloc]init];
             UINavigationController *loginNavi=[[UINavigationController alloc]initWithRootViewController:loginVC];
             [weakSelf presentViewController:loginNavi animated:YES completion:nil];
         }else{
-            if (self.index==0) {
-                [weakSelf commentAIdea:string];
-            }else{
-                [weakSelf commentAProject:string];
-            }
             
+            CommentSubmitViewController *writeVC=[[CommentSubmitViewController alloc]init];
+            UINavigationController *navi=[[UINavigationController alloc]initWithRootViewController:writeVC];
+            [writeVC setSubmitBtnBlock:^(NSString * _Nonnull string) {
+                if (weakSelf.index==0) {
+                    [weakSelf commentAIdea:string];
+                }else{
+                    [weakSelf commentAProject:string];
+                }
+            }];
+            [weakSelf presentViewController:navi animated:YES completion:nil];
         }
     }];
+//    [self.bottomView setSubmitBtnBlock:^(NSString *string){
+//        //NSLog(@"发表的内容:%@",string);
+//        if ([Account sharedAccount]==nil) {
+//            LoginViewController *loginVC = [[LoginViewController alloc]init];
+//            UINavigationController *loginNavi=[[UINavigationController alloc]initWithRootViewController:loginVC];
+//            [weakSelf presentViewController:loginNavi animated:YES completion:nil];
+//        }else{
+//            if (self.index==0) {
+//                [weakSelf commentAIdea:string];
+//            }else{
+//                [weakSelf commentAProject:string];
+//            }
+//
+//        }
+//    }];
     [self.bottomView setPraiseBtnBlock:^{
         if ([Account sharedAccount]==nil) {
             LoginViewController *loginVC = [[LoginViewController alloc]init];
@@ -325,6 +344,7 @@ WKNavigationDelegate>
     }];
     
 }
+
 -(void)praiseAIdea{
     NSString *token=[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"];
     if (token==nil) {
@@ -433,7 +453,7 @@ WKNavigationDelegate>
 #pragma mark - Observers
 - (void)addObservers{
     //注册观察键盘的变化
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transformView:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transformView:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
     [self.webView addObserver:self forKeyPath:@"scrollView.contentSize" options:NSKeyValueObservingOptionNew context:nil];
     [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
@@ -665,31 +685,31 @@ WKNavigationDelegate>
 }
 
 //键盘变化，移动UIView
--(void)transformView:(NSNotification *)aNSNotification
-{
-    //获取键盘弹出前的Rect
-    NSValue *keyBoardBeginBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameBeginUserInfoKey];
-    CGRect beginRect=[keyBoardBeginBounds CGRectValue];
-    
-    //获取键盘弹出后的Rect
-    NSValue *keyBoardEndBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect  endRect=[keyBoardEndBounds CGRectValue];
-    
-    //获取键盘位置变化前后纵坐标Y的变化值
-    CGFloat deltaY=endRect.origin.y-beginRect.origin.y;
-    //NSLog(@"看看这个变化的Y值:%f",deltaY);
-    
-    if (deltaY<0) {
-        [UIView animateWithDuration:0.25f animations:^{
-            [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y+deltaY+SafeAreaBottomHeight, self.view.frame.size.width, self.view.frame.size.height)];
-        }];
-    }else{
-        [UIView animateWithDuration:0.25f animations:^{
-            [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y+deltaY-(SafeAreaBottomHeight), self.view.frame.size.width, self.view.frame.size.height)];
-        }];
-    }
-    
-}
+//-(void)transformView:(NSNotification *)aNSNotification
+//{
+//    //获取键盘弹出前的Rect
+//    NSValue *keyBoardBeginBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameBeginUserInfoKey];
+//    CGRect beginRect=[keyBoardBeginBounds CGRectValue];
+//
+//    //获取键盘弹出后的Rect
+//    NSValue *keyBoardEndBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGRect  endRect=[keyBoardEndBounds CGRectValue];
+//
+//    //获取键盘位置变化前后纵坐标Y的变化值
+//    CGFloat deltaY=endRect.origin.y-beginRect.origin.y;
+//    //NSLog(@"看看这个变化的Y值:%f",deltaY);
+//
+//    if (deltaY<0) {
+//        [UIView animateWithDuration:0.25f animations:^{
+//            [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y+deltaY+SafeAreaBottomHeight, self.view.frame.size.width, self.view.frame.size.height)];
+//        }];
+//    }else{
+//        [UIView animateWithDuration:0.25f animations:^{
+//            [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y+deltaY-(SafeAreaBottomHeight), self.view.frame.size.width, self.view.frame.size.height)];
+//        }];
+//    }
+//
+//}
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self removeObservers];

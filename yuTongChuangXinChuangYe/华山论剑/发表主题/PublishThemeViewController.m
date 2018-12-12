@@ -89,7 +89,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     }
 }
 -(void)setBlodFont{
-    TextViewCell_Publish *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+    TextViewCell_Publish *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     NSAttributedString *att=cell.textView.attributedText;
     NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithAttributedString:att];
     [str addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:16] range:_curserRange];
@@ -99,11 +99,11 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 //发表
 -(void)rightBarClick{
     
-    if (_categoryId==-1) {
-        [SJTool showAlertWithText:@"请选择版块"];
-        return;
-    }
-    SingleTextFieldCell *cell1=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+//    if (_categoryId==-1) {
+//        [SJTool showAlertWithText:@"请选择版块"];
+//        return;
+//    }
+    SingleTextFieldCell *cell1=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     if (!cell1.textField.text.length) {
         [SJTool showAlertWithText:@"请输入标题"];
         return;
@@ -115,6 +115,10 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     }
     
     NSString *user_token=[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"];
+    //分类id改为固定的了，固定为创意交流的id
+    NSDictionary *cateDic=self.themeArr[2];
+    self.categoryId=[cateDic[@"id"] intValue];
+    
     NSDictionary *param=@{@"id":@(self.postId),@"user_token":user_token,@"title":cell1.textField.text,@"categoryId":@(self.categoryId),@"content":content};
     
     [TDHttpTools submitPostWithParams:param success:^(id response) {
@@ -161,27 +165,28 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     return _tableView;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    return 2;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row==0) {
-        NSString *cellID=@"cellIdentifier";
-        PullDownCell_Publish *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
-        if (!cell) {
-            cell=[[PullDownCell_Publish alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
-        }
-        NSMutableArray *titles=[NSMutableArray array];
-        for (NSDictionary *dic in self.themeArr) {
-            [titles addObject:dic[@"name"]];
-        }
-        cell.titleArr=titles;
-        cell.choseStyle.delegate=self;
-        if (self.categoryId!=-1) {
-            [cell.choseStyle.mainBtn setTitle:self.category forState:UIControlStateNormal];
-        }
-        return cell;
-    }else if (indexPath.row==1){
+//    if (indexPath.row==0) {
+//        NSString *cellID=@"cellIdentifier";
+//        PullDownCell_Publish *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
+//        if (!cell) {
+//            cell=[[PullDownCell_Publish alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
+//            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+//        }
+//        NSMutableArray *titles=[NSMutableArray array];
+//        for (NSDictionary *dic in self.themeArr) {
+//            [titles addObject:dic[@"name"]];
+//        }
+//        cell.titleArr=titles;
+//        cell.choseStyle.delegate=self;
+//        if (self.categoryId!=-1) {
+//            [cell.choseStyle.mainBtn setTitle:self.category forState:UIControlStateNormal];
+//        }
+//        return cell;
+//    }else
+    if (indexPath.row==0){
         NSString *cellID=@"cellIdentifier2";
         SingleTextFieldCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
         if (!cell) {
@@ -197,6 +202,10 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         if (self.titleName.length) {
             cell.textField.text=self.titleName;
         }
+        if (!self.isRevise){
+            [cell.textField becomeFirstResponder];
+        }
+        
         return cell;
     }else{
         NSString *cellID=@"cellIdentifier3";
@@ -263,8 +272,8 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     [self.textView setFont:[UIFont systemFontOfSize:16]];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row==2) {
-        return kTableViewHeight-50-88;
+    if (indexPath.row==1) {
+        return kTableViewHeight-50-44;
     }
     return 44;
 }
@@ -303,7 +312,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     
-    TextViewCell_Publish *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+    TextViewCell_Publish *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     image=[SJTool imageCompressForWidth:image targetWidth:kScreenWidth];
@@ -364,7 +373,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     if (strLength > 15){
         return NO;
     }
-    SingleTextFieldCell *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    SingleTextFieldCell *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     NSString *str=[NSString stringWithFormat:@"%d/15",(int)strLength];
     NSMutableAttributedString *attriStr=[[NSMutableAttributedString alloc]initWithString:str];
     [attriStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:8] range:NSMakeRange(str.length-2, 2)];

@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *status;
 @property(nonatomic,strong)NSString *note;
 @property(nonatomic,assign)int state;//0等待,1通过,2拒绝
+@property(nonatomic,strong)NSString *suggestion;
+@property(nonatomic,strong)NSString *suggestionfile;
+
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 @end
 

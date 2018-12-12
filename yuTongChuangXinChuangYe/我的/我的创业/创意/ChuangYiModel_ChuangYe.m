@@ -13,11 +13,14 @@
     if (self=[super init]) {
         self.imageUrl=dic[@"cover"];
         self.title=dic[@"title"];
+        self.descriptions=dic[@"description"];
         self.flagStr=dic[@"category"];
         self.times=dic[@"create_time"];
         self.checkStatus=dic[@"status"];
         self.checkIdea=dic[@"note"];
         self.Id=[dic[@"id"] intValue];
+        self.statusId=[dic[@"state"] intValue];
+        self.username=dic[@"username"];
     }
     return self;
 }

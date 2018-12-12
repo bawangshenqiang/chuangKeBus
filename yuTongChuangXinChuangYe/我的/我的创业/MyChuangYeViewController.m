@@ -25,6 +25,12 @@
 #import "ResourceModel_ChuangYe.h"
 #import "ServerDetailViewController.h"
 #import "NoDataView.h"
+#import "ChuangYiCell_ChuangYe_Second.h"
+#import "ChuangYiAuditViewController.h"
+#import "ProjectCell_ChuangYe_Second.h"
+#import "ProjectFooter.h"
+#import "ProjectAuditViewController.h"
+#import "ResourceModel_ChuangYe_second.h"
 
 @interface MyChuangYeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -178,7 +184,7 @@
                 
                 if ([dic[@"code"] intValue]==200) {
                     for (NSDictionary *dict in dic[@"data"][@"records"]) {
-                        ResourceModel_ChuangYe *model=[[ResourceModel_ChuangYe alloc]initWithDictionary:dict];
+                        ResourceModel_ChuangYe_second *model=[[ResourceModel_ChuangYe_second alloc]initWithDictionary:dict];
                         [self.dataArr addObject:model];
                     }
                     
@@ -306,7 +312,7 @@
                 
                 if ([dic[@"code"] intValue]==200) {
                     for (NSDictionary *dict in dic[@"data"][@"records"]) {
-                        ResourceModel_ChuangYe *model=[[ResourceModel_ChuangYe alloc]initWithDictionary:dict];
+                        ResourceModel_ChuangYe_second *model=[[ResourceModel_ChuangYe_second alloc]initWithDictionary:dict];
                         [self.dataArr addObject:model];
                     }
                     
@@ -332,7 +338,7 @@
     //
     self.header=[[Head_BusinessCourse alloc]init];
     self.header.frame=CGRectMake(0, 0, kScreenWidth, 40);
-    self.header.bgColor=kBackgroundColor;
+    //self.header.bgColor=kBackgroundColor;
     self.header.selectedIndex=self.index;
     self.header.fixedTitles=@[@"创意",@"项目",@"团队",@"资源"];
     WS(weakSelf);
@@ -441,7 +447,7 @@
 }
 -(UITableView *)tableView{
     if (!_tableView) {
-        _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, self.header.bottom, kScreenWidth, kTableViewHeight-40) style:UITableViewStylePlain];
+        _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, self.header.bottom, kScreenWidth, kTableViewHeight-40) style:UITableViewStyleGrouped];
         _tableView.delegate=self;
         _tableView.dataSource=self;
         _tableView.backgroundColor=kBackgroundColor;
@@ -458,28 +464,54 @@
         case 0:
         {
             NSString *cellID1=@"cellID1";
-            ChuangYiCell_ChuangYe *cell=[tableView dequeueReusableCellWithIdentifier:cellID1];
+            ChuangYiCell_ChuangYe_Second *cell=[tableView dequeueReusableCellWithIdentifier:cellID1];
             if (!cell) {
-                cell=[[ChuangYiCell_ChuangYe alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID1];
+                cell=[[ChuangYiCell_ChuangYe_Second alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID1];
                 cell.backgroundColor=kBackgroundColor;
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
             ChuangYiModel_ChuangYe *model=self.dataArr[indexPath.row];
             cell.model=model;
+            WS(weakSelf);
+            [cell setCheckIdeaBlock:^(ChuangYiModel_ChuangYe * _Nonnull model) {
+                //跳转到审核意见页面
+                if (model.statusId==0 || model.statusId==3){
+                    [SJTool showAlertWithText:@"创意审核中请耐心等待"];
+                }else{
+                    ChuangYiAuditViewController *auditVC=[ChuangYiAuditViewController new];
+                    auditVC.model=model;
+                    auditVC.title=model.title;
+                    [weakSelf.navigationController pushViewController:auditVC animated:YES];
+                }
+                
+            }];
             return cell;
         }
             break;
         case 1:
         {
             NSString *cellID2=@"cellID2";
-            ProjectCell_ChuangYe *cell=[tableView dequeueReusableCellWithIdentifier:cellID2];
+            ProjectCell_ChuangYe_Second *cell=[tableView dequeueReusableCellWithIdentifier:cellID2];
             if (!cell) {
-                cell=[[ProjectCell_ChuangYe alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID2];
+                cell=[[ProjectCell_ChuangYe_Second alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID2];
                 cell.backgroundColor=kBackgroundColor;
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
             ProjectModel_ChuangYe *model=self.dataArr[indexPath.row];
             cell.model=model;
+            WS(weakSelf);
+            [cell setCheckIdeaBlock:^(ProjectModel_ChuangYe * _Nonnull model) {
+                //跳转到审核意见页面
+                ProjectCheckModel_ChuangYe *littleModel=model.checkModels.firstObject;
+                if (littleModel.state==0) {
+                    [SJTool showAlertWithText:@"项目审核中请耐心等待"];
+                }else{
+                    ProjectAuditViewController *auditVC=[ProjectAuditViewController new];
+                    auditVC.model=model;
+                    auditVC.title=@"审核记录";//model.title;
+                    [weakSelf.navigationController pushViewController:auditVC animated:YES];
+                }
+            }];
             return cell;
         }
             break;
@@ -506,6 +538,12 @@
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
             cell.model=self.dataArr[indexPath.row];
+            WS(weakSelf);
+            [cell setBtnClickBlock:^(int iD) {
+                ServerDetailViewController *detailVC=[ServerDetailViewController new];
+                detailVC.providerId=iD;
+                [weakSelf.navigationController pushViewController:detailVC animated:YES];
+            }];
             return cell;
         }
             break;
@@ -520,14 +558,14 @@
         case 0:
         {
             ChuangYiModel_ChuangYe *model=self.dataArr[indexPath.row];
-            height=[tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ChuangYiCell_ChuangYe class] contentViewWidth:kScreenWidth-20];
+            height=[tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ChuangYiCell_ChuangYe_Second class] contentViewWidth:kScreenWidth];
             return height;
         }
             break;
         case 1:
         {
             ProjectModel_ChuangYe *model=self.dataArr[indexPath.row];
-            height=[tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ProjectCell_ChuangYe class] contentViewWidth:kScreenWidth-20];
+            height=[tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ProjectCell_ChuangYe_Second class] contentViewWidth:kScreenWidth-20];
             return height;
         }
             break;
@@ -539,7 +577,8 @@
             break;
         case 3:
         {
-            height=140;
+            ResourceModel_ChuangYe_second *model=self.dataArr[indexPath.row];
+            height=[tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ResourceCell_ChuangYe class] contentViewWidth:kScreenWidth];
             return height;
         }
             break;
@@ -580,15 +619,36 @@
             break;
         case 3:
         {
-            ResourceModel_ChuangYe *model=self.dataArr[indexPath.row];
-            ServerDetailViewController *detailVC=[ServerDetailViewController new];
-            detailVC.providerId=model.providerId;
-            [self.navigationController pushViewController:detailVC animated:YES];
+//            ResourceModel_ChuangYe_second *model=self.dataArr[indexPath.row];
+//            ServerDetailViewController *detailVC=[ServerDetailViewController new];
+//            detailVC.providerId=model.providerId;
+//            [self.navigationController pushViewController:detailVC animated:YES];
         }
             break;
         default:
             break;
     }
+}
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    UIView *footer=[[UIView alloc]init];
+    if (self.index==1 && self.dataArr.count>0) {
+        ProjectFooter *foot=[tableView dequeueReusableHeaderFooterViewWithIdentifier:@"footer"];
+        if (!foot) {
+            foot=[[ProjectFooter alloc]initWithReuseIdentifier:@"footer"];
+        }
+        footer=foot;
+        
+    }
+    return footer;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0.01;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (self.index==1 && self.dataArr.count>0) {
+        return 125;
+    }
+    return 0.01;
 }
 /*
 #pragma mark - Navigation

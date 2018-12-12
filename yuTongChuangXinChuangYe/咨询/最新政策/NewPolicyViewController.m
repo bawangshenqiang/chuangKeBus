@@ -154,7 +154,7 @@
     
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"hotspot_screen"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClick)];
     //
-    self.topView=[[PolicyTopView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth-20, 40) titles:@[@"区域",@"行业",@"解析"]];
+    self.topView=[[PolicyTopView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth-20, 40) titles:@[@"区域",@"行业",@"解读"]];
     [self.topView setImage:@[@"policy_area",@"policy_industry",@"policy_interpretation"] andSelectedImage:@[@"policy_area_nor",@"policy_industry_nor",@"policy_interpretation_nor"]];
     [self.view addSubview:self.topView];
     WS(weakSelf);

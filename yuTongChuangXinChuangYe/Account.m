@@ -33,6 +33,7 @@ static Account *_account;
                 _account.provinceId=[dic[@"provinceId"] intValue];
                 _account.cityId=[dic[@"cityId"] intValue];
                 _account.message=[dic[@"message"] intValue];
+                _account.provider=[dic[@"provider"] boolValue];
             }
             
         }
@@ -46,6 +47,7 @@ static Account *_account;
     //删除文件
     NSFileManager *fm = [NSFileManager defaultManager];
     [fm removeItemAtPath:kAccountPath error:nil];
+    
     //清空NSUserDefaults下的内容
 //    NSString*appDomain = [[NSBundle mainBundle] bundleIdentifier];
 //    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];

@@ -113,6 +113,10 @@ typedef NS_ENUM(NSInteger , RequestMethodType) {
  */
 +(void)searchNumbersListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
 /**
+ *  小贴士列表
+ */
++(void)tipsListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
  *  创意详情
  */
 +(void)ideaDeatilWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
@@ -392,5 +396,13 @@ typedef NS_ENUM(NSInteger , RequestMethodType) {
  *  孵化专员
  */
 +(void)getHatchPersonWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  项目审核记录列表
+ */
++(void)projectAuditListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  任务中心
+ */
++(void)taskCenterWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
 
 @end

@@ -13,13 +13,15 @@
 #import "CustomDatePickerView.h"
 #import "CustomCityPickerView.h"
 #import "CustomPickerView.h"
+#import "ClipViewController.h"
+#import "UIImage+fixOrientation.h"
 
 typedef NS_ENUM(NSInteger,ChosePhotoType) {
     ChosePhotoTypeAlbum,//相册
     ChosePhotoTypeCamera//相机
 };
 
-@interface UserInfomationViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface UserInfomationViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate,UITableViewDelegate,UITableViewDataSource,ClipVCDelegate>
 @property(nonatomic,strong)UITableView *tableView;
 @property (strong, nonatomic) UIAlertController *actionSheet;
 @property(nonatomic,strong)Header_UserInfo *headerView;
@@ -361,19 +363,32 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     
-    
-    
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    //image=[SJTool imageCompressForWidth:image targetWidth:100];
     
-    WS(weakSelf);
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [self dismissViewControllerAnimated:YES completion:^{
         
-        weakSelf.headerView.headIV.image=image; weakSelf.headerView.headIV.contentMode=UIViewContentModeScaleAspectFill;
-    });
+        [self clipImage:[image fixOrientation]];
+    }];
     
+}
+#pragma mark - 去裁剪
+- (void)clipImage:(UIImage *)img{
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    ClipViewController * clipVC;
+    clipVC = [[ClipViewController alloc]initWithImage:img radius:160];
+    clipVC.clipType = CIRCULARCLIP;//圆形
+    clipVC.delegate = self;
+    
+    UINavigationController *naviVC = [[UINavigationController alloc]initWithRootViewController:clipVC];
+    [self presentViewController:naviVC animated:YES completion:nil];
+    
+}
+
+#pragma mark - CardClipVCDelegate
+-(void)clipViewController:(ClipViewController *)clipViewController finishClipImage:(UIImage *)editImage
+{
+    
+    self.headerView.headIV.image=editImage;
     
 }
 -(NSString *)getPhotoString{

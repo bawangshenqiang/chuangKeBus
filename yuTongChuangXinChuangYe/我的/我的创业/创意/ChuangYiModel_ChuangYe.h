@@ -13,11 +13,15 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ChuangYiModel_ChuangYe : NSObject
 @property(nonatomic,strong)NSString *imageUrl;
 @property(nonatomic,strong)NSString *title;
+@property(nonatomic,strong)NSString *descriptions;
 @property(nonatomic,strong)NSString *flagStr;
 @property(nonatomic,strong)NSString *times;
 @property(nonatomic,strong)NSString *checkStatus;
 @property(nonatomic,strong)NSString *checkIdea;
 @property(nonatomic,assign)int Id;
+@property(nonatomic,assign)int statusId;
+@property(nonatomic,strong)NSString *username;
+
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 
 @end

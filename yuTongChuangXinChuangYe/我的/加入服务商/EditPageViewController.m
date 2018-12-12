@@ -22,6 +22,8 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 //光标位置
 @property (nonatomic,assign)NSRange curserRange;
 
+@property(nonatomic,strong)UILabel *countLab;//提示字数的label
+
 @end
 
 @implementation EditPageViewController
@@ -72,6 +74,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
+
 -(void)showAlert{
     UIAlertController *alert=[UIAlertController alertControllerWithTitle:@"退出编辑" message:@"编辑的内容还未保存，确定退出吗" preferredStyle:UIAlertControllerStyleActionSheet];
     WS(weakSelf);
@@ -144,8 +147,16 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         placeHolderLabel.font = [UIFont systemFontOfSize:16];
         //kvc改变私有属性
         [_textView setValue:placeHolderLabel forKey:@"_placeholderLabel"];
-        
         [_textView setInputAccessoryView:[SJTool backToolBarView]];
+        //
+        if (self.countControl) {
+            self.countLab=[[UILabel alloc]initWithFrame:CGRectMake(_textView.width-85, 70, 80, 20)];
+            self.countLab.font=[UIFont systemFontOfSize:12];
+            self.countLab.textAlignment=NSTextAlignmentRight;
+            self.countLab.textColor=[UIColor colorWithHexString:@"#989898"];
+            self.countLab.text=@"50字以内";
+            [_textView addSubview:self.countLab];
+        }
     }
     return _textView;
 }
@@ -262,6 +273,20 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 - (void)textViewDidChangeSelection:(UITextView *)textView {
     //NSLog(@"光标位置%ld——%ld",textView.selectedRange.location,textView.selectedRange.length);
     _curserRange = textView.selectedRange;
+}
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    
+    NSInteger strLength = textView.text.length - range.length + text.length;
+    if (self.countControl && strLength > 50){
+        return NO;
+    }
+    if (self.countControl) {
+        NSString *str=[NSString stringWithFormat:@"%d/50",(int)strLength];
+        NSMutableAttributedString *attriStr=[[NSMutableAttributedString alloc]initWithString:str];
+        [attriStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:8] range:NSMakeRange(str.length-2, 2)];
+        self.countLab.attributedText=attriStr;
+    }
+    return YES;
 }
 -(void)dismissKeyboard:(NSNotification *)noti{
     [self.textView endEditing:YES];

@@ -18,6 +18,9 @@
 #import "Hall_CreativityListCell.h"
 #import "SearchNumbersListModel_Hall.h"
 #import "LoginViewController.h"
+#import "TipsListModel.h"
+#import "TipsListCell.h"
+#import "TipsDetailViewController.h"
 
 @interface GotoSearchThreeViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UISegmentedControl *topSegment;
@@ -45,159 +48,331 @@
     _page=1;
     NSString *timestamp=[SJTool getNowTimeTimestamp3];
     NSString *access_token=[SJTool getToken];
-    NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"type":@(newOrHot),@"size":@(10),@"page":@(_page)};
+    
     
     
     if (self.index==0) {
-        [TDHttpTools searchCreativityListWithParams:param success:^(id response) {
-            NSDictionary *dic=[SJTool dictionaryWithResponse:response];
-            NSLog(@"%@",[SJTool logDic:dic]);
-            [self.dataArr removeAllObjects];
-            if ([dic[@"code"] intValue]==200) {
-                for (NSDictionary *dict in dic[@"data"][@"records"]) {
-                    SearchCreativityListModel *model=[[SearchCreativityListModel alloc]initWithDictionary:dict];
-                    [self.dataArr addObject:model];
+        
+        if (newOrHot==3) {
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"module":@"idea",@"size":@(100),@"page":@(_page)};
+            [TDHttpTools tipsListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
+                [self.dataArr removeAllObjects];
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        TipsListModel *model=[[TipsListModel alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
                 }
-                
-            }else{
-                [SJTool showAlertWithText:dic[@"msg"]];
-            }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_header endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
                 [self.tableView.mj_header endRefreshing];
-                [self.tableView reloadData];
-            });
-        } failure:^(NSError *error) {
-            NSLog(@"%@",error);
-            [self.tableView.mj_header endRefreshing];
-        }];
+            }];
+        }else{
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"type":@(newOrHot),@"size":@(10),@"page":@(_page)};
+            [TDHttpTools searchCreativityListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
+                [self.dataArr removeAllObjects];
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        SearchCreativityListModel *model=[[SearchCreativityListModel alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
+                }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_header endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+                [self.tableView.mj_header endRefreshing];
+            }];
+        }
+        
     }else if (self.index==1){
-        [TDHttpTools searchProjectListWithParams:param success:^(id response) {
-            NSDictionary *dic=[SJTool dictionaryWithResponse:response];
-            NSLog(@"%@",[SJTool logDic:dic]);
-            [self.dataArr removeAllObjects];
-            if ([dic[@"code"] intValue]==200) {
-                for (NSDictionary *dict in dic[@"data"][@"records"]) {
-                    SearchCreativityListModel *model=[[SearchCreativityListModel alloc]initWithDictionary:dict];
-                    [self.dataArr addObject:model];
+        if (newOrHot==3) {
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"module":@"project",@"size":@(100),@"page":@(_page)};
+            [TDHttpTools tipsListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
+                [self.dataArr removeAllObjects];
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        TipsListModel *model=[[TipsListModel alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
                 }
-                
-            }else{
-                [SJTool showAlertWithText:dic[@"msg"]];
-            }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_header endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
                 [self.tableView.mj_header endRefreshing];
-                [self.tableView reloadData];
-            });
-        } failure:^(NSError *error) {
-            NSLog(@"%@",error);
-            [self.tableView.mj_header endRefreshing];
-        }];
+            }];
+        }else{
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"type":@(newOrHot),@"size":@(10),@"page":@(_page)};
+            [TDHttpTools searchProjectListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
+                [self.dataArr removeAllObjects];
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        SearchCreativityListModel *model=[[SearchCreativityListModel alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
+                }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_header endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+                [self.tableView.mj_header endRefreshing];
+            }];
+        }
+        
     }else{
-        [TDHttpTools searchNumbersListWithParams:param success:^(id response) {
-            NSDictionary *dic=[SJTool dictionaryWithResponse:response];
-            NSLog(@"%@",[SJTool logDic:dic]);
-            [self.dataArr removeAllObjects];
-            if ([dic[@"code"] intValue]==200) {
-                for (NSDictionary *dict in dic[@"data"][@"records"]) {
-                    SearchNumbersListModel_Hall *model=[[SearchNumbersListModel_Hall alloc]initWithDictionary:dict];
-                    [self.dataArr addObject:model];
+        if (newOrHot==3) {
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"module":@"team",@"size":@(100),@"page":@(_page)};
+            [TDHttpTools tipsListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
+                [self.dataArr removeAllObjects];
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        TipsListModel *model=[[TipsListModel alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
                 }
-                
-            }else{
-                [SJTool showAlertWithText:dic[@"msg"]];
-            }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_header endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
                 [self.tableView.mj_header endRefreshing];
-                [self.tableView reloadData];
-            });
-        } failure:^(NSError *error) {
-            NSLog(@"%@",error);
-            [self.tableView.mj_header endRefreshing];
-        }];
+            }];
+        }else{
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"type":@(newOrHot),@"size":@(10),@"page":@(_page)};
+            [TDHttpTools searchNumbersListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
+                [self.dataArr removeAllObjects];
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        SearchNumbersListModel_Hall *model=[[SearchNumbersListModel_Hall alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
+                }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_header endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+                [self.tableView.mj_header endRefreshing];
+            }];
+        }
+        
     }
 }
 -(void)getMoreDataNewOrHot:(int)newOrHot{
     _page=_page+1;
     NSString *timestamp=[SJTool getNowTimeTimestamp3];
     NSString *access_token=[SJTool getToken];
-    NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"type":@(newOrHot),@"size":@(10),@"page":@(_page)};
+    
     
     
     if (self.index==0) {
-        [TDHttpTools searchCreativityListWithParams:param success:^(id response) {
-            NSDictionary *dic=[SJTool dictionaryWithResponse:response];
-            NSLog(@"%@",[SJTool logDic:dic]);
-            
-            if ([dic[@"code"] intValue]==200) {
-                for (NSDictionary *dict in dic[@"data"][@"records"]) {
-                    SearchCreativityListModel *model=[[SearchCreativityListModel alloc]initWithDictionary:dict];
-                    [self.dataArr addObject:model];
+        if (newOrHot==3) {
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"module":@"idea",@"size":@(100),@"page":@(_page)};
+            [TDHttpTools tipsListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
+                
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        TipsListModel *model=[[TipsListModel alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
                 }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                    
+                });
+            }];
+        }else{
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"type":@(newOrHot),@"size":@(10),@"page":@(_page)};
+            [TDHttpTools searchCreativityListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
                 
-            }else{
-                [SJTool showAlertWithText:dic[@"msg"]];
-            }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.tableView.mj_footer endRefreshing];
-                [self.tableView reloadData];
-            });
-        } failure:^(NSError *error) {
-            NSLog(@"%@",error);
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.tableView.mj_footer endRefreshingWithNoMoreData];
-                
-            });
-        }];
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        SearchCreativityListModel *model=[[SearchCreativityListModel alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
+                }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                    
+                });
+            }];
+        }
+        
     }else if (self.index==1){
-        [TDHttpTools searchProjectListWithParams:param success:^(id response) {
-            NSDictionary *dic=[SJTool dictionaryWithResponse:response];
-            NSLog(@"%@",[SJTool logDic:dic]);
-            
-            if ([dic[@"code"] intValue]==200) {
-                for (NSDictionary *dict in dic[@"data"][@"records"]) {
-                    SearchCreativityListModel *model=[[SearchCreativityListModel alloc]initWithDictionary:dict];
-                    [self.dataArr addObject:model];
+        if (newOrHot==3) {
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"module":@"project",@"size":@(100),@"page":@(_page)};
+            [TDHttpTools tipsListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
+                
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        TipsListModel *model=[[TipsListModel alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
                 }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                    
+                });
+            }];
+        }else{
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"type":@(newOrHot),@"size":@(10),@"page":@(_page)};
+            [TDHttpTools searchProjectListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
                 
-            }else{
-                [SJTool showAlertWithText:dic[@"msg"]];
-            }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.tableView.mj_footer endRefreshing];
-                [self.tableView reloadData];
-            });
-        } failure:^(NSError *error) {
-            NSLog(@"%@",error);
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.tableView.mj_footer endRefreshingWithNoMoreData];
-                
-            });
-        }];
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        SearchCreativityListModel *model=[[SearchCreativityListModel alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
+                }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                    
+                });
+            }];
+        }
+        
     }else{
-        [TDHttpTools searchNumbersListWithParams:param success:^(id response) {
-            NSDictionary *dic=[SJTool dictionaryWithResponse:response];
-            NSLog(@"%@",[SJTool logDic:dic]);
-            
-            if ([dic[@"code"] intValue]==200) {
-                for (NSDictionary *dict in dic[@"data"][@"records"]) {
-                    SearchNumbersListModel_Hall *model=[[SearchNumbersListModel_Hall alloc]initWithDictionary:dict];
-                    [self.dataArr addObject:model];
+        if (newOrHot==3) {
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"module":@"team",@"size":@(100),@"page":@(_page)};
+            [TDHttpTools tipsListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
+                
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        TipsListModel *model=[[TipsListModel alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
                 }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                    
+                });
+            }];
+        }else{
+            NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"type":@(newOrHot),@"size":@(10),@"page":@(_page)};
+            [TDHttpTools searchNumbersListWithParams:param success:^(id response) {
+                NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+                NSLog(@"%@",[SJTool logDic:dic]);
                 
-            }else{
-                [SJTool showAlertWithText:dic[@"msg"]];
-            }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.tableView.mj_footer endRefreshing];
-                [self.tableView reloadData];
-            });
-        } failure:^(NSError *error) {
-            NSLog(@"%@",error);
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.tableView.mj_footer endRefreshingWithNoMoreData];
-                
-            });
-        }];
+                if ([dic[@"code"] intValue]==200) {
+                    for (NSDictionary *dict in dic[@"data"][@"records"]) {
+                        SearchNumbersListModel_Hall *model=[[SearchNumbersListModel_Hall alloc]initWithDictionary:dict];
+                        [self.dataArr addObject:model];
+                    }
+                    
+                }else{
+                    [SJTool showAlertWithText:dic[@"msg"]];
+                }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                    
+                });
+            }];
+        }
+        
     }
 }
 - (void)viewDidLoad {
@@ -215,9 +390,9 @@
             break;
     }
     //
-    NSArray *topSegmentTitle=@[@"最新",@"最热"];
+    NSArray *topSegmentTitle=@[@"最新",@"最热",@"小贴士"];
     self.topSegment=[[UISegmentedControl alloc]initWithItems:topSegmentTitle];
-    self.topSegment.frame=CGRectMake(kScreenWidth/2-90, 0, 180, 40);
+    self.topSegment.frame=CGRectMake(0, 0, kScreenWidth, 40);//CGRectMake(kScreenWidth/2-90, 0, 180, 40);
     self.topSegment.backgroundColor=kBackgroundColor;
     self.topSegment.tintColor=[UIColor clearColor];
     [self.topSegment setSelectedSegmentIndex:0];
@@ -235,8 +410,8 @@
     [self.topSegment addTarget:self action:@selector(topSelecte:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.topSegment];
     //
-    UIView *segmentBottomLine=[[UIView alloc]initWithFrame:CGRectMake(self.topSegment.left, self.topSegment.bottom-2, 40, 2)];
-    segmentBottomLine.center=CGPointMake(self.topSegment.centerX-45, segmentBottomLine.centerY);
+    UIView *segmentBottomLine=[[UIView alloc]initWithFrame:CGRectMake(0, self.topSegment.bottom-2, 60, 2)];//CGRectMake(self.topSegment.left, self.topSegment.bottom-2, 40, 2)
+    segmentBottomLine.center=CGPointMake(kScreenWidth/6, segmentBottomLine.centerY);//self.topSegment.centerX-45
     segmentBottomLine.backgroundColor=kThemeColor;
     segmentBottomLine.tag=111111;
     [self.view addSubview:segmentBottomLine];
@@ -315,13 +490,17 @@
     switch (self.topSegment.selectedSegmentIndex) {
         case 0:
         {
-            view.center=CGPointMake(self.topSegment.centerX-45, view.centerY);
+            view.center=CGPointMake(kScreenWidth/6, view.centerY);//self.topSegment.centerX-45
         }
             break;
-            
+        case 1:
+        {
+            view.center=CGPointMake(kScreenWidth/2, view.centerY);
+        }
+            break;
         default:
         {
-            view.center=CGPointMake(self.topSegment.centerX+45, view.centerY);
+            view.center=CGPointMake(kScreenWidth*5/6, view.centerY);//self.topSegment.centerX+45
             
         }
             break;
@@ -344,51 +523,82 @@
     return self.dataArr.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.index==2) {
-        //找伙伴
-        NSString *cellID1=@"cellIdentifier";
-        GotoSearchPeopleCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID1];
+    if (self.topSegment.selectedSegmentIndex==2) {
+        NSString *cellID=@"cellidenti";
+        TipsListCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
         if (!cell) {
-            cell=[[GotoSearchPeopleCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID1];
-            cell.backgroundColor=kBackgroundColor;
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+            cell=[[TipsListCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
+            cell.backgroundColor=[UIColor whiteColor];
         }
         cell.model=self.dataArr[indexPath.row];
+        if (indexPath.row==self.dataArr.count-1) {
+            cell.separaterLine.hidden=YES;
+        }
         return cell;
     }else{
-        NSString *cellID=@"cellIdentifier";
-        Hall_CreativityListCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
-        if (!cell) {
-            cell=[[Hall_CreativityListCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
-            cell.backgroundColor=kBackgroundColor;
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        if (self.index==2) {
+            //找伙伴
+            NSString *cellID=@"cellIdentifier";
+            GotoSearchPeopleCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
+            if (!cell) {
+                cell=[[GotoSearchPeopleCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
+                cell.backgroundColor=kBackgroundColor;
+            }
+            cell.model=self.dataArr[indexPath.row];
+            return cell;
+        }else{
+            NSString *cellID=@"cellIdentifi";
+            Hall_CreativityListCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
+            if (!cell) {
+                cell=[[Hall_CreativityListCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
+                cell.backgroundColor=kBackgroundColor;
+            }
+            
+            cell.model=self.dataArr[indexPath.row];
+            return cell;
         }
-        
-        cell.model=self.dataArr[indexPath.row];
-        return cell;
     }
+    
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.index==2) {
-        return 75;
+    if (self.topSegment.selectedSegmentIndex==2) {
+        CGFloat height=0;
+        TipsListModel *model=self.dataArr[indexPath.row];
+        height=[tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[TipsListCell class] contentViewWidth:kScreenWidth];
+        return height;
+    }else{
+        if (self.index==2) {
+            return 75;
+        }
+        return 100;
     }
-    return 100;
+    
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.index==2) {
-        //找成员详情
-        SearchNumbersDetailViewController *detailVC=[SearchNumbersDetailViewController new];
-        SearchNumbersListModel_Hall *model=self.dataArr[indexPath.row];
-        detailVC.Id=model.Id;
-        [self.navigationController pushViewController:detailVC animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (self.topSegment.selectedSegmentIndex==2) {
+        TipsListModel *model=self.dataArr[indexPath.row];
+        TipsDetailViewController *tipVC=[TipsDetailViewController new];
+        tipVC.shareContent=model.title;
+        tipVC.urlString=model.url;
+        [self.navigationController pushViewController:tipVC animated:YES];
     }else{
-        //找创意、项目详情
-        CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
-        detailVC.index=self.index;
-        SearchCreativityListModel *model=self.dataArr[indexPath.row];
-        detailVC.Id=model.Id;
-        [self.navigationController pushViewController:detailVC animated:YES];
+        if (self.index==2) {
+            //找成员详情
+            SearchNumbersDetailViewController *detailVC=[SearchNumbersDetailViewController new];
+            SearchNumbersListModel_Hall *model=self.dataArr[indexPath.row];
+            detailVC.Id=model.Id;
+            [self.navigationController pushViewController:detailVC animated:YES];
+        }else{
+            //找创意、项目详情
+            CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
+            detailVC.index=self.index;
+            SearchCreativityListModel *model=self.dataArr[indexPath.row];
+            detailVC.Id=model.Id;
+            [self.navigationController pushViewController:detailVC animated:YES];
+        }
     }
+    
 }
 /*
 #pragma mark - Navigation

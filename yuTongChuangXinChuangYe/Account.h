@@ -25,6 +25,8 @@
 
 @property(nonatomic,assign)int message;//消息数
 
+@property(nonatomic,assign)BOOL provider;//是否加入了服务商
+
 +(Account *)sharedAccount;
 -(void)logout;
 

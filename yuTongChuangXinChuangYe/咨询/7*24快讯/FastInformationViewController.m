@@ -44,6 +44,11 @@
                 FastInfoListModel *model=[[FastInfoListModel alloc]initWithDictionary:dict];
                 [self.dataArr addObject:model];
             }
+            if (self.dataArr.count>0) {
+                FastInfoListModel *model=self.dataArr[0];
+                model.showBottomView=YES;
+                [self.dataArr replaceObjectAtIndex:0 withObject:model];
+            }
             [self.tableView reloadData];
         }else{
             [SJTool showAlertWithText:dic[@"msg"]];
@@ -90,7 +95,9 @@
         cell.separatorInset=UIEdgeInsetsMake(0, 35, 0, 10);
     }
     cell.indexPath=indexPath;
-    cell.model=self.dataArr[indexPath.row];
+    FastInfoListModel *model=self.dataArr[indexPath.row];
+    cell.model=model;
+    
     WS(weakSelf);
     [cell setFlodClickBlock:^(NSIndexPath * _Nonnull indexPath) {
         [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];

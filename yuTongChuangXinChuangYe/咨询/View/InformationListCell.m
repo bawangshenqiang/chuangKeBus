@@ -25,6 +25,7 @@
     _model=model;
     self.leftLab.text=_model.title;
     [self.rightIV sd_setImageWithURL:[NSURL URLWithString:_model.cover] placeholderImage:[UIImage imageNamed:@"picture"] options:SDWebImageAllowInvalidSSLCertificates];
+    
     [self.flagBtn setTitle:_model.label.length?_model.label:@"其他" forState:UIControlStateNormal];
     self.fromLab.text=_model.source;
     self.timeLab.text=_model.create_time;

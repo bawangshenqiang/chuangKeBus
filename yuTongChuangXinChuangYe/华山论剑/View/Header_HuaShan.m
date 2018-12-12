@@ -39,7 +39,7 @@
         [btn setTitleColor:[UIColor colorWithHexString:@"#323232"] forState:UIControlStateNormal];
         
         [btn setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:dic[@"icon"]]]] forState:UIControlStateNormal];
-        btn.titleLabel.font=[UIFont systemFontOfSize:17];
+        btn.titleLabel.font=[UIFont systemFontOfSize:14];
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
         [self.btnArr addObject:btn];
@@ -47,18 +47,18 @@
         btn.sd_layout
         .leftSpaceToView(left, 0)
         .topSpaceToView(self, 0)
-        .widthIs(kScreenWidth/4)
+        .widthIs(kScreenWidth/(_titleArr.count))
         .heightIs(80);
         btn.imageView.sd_layout
         .centerXEqualToView(btn)
-        .topSpaceToView(btn, 0)
-        .widthIs(50)
-        .heightIs(50);
+        .topSpaceToView(btn, 10)
+        .widthIs(45)
+        .heightIs(45);
         btn.titleLabel.sd_layout
         .centerXEqualToView(btn)
         .topSpaceToView(btn.imageView, 0)
-        .widthIs(kScreenWidth/4)
-        .heightIs(30);
+        .widthIs(kScreenWidth/(_titleArr.count))
+        .heightIs(25);
         btn.titleLabel.textAlignment=NSTextAlignmentCenter;
         
         left=btn;

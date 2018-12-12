@@ -26,7 +26,7 @@
 @property(nonatomic,strong)NSString *province;
 @property(nonatomic,strong)NSString *city;
 @property(nonatomic,strong)NSMutableArray *dataArr;
-
+@property(nonatomic,strong)NSDictionary *saveDic;//存到草稿里面的内容
 
 @end
 
@@ -53,6 +53,11 @@
     }
     //NSLog(@"dataArr==%@",self.dataArr);
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationItem setHidesBackButton:YES animated:YES];
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor=[UIColor whiteColor];
@@ -63,10 +68,25 @@
     self.province=@"";
     self.city=@"";
     
+    UIBarButtonItem *leftBar=[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"fanhui"] style:UIBarButtonItemStylePlain target:self action:@selector(backToHomepage)];
+    self.navigationItem.leftBarButtonItem=leftBar;
+    
     [self.view addSubview:self.tableView];
     [self getData];
     
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"提交" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarClick)];
+    
+    NSDictionary *dic=[NSDictionary dictionaryWithContentsOfFile:kTeamPath];
+    if (dic!=nil) {
+        self.saveDic=dic;
+        self.catogaryID=[self.saveDic[@"catogaryID"] intValue];
+        self.project=self.saveDic[@"project"];
+        self.team=self.saveDic[@"team"];
+        self.demand=self.saveDic[@"demand"];
+        self.province=self.saveDic[@"province"];
+        self.city=self.saveDic[@"city"];
+    }
+    
     if (self.isRevise) {
         //修改
         NSString *user_token=[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"];
@@ -90,6 +110,54 @@
         } failure:^(NSError *error) {
             NSLog(@"%@",error);
         }];
+    }
+}
+-(void)backToHomepage{
+    ApplySecondCell *cell0=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (cell0.textField.text.length>0) {
+        [self showAlert];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+-(void)showAlert{
+    UIAlertController *alert=[UIAlertController alertControllerWithTitle:@"退出编辑" message:@"编辑的内容还未保存，确定退出吗" preferredStyle:UIAlertControllerStyleActionSheet];
+    WS(weakSelf);
+    [alert addAction:[UIAlertAction actionWithTitle:@"保存为草稿" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf saveDraft];
+        
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    }]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+-(void)saveDraft{
+    ApplySecondCell *cell0=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    ApplySecondCell *cell1=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    ApplySecondCell *cell2=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
+    NSString *title=@"";
+    if (cell0.textField.text.length) {
+        title=cell0.textField.text;
+    }
+    NSString *name=@"";
+    if (cell1.textField.text.length) {
+        name=cell1.textField.text;
+    }
+    NSString *job=@"";
+    if (cell2.textField.text.length) {
+        job=cell2.textField.text;
+    }
+    ApplyThirdCell *cell4=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]];
+    NSString *hangYeCategory=cell4.bottomLab.text;
+    NSDictionary *saveDic=@{@"title":title,@"job":job,@"name":name,@"hangYeCategory":hangYeCategory,@"project":self.project,@"team":self.team,@"demand":self.demand,@"province":self.province,@"city":self.city,@"catogaryID":@(self.catogaryID)};
+    
+    
+    BOOL save=[saveDic writeToFile:kTeamPath atomically:YES];
+    if (save) {
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 -(void)rightBarClick{
@@ -180,6 +248,9 @@
                 if (indexPath.row==0) {
                     cell.topLab.text=@"标题";
                     cell.textField.placeholder=@"如新能源电池回收";
+                    if (self.saveDic) {
+                        cell.textField.text=self.saveDic[@"title"];
+                    }
                     if (self.model) {
                         cell.textField.text=self.model.title;
                     }
@@ -188,12 +259,18 @@
                 }else if(indexPath.row==1){
                     cell.topLab.text=@"姓名";
                     cell.textField.placeholder=@"请输入姓名";
+                    if (self.saveDic) {
+                        cell.textField.text=self.saveDic[@"name"];
+                    }
                     if (self.model) {
                         cell.textField.text=self.model.name;
                     }
                 }else{
                     cell.topLab.text=@"职位";
                     cell.textField.placeholder=@"例：***公司创始人&CEO";
+                    if (self.saveDic) {
+                        cell.textField.text=self.saveDic[@"job"];
+                    }
                     if (self.model) {
                         cell.textField.text=self.model.job;
                     }
@@ -215,19 +292,31 @@
                 cell.bottomLab.textColor=[UIColor colorWithHexString:@"#cccccc"];
                 if (indexPath.row==3) {
                     cell.topLab.text=@"地区";
-                    if (self.model) {
-                        cell.bottomLab.text=[NSString stringWithFormat:@"%@-%@",self.model.province,self.model.city];
-                        cell.bottomLab.textColor=[UIColor colorWithHexString:@"#323232"];
+                    if (self.saveDic) {
+                        cell.bottomLab.text=[NSString stringWithFormat:@"%@-%@",self.saveDic[@"province"],self.saveDic[@"city"]];
+                        if (![cell.bottomLab.text isEqualToString:@"请选择团队所在地"]) {
+                            cell.bottomLab.textColor=[UIColor colorWithHexString:@"#323232"];
+                        }
                     }else{
                         cell.bottomLab.text=@"请选择团队所在地";
                     }
+                    if (self.model) {
+                        cell.bottomLab.text=[NSString stringWithFormat:@"%@-%@",self.model.province,self.model.city];
+                        cell.bottomLab.textColor=[UIColor colorWithHexString:@"#323232"];
+                    }
                 }else{
                     cell.topLab.text=@"行业分类";
+                    if (self.saveDic) {
+                        cell.bottomLab.text=self.saveDic[@"hangYeCategory"];
+                        if (![cell.bottomLab.text isEqualToString:@"请选择行业"]) {
+                            cell.bottomLab.textColor=[UIColor colorWithHexString:@"#323232"];
+                        }
+                    }else{
+                        cell.bottomLab.text=@"请选择行业";
+                    }
                     if (self.model) {
                         cell.bottomLab.text=self.model.category;
                         cell.bottomLab.textColor=[UIColor colorWithHexString:@"#323232"];
-                    }else{
-                        cell.bottomLab.text=@"请选择行业";
                     }
                 }
                 
@@ -247,12 +336,28 @@
                 }
                 if (indexPath.row==5) {
                     cell.textLabel.text=@"项目介绍";
+                    if (self.project.length) {
+                        cell.detailTextLabel.text=@"已完成";
+                    }else{
+                        cell.detailTextLabel.text=@"待填写";
+                    }
                 }else if (indexPath.row==6){
                     cell.textLabel.text=@"团队介绍";
+                    if (self.team.length) {
+                        cell.detailTextLabel.text=@"已完成";
+                    }else{
+                        cell.detailTextLabel.text=@"待填写";
+                    }
                 }else{
                     cell.textLabel.text=@"期望成员";
+                    if (self.demand.length) {
+                        cell.detailTextLabel.text=@"已完成";
+                    }else{
+                        cell.detailTextLabel.text=@"待填写";
+                    }
                 }
                 cell.textLabel.font=[UIFont systemFontOfSize:16];
+                cell.detailTextLabel.font=[UIFont systemFontOfSize:16];
                 return cell;
             }
                 break;
@@ -358,6 +463,7 @@
             WS(weakSelf);
             [editVC setCallBackBlock:^(NSString * _Nonnull string) {
                 weakSelf.project=string;
+                [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             }];
             [self.navigationController pushViewController:editVC animated:YES];
         }
@@ -371,6 +477,7 @@
             WS(weakSelf);
             [editVC setCallBackBlock:^(NSString * _Nonnull string) {
                 weakSelf.team=string;
+                [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             }];
             [self.navigationController pushViewController:editVC animated:YES];
         }
@@ -384,6 +491,7 @@
             WS(weakSelf);
             [editVC setCallBackBlock:^(NSString * _Nonnull string) {
                 weakSelf.demand=string;
+                [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             }];
             [self.navigationController pushViewController:editVC animated:YES];
         }

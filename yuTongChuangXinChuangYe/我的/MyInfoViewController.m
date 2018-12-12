@@ -21,6 +21,7 @@
 #import "SystemTableViewCell.h"
 #import "HatchPersonViewController.h"
 #import "UserInfomationViewController.h"
+#import "TastCenterViewController.h"
 
 extern BOOL receiveMessage;
 
@@ -39,6 +40,8 @@ extern BOOL receiveMessage;
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
+    [self getUserInfro];
+    
     [self.topView.headerIV sd_setImageWithURL:[NSURL URLWithString:[Account sharedAccount].photo] placeholderImage:[UIImage imageNamed:@"mine_user"]];
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"]==nil || [[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"] isEqualToString:@""]) {
         self.topView.nameLab.text=@"登录/注册";
@@ -54,12 +57,41 @@ extern BOOL receiveMessage;
     }
     
 }
+//获取个人信息
+-(void)getUserInfro{
+    NSString *token=[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"];
+    if (token==nil) {
+        token=@"";
+    }
+    NSDictionary *param=@{@"user_token":token};
+    [TDHttpTools getUserInfoWithParams:param success:^(id response) {
+        NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+        NSLog(@"%@",[SJTool logDic:dic]);
+        if ([dic[@"code"] intValue]==200) {
+            [Account sharedAccount].message=[dic[@"data"][@"message"] intValue];
+            [Account sharedAccount].photo=dic[@"data"][@"photo"];
+            [Account sharedAccount].nickname=dic[@"data"][@"nickname"];
+            [Account sharedAccount].provider=[dic[@"data"][@"provider"] boolValue];
+            [self.topView.headerIV sd_setImageWithURL:[NSURL URLWithString:[Account sharedAccount].photo] placeholderImage:[UIImage imageNamed:@"mine_user"]];
+            
+        }else{
+            [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"TOKEN"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [[Account sharedAccount] logout];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+        
+    }];
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor=kBackgroundColor;
     
     self.topView=[[TopView_MyInfo alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kStatusBarHeight+275)];
     
+    //[self getUserInfro];
     
     [self.view addSubview:self.topView];
     
@@ -77,7 +109,7 @@ extern BOOL receiveMessage;
             [weakSelf presentViewController:loginNavi animated:YES completion:nil];
         }else{
             UserInfomationViewController *userinfroVC=[UserInfomationViewController new];
-            [self.navigationController pushViewController:userinfroVC animated:YES];
+            [weakSelf.navigationController pushViewController:userinfroVC animated:YES];
         }
     }];
     [self.topView setHeaderClickBlock:^{
@@ -88,7 +120,7 @@ extern BOOL receiveMessage;
             [weakSelf presentViewController:loginNavi animated:YES completion:nil];
         }else{
             UserInfomationViewController *userinfroVC=[UserInfomationViewController new];
-            [self.navigationController pushViewController:userinfroVC animated:YES];
+            [weakSelf.navigationController pushViewController:userinfroVC animated:YES];
         }
     }];
     [self.topView setFourBtnClickBlock:^(NSInteger index) {
@@ -126,7 +158,7 @@ extern BOOL receiveMessage;
                     [weakSelf.navigationController pushViewController:publishVC animated:YES];
                 }
                     break;
-                default:
+                case 2:
                 {//我的消息
                     [Account sharedAccount].message=0;
                     weakSelf.topView.mesCountLab.hidden=YES;
@@ -134,6 +166,12 @@ extern BOOL receiveMessage;
                     MyMessageViewController *messageVC=[MyMessageViewController new];
                     messageVC.index=0;
                     [weakSelf.navigationController pushViewController:messageVC animated:YES];
+                }
+                    break;
+                default:
+                {//任务中心
+                    TastCenterViewController *centerVC=[TastCenterViewController new];
+                    [weakSelf.navigationController pushViewController:centerVC animated:YES];
                 }
                     break;
             }
@@ -147,7 +185,7 @@ extern BOOL receiveMessage;
 }
 -(UITableView *)tableView{
     if (!_tableView) {
-        _tableView=[[UITableView alloc]initWithFrame:CGRectMake(10, self.topView.bottom+10, kScreenWidth-20, 220) style:UITableViewStylePlain];
+        _tableView=[[UITableView alloc]initWithFrame:CGRectMake(10, self.topView.bottom+10, kScreenWidth-20, 176) style:UITableViewStylePlain];
         _tableView.delegate=self;
         _tableView.dataSource=self;
         _tableView.scrollEnabled=NO;
@@ -159,7 +197,7 @@ extern BOOL receiveMessage;
     return _tableView;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return 4;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellId=@"cellIdentifier";
@@ -168,7 +206,7 @@ extern BOOL receiveMessage;
         cell=[[SystemTableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
         cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     }
-    NSArray *arr=@[@"孵化专员",@"加入服务商",@"检查更新",@"关于我们",@"建议反馈"];
+    NSArray *arr=@[@"加入服务商",@"检查更新",@"关于我们",@"建议反馈"];
     cell.titleLab.text=arr[indexPath.row];
     if (indexPath.row==arr.count-1) {
         cell.separatorLine.hidden=YES;
@@ -181,6 +219,18 @@ extern BOOL receiveMessage;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     switch (indexPath.row) {
+//        case 0:
+//        {
+//            if ([Account sharedAccount]==nil) {
+//                LoginViewController *loginVC = [[LoginViewController alloc]init];
+//                UINavigationController *loginNavi=[[UINavigationController alloc]initWithRootViewController:loginVC];
+//                [self presentViewController:loginNavi animated:YES completion:nil];
+//            }else{
+//                HatchPersonViewController *hatchVC=[HatchPersonViewController new];
+//                [self.navigationController pushViewController:hatchVC animated:YES];
+//            }
+//        }
+//            break;
         case 0:
         {
             if ([Account sharedAccount]==nil) {
@@ -188,31 +238,25 @@ extern BOOL receiveMessage;
                 UINavigationController *loginNavi=[[UINavigationController alloc]initWithRootViewController:loginVC];
                 [self presentViewController:loginNavi animated:YES completion:nil];
             }else{
-                HatchPersonViewController *hatchVC=[HatchPersonViewController new];
-                [self.navigationController pushViewController:hatchVC animated:YES];
-            }
-        }
-            break;
-        case 1:
-        {
-            if ([Account sharedAccount]==nil) {
-                LoginViewController *loginVC = [[LoginViewController alloc]init];
-                UINavigationController *loginNavi=[[UINavigationController alloc]initWithRootViewController:loginVC];
-                [self presentViewController:loginNavi animated:YES completion:nil];
-            }else{
-                JoinServerViewController *joinVC=[JoinServerViewController new];
-                [self.navigationController pushViewController:joinVC animated:YES];
+                if ([Account sharedAccount].provider) {
+                    //给服务商展示的沟通列表
+                    
+                }else{
+                    JoinServerViewController *joinVC=[JoinServerViewController new];
+                    [self.navigationController pushViewController:joinVC animated:YES];
+                }
+                
             }
             
         }
             break;
-        case 2:
+        case 1:
         {
             CheckUpdateViewController *checkVC=[CheckUpdateViewController new];
             [self.navigationController pushViewController:checkVC animated:YES];
         }
             break;
-        case 3:
+        case 2:
         {
             AboutWeViewController *aboutVC=[AboutWeViewController new];
             [self.navigationController pushViewController:aboutVC animated:YES];
