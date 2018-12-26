@@ -20,6 +20,10 @@
 #import "DetailViewController.h"
 #import "BusinessHotDetailViewController.h"
 #import "SystemMessageDetailViewController.h"
+#import "MyChuangYeViewController.h"
+#import "ClientDemandListViewController.h"
+#import "CaredNumberListViewController.h"
+#import "ServerAuditingViewController.h"
 
 @interface MyMessageViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)Head_BusinessCourse *header;
@@ -311,28 +315,55 @@
     }
 }
 -(void)jumpWithId:(int)targetId module:(NSString *)module{
-    if ([module isEqualToString:@"idea"]||[module isEqualToString:@"ideacollect"]||[module isEqualToString:@"ideapraise"]||[module isEqualToString:@"ideacomment"]){
+    if ([module isEqualToString:@"ideacollect"]||[module isEqualToString:@"ideapraise"]||[module isEqualToString:@"ideacomment"]){
         CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
         detailVC.index=0;
         detailVC.Id=targetId;
         [self.navigationController pushViewController:detailVC animated:YES];
-    }else if ([module isEqualToString:@"project"]||[module isEqualToString:@"projectcollect"]||[module isEqualToString:@"projectpraise"]||[module isEqualToString:@"projectcomment"]){
+    }else if ([module isEqualToString:@"idea"]){
+        MyChuangYeViewController *vc=[MyChuangYeViewController new];
+        vc.index=0;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if ([module isEqualToString:@"project"]){
+        MyChuangYeViewController *vc=[MyChuangYeViewController new];
+        vc.index=1;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if ([module isEqualToString:@"projectcollect"]||[module isEqualToString:@"projectpraise"]||[module isEqualToString:@"projectcomment"]){
         CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
         detailVC.index=1;
         detailVC.Id=targetId;
         [self.navigationController pushViewController:detailVC animated:YES];
-    }else if ([module isEqualToString:@"findteamuser"]||[module isEqualToString:@"findteamusercare"]||[module isEqualToString:@"findteamuserpraise"]){
+    }else if ([module isEqualToString:@"findteamuser"]){
+        MyChuangYeViewController *vc=[MyChuangYeViewController new];
+        vc.index=2;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if ([module isEqualToString:@"findteamuserpraise"]){
         SearchNumbersDetailViewController *detailVC=[SearchNumbersDetailViewController new];
         detailVC.Id=targetId;
         [self.navigationController pushViewController:detailVC animated:YES];
-    }else if ([module isEqualToString:@"provider"]||[module isEqualToString:@"providercollect"]||[module isEqualToString:@"providerdemand"]){
+    }else if ([module isEqualToString:@"findteamusercare"]){
+        CaredNumberListViewController *vc=[CaredNumberListViewController new];
+        vc.teamId=targetId;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if ([module isEqualToString:@"providercollect"]){
         ServerDetailViewController *detailVC=[ServerDetailViewController new];
         detailVC.providerId=targetId;
         [self.navigationController pushViewController:detailVC animated:YES];
-    }else if ([module isEqualToString:@"post"]||[module isEqualToString:@"postcollect"]||[module isEqualToString:@"postpraise"]||[module isEqualToString:@"postcomment"]){
+    }else if ([module isEqualToString:@"postcollect"]||[module isEqualToString:@"postpraise"]||[module isEqualToString:@"postcomment"]){
         HuaShanDetailViewController *detailVC=[HuaShanDetailViewController new];
         detailVC.postId=targetId;
         [self.navigationController pushViewController:detailVC animated:YES];
+    }else if ([module isEqualToString:@"provider"]){
+        ServerAuditingViewController *vc=[ServerAuditingViewController new];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if ([module isEqualToString:@"providerdemand"]||[module isEqualToString:@"providercomment"]||[module isEqualToString:@"providerdeal"]){
+        ClientDemandListViewController *vc=[ClientDemandListViewController new];
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }else if ([module isEqualToString:@"userdemand"]){
+        MyChuangYeViewController *vc=[MyChuangYeViewController new];
+        vc.index=3;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 /*

@@ -13,111 +13,120 @@
 -(void)setModel:(InterestModel_Public *)model{
     _model=model;
     
-    [self.headIV sd_setImageWithURL:[NSURL URLWithString:_model.photo] placeholderImage:[UIImage imageNamed:@"hall_user"]];
-    self.nameLab.text=_model.nickname;
-    
     self.titleLab.text=_model.title;
-    
     self.timeLab.text=_model.create_time;
+    self.position.text=_model.job;
+    self.userinfo.text=_model.descriptions;
     
+    if (_model.showAll) {
+        self.allBtn.selected=YES;
+        self.userinfo.sd_resetLayout
+        .leftSpaceToView(self.contentView, 39)
+        .topSpaceToView(self.position, 53)
+        .rightSpaceToView(self.contentView, 12)
+        .autoHeightRatio(0);
+        [self.userinfo setMaxNumberOfLinesToShow:0];
+    }else{
+        self.allBtn.selected=NO;
+        self.userinfo.sd_resetLayout
+        .leftSpaceToView(self.contentView, 39)
+        .topSpaceToView(self.position, 53)
+        .rightSpaceToView(self.contentView, 12)
+        .autoHeightRatio(0);
+        [self.userinfo setMaxNumberOfLinesToShow:3];
+    }
     
-    [self setupAutoHeightWithBottomView:self.outBig bottomMargin:10];
+    [self setupAutoHeightWithBottomView:self.separater bottomMargin:0];
+}
+-(void)allBtnClick{
+    
+    _model.showAll=!_model.showAll;
+    if (self.lookAllBtnBlock) {
+        self.lookAllBtnBlock(_indexPath);
+    }
 }
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.outBig=[[UIView alloc]init];
-        self.outBig.backgroundColor=[UIColor whiteColor];
-        [self.contentView addSubview:self.outBig];
-        //
-        _leftLab=[[UILabel alloc]init];
-        _leftLab.text=@"对";
-        _leftLab.font=[UIFont systemFontOfSize:16];
-        [self.outBig addSubview:_leftLab];
-        //
-        _headIV=[[UIImageView alloc]init];
-        [self.outBig addSubview:_headIV];
-        //
-        _nameLab=[[UILabel alloc]init];
-        _nameLab.font=[UIFont systemFontOfSize:16];
-        _nameLab.textColor=kThemeColor;
-        [self.outBig addSubview:_nameLab];
-        //
-        _rightLab=[[UILabel alloc]init];
-        _rightLab.text=@"发表的找伙伴感兴趣";
-        _rightLab.font=[UIFont systemFontOfSize:16];
-        [self.outBig addSubview:_rightLab];
-        //
-        _titleView=[[UIView alloc]init];
-        _titleView.backgroundColor=[UIColor colorWithHexString:@"#f2f2f2"];
-        [self.outBig addSubview:_titleView];
-        //
-        _titleLab=[[UILabel alloc]init];
-        _titleLab.font=[UIFont systemFontOfSize:14];
-        _titleLab.textColor=[UIColor colorWithHexString:@"#989898"];
-        _titleLab.backgroundColor=[UIColor colorWithHexString:@"#f2f2f2"];
-        _titleLab.numberOfLines=0;
-        [_titleView addSubview:_titleLab];
-        //
-        _timeLab=[[UILabel alloc]init];
-        _timeLab.font=[UIFont systemFontOfSize:10];
-        _timeLab.textColor=[UIColor colorWithHexString:@"#989898"];
-        _timeLab.textAlignment=NSTextAlignmentRight;
-        [self.outBig addSubview:_timeLab];
         
-        _outBig.sd_layout
-        .leftSpaceToView(self.contentView, 10)
-        .topEqualToView(self.contentView)
-        .widthIs(kScreenWidth-20);
-        [_outBig setupAutoHeightWithBottomView:_timeLab bottomMargin:0];
-        _outBig.sd_cornerRadius=@(5);
+        //
+        self.titleLab=[[UILabel alloc]initWithFrame:CGRectMake(12, 15, kScreenWidth-36-100, 14)];
+        self.titleLab.font=[UIFont boldSystemFontOfSize:16];
+        //self.titleLab.textColor=RGBAColor(102, 102, 102, 1);
+        [self.contentView addSubview:self.titleLab];
+        //
+        self.timeLab=[[UILabel alloc]initWithFrame:CGRectMake(self.titleLab.right, 15, 100, 14)];
+        self.timeLab.textAlignment=NSTextAlignmentRight;
+        self.timeLab.textColor=RGBAColor(102, 102, 102, 1);
+        self.timeLab.font=[UIFont systemFontOfSize:12];
+        [self.contentView addSubview:self.timeLab];
         
-        _leftLab.sd_layout
-        .leftSpaceToView(self.outBig, 10)
-        .topSpaceToView(self.outBig, 10)
-        .heightIs(15);
-        [_leftLab setSingleLineAutoResizeWithMaxWidth:50];
-        
-        _headIV.sd_layout
-        .leftSpaceToView(self.leftLab, 10)
-        .centerYEqualToView(self.leftLab)
-        .widthIs(24)
-        .heightIs(24);
-        _headIV.sd_cornerRadius=@(12);
-        
-        _nameLab.sd_layout
-        .leftSpaceToView(self.headIV, 10)
-        .centerYEqualToView(self.headIV)
-        .heightIs(15);
-        [_nameLab setSingleLineAutoResizeWithMaxWidth:120];
-        
-        _rightLab.sd_layout
-        .leftSpaceToView(self.nameLab, 10)
-        .centerYEqualToView(self.headIV)
-        .heightIs(15)
-        .widthIs(kScreenWidth-20-self.nameLab.right-20);
-        
-        _titleView.sd_layout
-        .leftEqualToView(self.leftLab)
-        .topSpaceToView(self.headIV, 5)
-        .widthIs(kScreenWidth-40);
-        [_titleView setupAutoHeightWithBottomView:_titleLab bottomMargin:10];
-        _titleView.sd_cornerRadius=@(5);
-        
-        _titleLab.sd_layout
-        .leftSpaceToView(self.titleView, 10)
-        .topSpaceToView(self.titleView, 10)
-        .widthIs(kScreenWidth-60)
+        //
+        UIView *line=[[UIView alloc]initWithFrame:CGRectMake(12, self.titleLab.bottom+15, kScreenWidth-24, 0.5)];
+        line.backgroundColor=RGBAColor(200, 200, 200, 1);
+        [self.contentView addSubview:line];
+        //
+        UIImageView *firstIV=[[UIImageView alloc]initWithFrame:CGRectMake(12, line.bottom+20, 15, 16)];
+        firstIV.image=[UIImage imageNamed:@"e-commerce_position"];
+        [self.contentView addSubview:firstIV];
+        //
+        UILabel *lab1=[[UILabel alloc]initWithFrame:CGRectMake(firstIV.right+12, line.bottom+20, 100, 16)];
+        lab1.text=@"期望职位";
+        lab1.font=[UIFont boldSystemFontOfSize:14];
+        [self.contentView addSubview:lab1];
+        //
+        self.position=[[UILabel alloc]initWithFrame:CGRectMake(39, lab1.bottom+20, kScreenWidth-39-12, 14)];
+        self.position.font=[UIFont systemFontOfSize:14];
+        self.position.textColor=RGBAColor(51, 51, 51, 1);
+        [self.contentView addSubview:self.position];
+        //
+        UIImageView *secondIV=[[UIImageView alloc]initWithFrame:CGRectMake(12, self.position.bottom+20, 13, 15)];
+        secondIV.image=[UIImage imageNamed:@"e-commerce_personal"];
+        [self.contentView addSubview:secondIV];
+        //
+        UILabel *lab2=[[UILabel alloc]initWithFrame:CGRectMake(secondIV.right+14, self.position.bottom+20, 100, 15)];
+        lab2.text=@"个人简介";
+        lab2.font=[UIFont boldSystemFontOfSize:14];
+        [self.contentView addSubview:lab2];
+        //
+        self.userinfo=[[UILabel alloc]init];
+        self.userinfo.font=[UIFont systemFontOfSize:14];
+        self.userinfo.textColor=RGBAColor(51, 51, 51, 1);
+        self.userinfo.numberOfLines=0;
+        [self.contentView addSubview:self.userinfo];
+        self.userinfo.sd_layout
+        .leftSpaceToView(self.contentView, 39)
+        .topSpaceToView(lab2, 18)
+        .rightSpaceToView(self.contentView, 12)
         .autoHeightRatio(0);
-        
-        _timeLab.sd_layout
-        .rightSpaceToView(self.outBig, 10)
-        .topSpaceToView(self.titleView, 0)
-        .heightIs(20);
-        [_timeLab setSingleLineAutoResizeWithMaxWidth:100];
-        
+        [self.userinfo setMaxNumberOfLinesToShow:3];
+        //
+        self.allBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        [self.allBtn setTitle:@"全部" forState:UIControlStateNormal];
+        [self.allBtn setTitleColor:kThemeColor forState:UIControlStateNormal];
+        [self.allBtn setTitle:@"收起" forState:UIControlStateSelected];
+        [self.allBtn setTitleColor:kThemeColor forState:UIControlStateSelected];
+        self.allBtn.selected=NO;
+        self.allBtn.titleLabel.font=[UIFont systemFontOfSize:14];
+        [self.allBtn addTarget:self action:@selector(allBtnClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.contentView addSubview:self.allBtn];
+        //
+        self.allBtn.sd_layout
+        .rightEqualToView(self.userinfo)
+        .topSpaceToView(self.userinfo, 5);
+        [self.allBtn setupAutoSizeWithHorizontalPadding:0 buttonHeight:15];
+        //
+        self.separater=[[UIView alloc]init];
+        self.separater.backgroundColor=kBackgroundColor;
+        [self.contentView addSubview:self.separater];
+        self.separater.sd_layout
+        .leftEqualToView(self.contentView)
+        .rightEqualToView(self.contentView)
+        .topSpaceToView(self.allBtn, 10)
+        .heightIs(10);
     }
     return self;
 }
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

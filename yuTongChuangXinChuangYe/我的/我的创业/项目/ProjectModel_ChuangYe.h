@@ -20,8 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *instructor;
 @property(nonatomic,strong)NSString *linkphone;
 @property(nonatomic,strong)NSString *status;
+/** 项目跳转逻辑 1-详情 0-表单 2-预览 */
+@property(nonatomic,strong)NSString *pstatus;
 @property(nonatomic,strong)NSString *descriptions;
-
+@property(nonatomic,strong)NSString *url;
 @property(nonatomic,strong)NSMutableArray <ProjectCheckModel_ChuangYe *> *checkModels;
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 @end

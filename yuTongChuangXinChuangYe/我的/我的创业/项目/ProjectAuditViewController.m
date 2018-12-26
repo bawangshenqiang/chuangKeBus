@@ -11,6 +11,7 @@
 #import "ProjectAuditCell.h"
 #import "LoadDisplayViewController.h"
 #import "CreativityAndProjectDetailViewController.h"
+#import "AuditingLookDetailViewController.h"
 
 @interface ProjectAuditViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *tableView;
@@ -61,7 +62,7 @@
         _tableView.dataSource=self;
         _tableView.backgroundColor=kBackgroundColor;
         _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
-        _tableView.tableFooterView=[UIView new];
+        _tableView.tableFooterView=[self tableViewfooter];
     }
     return _tableView;
 }
@@ -94,14 +95,58 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    //进预览页,不进详情了
     ProjectModel_ChuangYe *model=self.dataArr[indexPath.row];
-    CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
-    detailVC.index=1;
+    AuditingLookDetailViewController *vc=[AuditingLookDetailViewController new];
+    vc.url=model.url;
+    [self.navigationController pushViewController:vc animated:YES];
     
-    detailVC.Id=model.projectId;
-    [self.navigationController pushViewController:detailVC animated:YES];
+//    ProjectModel_ChuangYe *model=self.dataArr[indexPath.row];
+//    CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
+//    detailVC.index=1;
+//
+//    detailVC.Id=model.projectId;
+//    [self.navigationController pushViewController:detailVC animated:YES];
 }
-
+-(UIView *)tableViewfooter{
+    UIView *footer=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 145)];
+    UIImageView *backIV=[[UIImageView alloc]initWithFrame:CGRectMake(10, 15, kScreenWidth-20, 115)];
+    backIV.image=[UIImage imageNamed:@"incubation_bg"];
+    backIV.userInteractionEnabled=YES;
+    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickBackIV)];
+    [backIV addGestureRecognizer:tap];
+    [footer addSubview:backIV];
+    //
+    UIImageView *headerIV=[[UIImageView alloc]initWithFrame:CGRectMake(20, (115-45)/2, 45, 45)];
+    headerIV.image=[UIImage imageNamed:@"incubation_headportrait"];
+    [backIV addSubview:headerIV];
+    //
+    UILabel *topLab=[[UILabel alloc]initWithFrame:CGRectMake(headerIV.right+20, headerIV.y, 230, 15)];
+    topLab.text=[NSString stringWithFormat:@"辅导员：%@",self.model.instructor];
+    topLab.font=[UIFont boldSystemFontOfSize:18];
+    topLab.textColor=[UIColor whiteColor];
+    [backIV addSubview:topLab];
+    //
+    UILabel *bottomLab=[[UILabel alloc]initWithFrame:CGRectMake(headerIV.right+20, topLab.bottom+15, topLab.width, 15)];
+    bottomLab.textColor=[UIColor whiteColor];
+    bottomLab.text=[NSString stringWithFormat:@"联系方式：%@",self.model.linkphone];
+    bottomLab.font=[UIFont boldSystemFontOfSize:18];
+    [backIV addSubview:bottomLab];
+    
+    return footer;
+}
+-(void)clickBackIV{
+    //NSLog(@"打电话");
+    if (self.model.linkphone.length==11) {
+        NSString *callPhone = [NSString stringWithFormat:@"telprompt://%@", self.model.linkphone];
+        if (@available(iOS 10.0, *)) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:callPhone] options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:callPhone]];
+        }
+        
+    }
+}
 /*
 #pragma mark - Navigation
 

@@ -56,7 +56,7 @@
 -(UILabel *)descriptionLab{
     if (!_descriptionLab) {
         _descriptionLab=[[UILabel alloc]initWithFrame:CGRectMake(self.leftIV.right+10, self.rightLab.bottom, self.outBig.width-self.leftIV.right-20, 40)];
-        _descriptionLab.numberOfLines=2;
+        _descriptionLab.numberOfLines=1;//2;
         _descriptionLab.font=[UIFont systemFontOfSize:14];
         [self.outBig addSubview:_descriptionLab];
     }

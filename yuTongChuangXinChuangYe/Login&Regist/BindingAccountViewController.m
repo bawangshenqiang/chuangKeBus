@@ -199,7 +199,7 @@ extern BOOL receiveMessage;
         [SJTool showAlertWithText:@"请输入密码"];
         return;
     }
-    NSDictionary *param=@{@"telphone":self.customTF1.textField.text,@"password":self.customTF3.textField.text,@"code":self.customTF2.textField.text,@"openid":self.openid,@"ip":@""};
+    NSDictionary *param=@{@"telphone":self.customTF1.textField.text,@"password":self.customTF3.textField.text,@"code":self.customTF2.textField.text,@"openid":self.openid,@"ip":@"",@"name":self.name};
     [TDHttpTools bindingWithParams:param success:^(id response) {
         NSDictionary *dic=[SJTool dictionaryWithResponse:response];
         NSLog(@"%@",[SJTool logDic:dic]);

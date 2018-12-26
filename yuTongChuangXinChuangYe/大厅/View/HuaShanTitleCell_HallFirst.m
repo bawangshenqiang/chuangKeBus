@@ -59,44 +59,44 @@
 
 -(void)setModel:(HuaShanListModel *)model{
     _model=model;
-    self.outBig.backgroundColor=[UIColor whiteColor];
+    //self.outBig.backgroundColor=[UIColor whiteColor];
     [self.headerIV sd_setImageWithURL:[NSURL URLWithString:_model.headerUrl] placeholderImage:[UIImage imageNamed:@"hall_user"]];
     self.nameLab.text=_model.name;
     self.timeLab.text=_model.time;
     self.titleLab.text=_model.title;
+    self.praiseIV.image=[UIImage imageNamed:@"block_snap"];
     self.praiseLab.text=[NSString stringWithFormat:@"%d",_model.praise];
-    self.praiseIV.image=[UIImage imageNamed:@"hall_snap"];
     self.commentLab.text=[NSString stringWithFormat:@"%d",_model.comment];
-    self.commentIV.image=[UIImage imageNamed:@"hall_comment"];
-    [self.outBig setupAutoHeightWithBottomView:self.praiseLab bottomMargin:10];
-    self.separaterView.backgroundColor=kBackgroundColor;
+    self.commentIV.image=[UIImage imageNamed:@"block_news"];
+    //[self.outBig setupAutoHeightWithBottomView:self.praiseLab bottomMargin:10];
+    self.separaterView.backgroundColor=RGBAColor(200, 200, 200, 0.5);
     [self setupAutoHeightWithBottomView:self.separaterView bottomMargin:0];
 }
--(UIView *)outBig{
-    if (!_outBig) {
-        _outBig=[[UIView alloc]init];
-        //_outBig.backgroundColor=[UIColor whiteColor];
-        _outBig.layer.cornerRadius=5;
-        [self.contentView addSubview:_outBig];
-        _outBig.sd_layout
-        .leftSpaceToView(self.contentView, 10)
-        .topEqualToView(self.contentView)
-        .widthIs(kScreenWidth-20);
-        [_outBig setupAutoHeightWithBottomView:_praiseLab bottomMargin:10];
-    }
-    return _outBig;
-}
+//-(UIView *)outBig{
+//    if (!_outBig) {
+//        _outBig=[[UIView alloc]init];
+//        //_outBig.backgroundColor=[UIColor whiteColor];
+//        _outBig.layer.cornerRadius=5;
+//        [self.contentView addSubview:_outBig];
+//        _outBig.sd_layout
+//        .leftSpaceToView(self.contentView, 10)
+//        .topEqualToView(self.contentView)
+//        .widthIs(kScreenWidth-20);
+//        [_outBig setupAutoHeightWithBottomView:_praiseLab bottomMargin:10];
+//    }
+//    return _outBig;
+//}
 - (UIImageView *)headerIV{
     if (!_headerIV) {
         _headerIV=[[UIImageView alloc]init];
         //_headerIV.image=[UIImage imageNamed:@"hall_user"];
-        [self.outBig addSubview:_headerIV];
+        [self.contentView addSubview:_headerIV];
         _headerIV.sd_layout
-        .leftSpaceToView(self.outBig, 10)
-        .topSpaceToView(self.outBig, 10)
-        .widthIs(24)
-        .heightIs(24);
-        _headerIV.sd_cornerRadius=@(12);
+        .leftSpaceToView(self.contentView, 10)
+        .topSpaceToView(self.contentView, 15)
+        .widthIs(30)
+        .heightIs(30);
+        _headerIV.sd_cornerRadius=@(15);
         
     }
     return _headerIV;
@@ -104,14 +104,14 @@
 -(UILabel *)nameLab{
     if (!_nameLab) {
         _nameLab=[[UILabel alloc]init];
-        _nameLab.font=[UIFont systemFontOfSize:16];
-        _nameLab.textColor=[UIColor colorWithHexString:@"#989898"];
-        [self.outBig addSubview:_nameLab];
+        _nameLab.font=[UIFont systemFontOfSize:14];
+        _nameLab.textColor=RGBAColor(152, 152, 152, 1);//[UIColor colorWithHexString:@"#989898"];
+        [self.contentView addSubview:_nameLab];
         _nameLab.sd_layout
         .leftSpaceToView(self.headerIV, 10)
         .centerYEqualToView(self.headerIV)
         .heightIs(20);
-        [_nameLab setSingleLineAutoResizeWithMaxWidth:(kScreenWidth-20-self.headerIV.right-20)/2];
+        [_nameLab setSingleLineAutoResizeWithMaxWidth:(kScreenWidth-self.headerIV.right-20)/2];
     }
     return _nameLab;
 }
@@ -121,25 +121,25 @@
         _timeLab.font=[UIFont systemFontOfSize:12];
         _timeLab.textColor=[UIColor colorWithHexString:@"#989898"];
         _timeLab.textAlignment=NSTextAlignmentRight;
-        [self.outBig addSubview:_timeLab];
+        [self.contentView addSubview:_timeLab];
         _timeLab.sd_layout
-        .rightSpaceToView(self.outBig, 10)
+        .rightSpaceToView(self.contentView, 10)
         .centerYEqualToView(self.headerIV)
         .heightIs(20);
-        [_timeLab setSingleLineAutoResizeWithMaxWidth:(kScreenWidth-20-self.headerIV.right-20)/2];
+        [_timeLab setSingleLineAutoResizeWithMaxWidth:(kScreenWidth-self.headerIV.right-20)/2];
     }
     return _timeLab;
 }
 -(UILabel *)titleLab{
     if (!_titleLab) {
         _titleLab=[[UILabel alloc]init];
-        _titleLab.font=[UIFont systemFontOfSize:18];
+        _titleLab.font=[UIFont systemFontOfSize:15];
         _titleLab.textColor=[UIColor colorWithHexString:@"#323232"];
-        [self.outBig addSubview:_titleLab];
+        [self.contentView addSubview:_titleLab];
         _titleLab.sd_layout
-        .topSpaceToView(self.headerIV, 10)
-        .leftSpaceToView(self.outBig, 10)
-        .widthIs(kScreenWidth-40)
+        .topSpaceToView(self.headerIV, 15)
+        .leftSpaceToView(self.contentView, 10)
+        .widthIs(kScreenWidth-20)
         .autoHeightRatio(0);
         [_titleLab setMaxNumberOfLinesToShow:2];
     }
@@ -149,26 +149,26 @@
     if (!_commentIV) {
         _commentIV=[[UIImageView alloc]init];
         //_commentIV.image=[UIImage imageNamed:@"hall_comment"];
-        [self.outBig addSubview:_commentIV];
+        [self.contentView addSubview:_commentIV];
         _commentIV.sd_layout
-        .rightSpaceToView(self.commentLab, 10)
+        .rightSpaceToView(self.commentLab, 8)
         .centerYEqualToView(self.commentLab)
-        .widthIs(10)
-        .heightIs(10);
+        .widthIs(16)
+        .heightIs(16);
     }
     return _commentIV;
 }
 -(UILabel *)commentLab{
     if (!_commentLab) {
         _commentLab=[[UILabel alloc]init];
-        _commentLab.font=[UIFont systemFontOfSize:10];
+        _commentLab.font=[UIFont systemFontOfSize:12];
         _commentLab.textColor=[UIColor colorWithHexString:@"#989898"];
-        [self.outBig addSubview:_commentLab];
+        [self.contentView addSubview:_commentLab];
         _commentLab.sd_layout
-        .rightSpaceToView(self.praiseIV, 5)
+        .rightSpaceToView(self.contentView, 75*kBaseWidth)
         .centerYEqualToView(self.praiseIV)
-        .heightIs(10);
-        [_commentLab setSingleLineAutoResizeWithMaxWidth:120];
+        .heightIs(16);
+        [_commentLab setSingleLineAutoResizeWithMaxWidth:100];
     }
     return _commentLab;
 }
@@ -176,26 +176,26 @@
     if (!_praiseIV) {
         _praiseIV=[[UIImageView alloc]init];
         //_praiseIV.image=[UIImage imageNamed:@"hall_snap"];
-        [self.outBig addSubview:_praiseIV];
+        [self.contentView addSubview:_praiseIV];
         _praiseIV.sd_layout
-        .rightSpaceToView(self.praiseLab, 10)
-        .centerYEqualToView(self.praiseLab)
-        .widthIs(10)
-        .heightIs(10);
+        .topSpaceToView(self.titleLab, 20)
+        .leftSpaceToView(self.contentView, 75*kBaseWidth)
+        .widthIs(16)
+        .heightIs(16);
     }
     return _praiseIV;
 }
 -(UILabel *)praiseLab{
     if (!_praiseLab) {
         _praiseLab=[[UILabel alloc]init];
-        _praiseLab.font=[UIFont systemFontOfSize:10];
+        _praiseLab.font=[UIFont systemFontOfSize:12];
         _praiseLab.textColor=[UIColor colorWithHexString:@"#989898"];
-        [self.outBig addSubview:_praiseLab];
+        [self.contentView addSubview:_praiseLab];
         _praiseLab.sd_layout
-        .rightSpaceToView(self.outBig, 10)
-        .topSpaceToView(self.titleLab, 10)
-        .heightIs(10);
-        [_praiseLab setSingleLineAutoResizeWithMaxWidth:120];
+        .leftSpaceToView(self.praiseIV, 8)
+        .centerYEqualToView(self.praiseIV)
+        .heightIs(16);
+        [_praiseLab setSingleLineAutoResizeWithMaxWidth:100];
     }
     return _praiseLab;
 }
@@ -205,10 +205,10 @@
         //_separaterView.backgroundColor=kBackgroundColor;
         [self.contentView addSubview:_separaterView];
         _separaterView.sd_layout
-        .leftEqualToView(self.contentView)
-        .rightEqualToView(self.contentView)
-        .topSpaceToView(self.commentIV, 10)
-        .heightIs(10);
+        .leftSpaceToView(self.contentView, 10)
+        .rightSpaceToView(self.contentView, 10)
+        .topSpaceToView(self.commentIV, 15)
+        .heightIs(0.5);
     }
     return _separaterView;
 }

@@ -11,16 +11,21 @@
 @implementation SectionHeader_SystemHall
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier{
     if (self=[super initWithReuseIdentifier:reuseIdentifier]) {
-        UIView *backV=[[UIView alloc]initWithFrame:CGRectMake(0, 5, kScreenWidth, 30)];
+        UIView *backV=[[UIView alloc]initWithFrame:CGRectMake(0, 10, kScreenWidth, 42)];
         backV.backgroundColor=[UIColor whiteColor];
         [self addSubview:backV];
         //
         self.choseStyle=[[LMJDropdownMenu alloc]init];
-        self.choseStyle.frame=CGRectMake(0, 5, 110, 30);
+        self.choseStyle.frame=CGRectMake(kScreenWidth-115, 10, 115, 42);
         [self.choseStyle setMenuTitles:@[@"按发帖时间",@"按回复时间"] rowHeight:30];
         [self.choseStyle.mainBtn setTitle:@"按发帖时间" forState:UIControlStateNormal];
+        [self.choseStyle.mainBtn setTitleColor:RGBAColor(152, 152, 152, 1) forState:UIControlStateNormal];
         
         [self addSubview:self.choseStyle];
+        //
+        UIView *line=[[UIView alloc]initWithFrame:CGRectMake(0, self.choseStyle.bottom-0.5, kScreenWidth, 0.5)];
+        line.backgroundColor=RGBAColor(200, 200, 200, 0.5);
+        [self addSubview:line];
     }
     return self;
 }

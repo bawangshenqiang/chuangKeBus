@@ -16,11 +16,11 @@
 @property(nonatomic,strong)UIButton *collectBtn;
 @property(nonatomic,strong)UIButton *bottomBtn;
 @property(nonatomic,assign)BOOL collected;//是否收藏
-@property(nonatomic,assign)BOOL editable;//是否可编辑
+@property(nonatomic,assign)BOOL editable;//是否是自己的
 @property(nonatomic,assign)int status;//1审核通过 非1审核不通过
 @property(nonatomic,strong)NSString *serverName;//服务商名称
 @property(nonatomic,strong)NSString *categoryName;//分类
-
+@property(nonatomic,assign)BOOL demand;//用户是否可以提交需求
 @end
 
 @implementation ServerDetailViewController
@@ -52,13 +52,14 @@
             self.status=[dic[@"data"][@"status"] intValue];
             self.serverName=dic[@"data"][@"title"];
             self.categoryName=dic[@"data"][@"category"];
+            self.demand=[dic[@"data"][@"demand"] boolValue];
             self.editable=[dic[@"data"][@"editable"] boolValue];
-            if (self.editable) {
-                self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"修改" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarClick)];
-            }else{
-                self.navigationItem.rightBarButtonItem=nil;
-                
-            }
+//            if (self.editable) {
+//                self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"修改" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarClick)];
+//            }else{
+//                self.navigationItem.rightBarButtonItem=nil;
+//
+//            }
         }else{
             [SJTool showAlertWithText:dic[@"msg"]];
         }
@@ -182,6 +183,10 @@
     }
     if (self.status!=1) {
         [SJTool showAlertWithText:@"正在审核中"];
+        return;
+    }
+    if (!self.demand) {
+        [SJTool showAlertWithText:@"请先提交一个项目"];
         return;
     }
     if (!self.serverName.length || !self.categoryName.length) {

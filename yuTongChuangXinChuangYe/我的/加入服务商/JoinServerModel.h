@@ -24,6 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *linkphone;
 @property(nonatomic,strong)NSString *email;
 @property(nonatomic,strong)NSString *address;
+
+/** 状态 0-新添加 1-已审核 2-待修改 3-已修改 */
+@property(nonatomic,assign)int status;
+/** 审批备注 */
+@property(nonatomic,strong)NSString *note;
+
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 
 @end

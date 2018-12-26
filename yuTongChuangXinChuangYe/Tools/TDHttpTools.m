@@ -871,7 +871,7 @@
  */
 +(void)myPublishCaredListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
     
-    NSString *urlString=[NSString stringWithFormat:@"%@user/findteamusercare",kSERVER_HTTP_DXE];
+    NSString *urlString=[NSString stringWithFormat:@"%@user/findteamusercared",kSERVER_HTTP_DXE];
     [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
         if (success) {
             success(response);
@@ -1672,6 +1672,150 @@
 +(void)taskCenterWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
     
     NSString *urlString=[NSString stringWithFormat:@"%@user/job",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  完成任务
+ */
++(void)completejobWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/completejob",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  车票记录
+ */
++(void)ticketRecordWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/userscore/list",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  排行榜
+ */
++(void)rankingListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/userscore/rank",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  服务商需求详情
+ */
++(void)serverDemandDetailWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/providerdemand/detail",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  评价服务商
+ */
++(void)gotoEvaluateWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/providerdemandcomment",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  客户需求列表
+ */
++(void)clientDemandListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/providerdemand",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  服务商回复需求
+ */
++(void)providerReplyDemandWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/providerdemandreply",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  服务商确认服务完成
+ */
++(void)providerCompleteWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/providerdemanddone",kSERVER_HTTP_DXE];
+    [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
+        if (success) {
+            success(response);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+/**
+ *  感兴趣成员列表
+ */
++(void)caredNumberListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString=[NSString stringWithFormat:@"%@user/findteamusercare",kSERVER_HTTP_DXE];
     [TDHttpTools requestWithMethodType:RequestMethodTypePost Url:urlString params:params success:^(id response) {
         if (success) {
             success(response);

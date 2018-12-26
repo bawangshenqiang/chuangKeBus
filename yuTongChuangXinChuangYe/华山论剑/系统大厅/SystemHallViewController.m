@@ -119,7 +119,7 @@
     [super viewDidLoad];
     self.view.backgroundColor=kBackgroundColor;
     [self.view addSubview:self.tableView];
-    
+    self.title=@"版块";
     self.type=3;
     WS(weakSelf);
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -127,14 +127,14 @@
         [weakSelf getNewData];
         
     }];
-    self.tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
+    self.tableView.mj_footer = [MJRefreshAutoFooter footerWithRefreshingBlock:^{
         
         [weakSelf getMoreData];
         
     }];
     [self.tableView.mj_header beginRefreshing];
     
-    if ([self.title isEqualToString:@"创意交流"]) {
+    if ([self.name isEqualToString:@"创意交流"]) {
         UIButton *submitBtn=[UIButton buttonWithType:UIButtonTypeCustom];
         submitBtn.frame=CGRectMake(kScreenWidth-75, self.tableView.bottom-75, 50, 50);
         [submitBtn setBackgroundImage:[UIImage imageNamed:@"huashan_publish"] forState:UIControlStateNormal];
@@ -149,7 +149,7 @@
     
 }
 -(void)submitClick{
-    NSLog(@"发表主题");
+    //NSLog(@"发表主题");
     if ([Account sharedAccount]==nil) {
         LoginViewController *loginVC = [[LoginViewController alloc]init];
         UINavigationController *loginNavi=[[UINavigationController alloc]initWithRootViewController:loginVC];
@@ -193,6 +193,7 @@
                 
             }
             [cell.headIV sd_setImageWithURL:[NSURL URLWithString:self.categoryDic[@"icon"]] placeholderImage:nil];//[UIImage imageNamed:@"hall_user"]
+            cell.nameLab.text=self.categoryDic[@"name"];
             cell.titleLab.text=self.categoryDic[@"note"];
             return cell;
         }else{
@@ -205,11 +206,11 @@
             if (self.tops.count==2) {
                 cell.modelDic=self.tops[indexPath.row-1];
             }
-            if (indexPath.row==1) {
-                cell.line.hidden=NO;
-            }else{
-                cell.line.hidden=YES;
-            }
+//            if (indexPath.row==1) {
+//                cell.line.hidden=NO;
+//            }else{
+//                cell.line.hidden=YES;
+//            }
             return cell;
         }
     }else{
@@ -227,7 +228,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0) {
         if (indexPath.row==0) {
-            return 60;
+            return 91;
         }else{
             return 45;
         }
@@ -260,7 +261,7 @@
     if (section==0) {
         return 0.01;
     }else{
-       return 40;
+       return 52;
     }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -288,7 +289,7 @@
 #pragma mark - LMJDropdownMenu Delegate
 
 - (void)dropdownMenu:(LMJDropdownMenu *)menu selectedCellNumber:(NSInteger)number{
-    NSLog(@"你选择了：%ld",number);
+    //NSLog(@"你选择了：%ld",number);
     self.type=(int)number+3;
     [self getNewData];
 }

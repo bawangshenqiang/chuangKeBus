@@ -116,8 +116,8 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     
     NSString *user_token=[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"];
     //分类id改为固定的了，固定为创意交流的id
-    NSDictionary *cateDic=self.themeArr[2];
-    self.categoryId=[cateDic[@"id"] intValue];
+    //NSDictionary *cateDic=self.themeArr[2];
+    self.categoryId=126;//[cateDic[@"id"] intValue];
     
     NSDictionary *param=@{@"id":@(self.postId),@"user_token":user_token,@"title":cell1.textField.text,@"categoryId":@(self.categoryId),@"content":content};
     

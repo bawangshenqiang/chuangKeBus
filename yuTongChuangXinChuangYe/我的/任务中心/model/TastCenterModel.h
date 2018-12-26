@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign)int commentjobnow;
 /** 点赞任务完成数 1-完成 0-未完成 */
 @property(nonatomic,assign)int praisejobnow;
-/** 点击任务积分 */
+/** 点击(点赞收藏评价)任务积分 */
 @property(nonatomic,assign)int clickjobscore;
 /** 点击任务是否完成 */
 @property(nonatomic,assign)BOOL clickjobdone;
@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign)int regjobscore;
 /** 是否绑定微信 */
 @property(nonatomic,assign)BOOL bindjobnow;
-/** 是否完成绑定任务 */
+/** 是否完成领奖励 */
 @property(nonatomic,assign)BOOL bindjobdone;
 /** 绑定任务积分 */
 @property(nonatomic,assign)int bindjobscore;

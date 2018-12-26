@@ -25,6 +25,8 @@
         self.email=dic[@"email"];
         self.address=dic[@"address"];
         
+        self.status=[dic[@"status"] intValue];
+        self.note=dic[@"note"];
     }
     return self;
 }

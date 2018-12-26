@@ -12,10 +12,6 @@
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.outBig.backgroundColor=[UIColor whiteColor];
-//        self.leftLab.text=@"这家公司要用设计+AI创新新时代！这家公司要用设计+AI创新新时代！这家公司要用设计+AI创新新时代！这家公司要用设计+AI创新新时代！";
-//        [self.flagBtn setTitle:@"新时代" forState:UIControlStateNormal];
-//        self.fromLab.text=@"来源来源";
-//        self.timeLab.text=@"20分钟前";
     }
     return self;
 }
@@ -28,7 +24,7 @@
 }
 -(UIView *)outBig{
     if (!_outBig) {
-        _outBig=[[UIView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth-20, 75)];
+        _outBig=[[UIView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth-20, 90)];
         _outBig.layer.cornerRadius=5;
         _outBig.layer.masksToBounds=YES;
         [self.contentView addSubview:_outBig];
@@ -38,7 +34,7 @@
 
 -(UILabel *)leftLab{
     if (!_leftLab) {
-        _leftLab=[[UILabel alloc]initWithFrame:CGRectMake(10, 5, self.outBig.width-20, 40)];
+        _leftLab=[[UILabel alloc]initWithFrame:CGRectMake(10, 10, self.outBig.width-20, 40)];
         _leftLab.numberOfLines=2;
         _leftLab.font=[UIFont systemFontOfSize:16];
         [self.outBig addSubview:_leftLab];
@@ -57,7 +53,7 @@
         
         _flagBtn.sd_layout
         .leftSpaceToView(self.outBig, 10)
-        .topSpaceToView(self.leftLab, 5);
+        .topSpaceToView(self.leftLab, 10);
         [_flagBtn setupAutoSizeWithHorizontalPadding:5 buttonHeight:15];
     }
     return _flagBtn;

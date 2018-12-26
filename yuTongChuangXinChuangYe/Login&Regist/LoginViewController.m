@@ -212,6 +212,7 @@ extern BOOL receiveMessage;
              //未绑定
              BindingAccountViewController *bingVC=[BindingAccountViewController new];
              bingVC.openid=openId;
+             bingVC.name=cname;
              [self.navigationController pushViewController:bingVC animated:YES];
          }else{
              [SJTool showAlertWithText:dic[@"msg"]];

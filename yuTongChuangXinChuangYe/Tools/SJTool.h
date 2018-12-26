@@ -52,10 +52,10 @@ typedef void (^CompleteBlock)();
 +(void)getAuthcodeClick:(UIButton *)l_timeButton;
 
 //网址正则验证
-- (BOOL)urlValidation:(NSString *)string;
++ (BOOL)urlValidation:(NSString *)string;
 
 //去设置页面
-+ (void)gotoSetting:(UIViewController *)vc;
++ (void)gotoSetting:(UIViewController *)vc place:(NSString *)place;
 
 //验证手机号合法性
 + (BOOL)isMobile:(NSString *)mobileNum;

@@ -13,11 +13,6 @@
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.outBig.backgroundColor=[UIColor whiteColor];
-//        self.leftLab.text=@"这家公司要用设计+AI创新新时代！这家公司要用设计+AI创新新时代！这家公司要用设计+AI创新新时代！这家公司要用设计+AI创新新时代！";
-//        self.rightIV.image=[UIImage imageNamed:@"picture"];
-//        [self.flagBtn setTitle:@"新时代" forState:UIControlStateNormal];
-//        self.fromLab.text=@"来源来源";
-//        self.timeLab.text=@"20分钟前";
     }
     return self;
 }
@@ -32,7 +27,7 @@
 }
 -(UIView *)outBig{
     if (!_outBig) {
-        _outBig=[[UIView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth-20, 95)];
+        _outBig=[[UIView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth-20, 105)];
         _outBig.layer.cornerRadius=5;
         _outBig.layer.masksToBounds=YES;
         [self.contentView addSubview:_outBig];
@@ -41,7 +36,7 @@
 }
 -(UIImageView *)rightIV{
     if (!_rightIV) {
-        _rightIV=[[UIImageView alloc]initWithFrame:CGRectMake(self.outBig.width-105-10, 10, 105, 75)];
+        _rightIV=[[UIImageView alloc]initWithFrame:CGRectMake(self.outBig.width-105-10, 15, 105, 75)];
         [self.outBig addSubview:_rightIV];
     }
     return _rightIV;
@@ -49,15 +44,15 @@
 -(UILabel *)leftLab{
     if (!_leftLab) {
         _leftLab=[[UILabel alloc]init];//WithFrame:CGRectMake(10, 10, self.outBig.width-105-10-20, 60)
-        _leftLab.numberOfLines=3;
+        _leftLab.numberOfLines=2;
         _leftLab.font=[UIFont systemFontOfSize:16];
         [self.outBig addSubview:_leftLab];
         _leftLab.sd_layout
         .leftSpaceToView(self.outBig, 10)
-        .topSpaceToView(self.outBig, 10)
+        .topSpaceToView(self.outBig, 15)
         .widthIs(self.outBig.width-105-10-20)
         .autoHeightRatio(0);
-        [_leftLab setMaxNumberOfLinesToShow:3];
+        [_leftLab setMaxNumberOfLinesToShow:2];
     }
     return _leftLab;
 }
@@ -73,7 +68,7 @@
         
         _flagBtn.sd_layout
         .leftSpaceToView(self.outBig, 10)
-        .topSpaceToView(self.outBig, 70);
+        .topSpaceToView(self.outBig, 75);
         [_flagBtn setupAutoSizeWithHorizontalPadding:5 buttonHeight:15];
     }
     return _flagBtn;

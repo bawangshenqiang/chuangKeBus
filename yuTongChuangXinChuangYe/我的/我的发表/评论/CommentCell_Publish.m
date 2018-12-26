@@ -59,7 +59,7 @@
         .leftSpaceToView(self.leftLab, 10)
         .topEqualToView(self.leftLab)
         .heightIs(15)
-        .widthIs(kScreenWidth-20-self.leftLab.right-30);
+        .widthIs(kScreenWidth-20-20-self.leftLab.right-30);
         
         _commentView.sd_layout
         .leftEqualToView(self.leftLab)

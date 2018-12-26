@@ -19,8 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *checkStatus;
 @property(nonatomic,strong)NSString *checkIdea;
 @property(nonatomic,assign)int Id;
+/** 0,3 审核中 1-已通过 2-未通过 */
 @property(nonatomic,assign)int statusId;
 @property(nonatomic,strong)NSString *username;
+@property(nonatomic,strong)NSString *url;
 
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 

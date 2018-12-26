@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SystemTableViewCell : UITableViewCell
 @property(nonatomic,strong)UILabel *titleLab;
-//@property(nonatomic,strong)UIImageView *rightIV;
+@property(nonatomic,strong)UILabel *subTitle;
 @property(nonatomic,strong)UIView *separatorLine;
 
 @end

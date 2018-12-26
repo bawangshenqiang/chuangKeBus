@@ -81,6 +81,9 @@
             cell.textLabel.text=arr[indexPath.row];
             if (indexPath.row==2) {
                 cell.separatorLine.hidden=YES;
+                if ([Account sharedAccount].wxbind) {
+                    cell.subTitle.text=[Account sharedAccount].wxname;
+                }
             }
             return cell;
         }
@@ -159,28 +162,31 @@
                     UINavigationController *loginNavi=[[UINavigationController alloc]initWithRootViewController:loginVC];
                     [self presentViewController:loginNavi animated:YES completion:nil];
                 }else{
-                    [ShareSDK getUserInfo:SSDKPlatformTypeWechat
-                           onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
-                     {
-                         if (state == SSDKResponseStateSuccess)
+                    if (![Account sharedAccount].wxbind) {
+                        [ShareSDK getUserInfo:SSDKPlatformTypeWechat
+                               onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
                          {
+                             if (state == SSDKResponseStateSuccess)
+                             {
+                                 
+                                 
+                                 //
+                                 NSString *CName=[user.nickname copy];
+                                 NSString *icon = [user.icon copy];
+                                 
+                                 //
+                                 WS(weakSelf);
+                                 [weakSelf thirdPartyLogin:user.uid cName:CName headImg:icon];
+                             }
                              
+                             else
+                             {
+                                 NSLog(@"%@",error);
+                             }
                              
-                             //
-                             NSString *CName=[user.nickname copy];
-                             NSString *icon = [user.icon copy];
-                             
-                             //
-                             WS(weakSelf);
-                             [weakSelf thirdPartyLogin:user.uid cName:CName headImg:icon];
-                         }
-                         
-                         else
-                         {
-                             NSLog(@"%@",error);
-                         }
-                         
-                     }];
+                         }];
+                    }
+                    
                 }
             }
             break;
@@ -250,20 +256,27 @@
 }
 -(void)thirdPartyLogin:(NSString*)openId cName:(NSString *)cname headImg:(NSString *)headImg{
     
-    NSDictionary *param=@{@"openid":openId,@"ip":@""};
+    NSDictionary *param=@{@"openid":openId,@"ip":@"",@"name":cname,@"user_token":[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"]};
     [TDHttpTools loginWXWithParams:param success:^(id response) {
         NSDictionary *dic=[SJTool dictionaryWithResponse:response];
         //NSLog(@"%@",[SJTool logDic:dic]);
         if ([dic[@"code"] intValue]==200) {
             [SVProgressHUD setMinimumDismissTimeInterval:1];
             [SVProgressHUD showSuccessWithStatus:@"已绑定微信"];
-        }else if ([dic[@"code"] intValue]==500301){
-            //未绑定
-            BindingAccountViewController *bingVC=[BindingAccountViewController new];
-            bingVC.openid=openId;
-            bingVC.fromSetPage=YES;
-            [self.navigationController pushViewController:bingVC animated:YES];
-        }else{
+            
+            [Account sharedAccount].wxname=cname;
+            [Account sharedAccount].wxbind=YES;
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+//        else if ([dic[@"code"] intValue]==500301){
+//            //未绑定
+//            BindingAccountViewController *bingVC=[BindingAccountViewController new];
+//            bingVC.openid=openId;
+//            bingVC.fromSetPage=YES;
+//            bingVC.name=cname;
+//            [self.navigationController pushViewController:bingVC animated:YES];
+//        }
+        else{
             [SJTool showAlertWithText:dic[@"msg"]];
         }
     } failure:^(NSError *error) {

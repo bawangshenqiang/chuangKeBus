@@ -176,7 +176,7 @@ extern BOOL receiveMessage;
         [weakSelf getNewData];
         
     }];
-    self.tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
+    self.tableView.mj_footer = [MJRefreshAutoFooter footerWithRefreshingBlock:^{
         
         [weakSelf getMoreData];
         
@@ -268,7 +268,7 @@ extern BOOL receiveMessage;
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 100;
+    return 115;
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     SectionHeader_HallFirst *header=[tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
@@ -291,9 +291,7 @@ extern BOOL receiveMessage;
     return 40;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (section==0) {
-        return 5;
-    }
+    
     return 0.01;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

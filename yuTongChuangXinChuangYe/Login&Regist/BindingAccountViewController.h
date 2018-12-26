@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface BindingAccountViewController : UIViewController
 @property(nonatomic,strong)NSString *openid;
 @property(nonatomic,assign)BOOL fromSetPage;
+@property(nonatomic,strong)NSString *name;//微信昵称
 @end
 
 NS_ASSUME_NONNULL_END

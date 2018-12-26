@@ -306,12 +306,28 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 }
                 if (indexPath.row==4) {
                     cell.textLabel.text=@"企业简介";
+                    if (self.companyIntro.length) {
+                        cell.detailTextLabel.text=@"已完成";
+                    }else{
+                        cell.detailTextLabel.text=@"待填写";
+                    }
                 }else if (indexPath.row==5){
                     cell.textLabel.text=@"企业详情";
+                    if (self.companyDetail.length) {
+                        cell.detailTextLabel.text=@"已完成";
+                    }else{
+                        cell.detailTextLabel.text=@"待填写";
+                    }
                 }else{
                     cell.textLabel.text=@"服务说明";
+                    if (self.serverDescription.length) {
+                        cell.detailTextLabel.text=@"已完成";
+                    }else{
+                        cell.detailTextLabel.text=@"待填写";
+                    }
                 }
                 cell.textLabel.font=[UIFont systemFontOfSize:16];
+                cell.detailTextLabel.font=[UIFont systemFontOfSize:16];
                 return cell;
             }
                 break;
@@ -378,6 +394,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 WS(weakSelf);
                 [editVC setCallBackBlock:^(NSString * _Nonnull string) {
                     weakSelf.companyIntro=string;
+                    [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 }];
                 [self.navigationController pushViewController:editVC animated:YES];
             }
@@ -390,6 +407,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 WS(weakSelf);
                 [editVC setCallBackBlock:^(NSString * _Nonnull string) {
                     weakSelf.companyDetail=string;
+                    [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 }];
                 [self.navigationController pushViewController:editVC animated:YES];
             }
@@ -402,6 +420,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 WS(weakSelf);
                 [editVC setCallBackBlock:^(NSString * _Nonnull string) {
                     weakSelf.serverDescription=string;
+                    [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 }];
                 [self.navigationController pushViewController:editVC animated:YES];
             }

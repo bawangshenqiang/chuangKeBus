@@ -22,7 +22,8 @@
         .topSpaceToView(self.contentView, 20)
         .bottomSpaceToView(self.contentView, 10);
         [self.titleLab setSingleLineAutoResizeWithMaxWidth:100];
-        
+        //
+        //加一个更多的按钮
     }
     return self;
 }

@@ -19,7 +19,7 @@
 #import "SubmitProjectViewController.h"
 #import "SearchNumbersViewController.h"
 #import "CreativityAndProjectDetailViewController.h"
-#import "SearchNumbersListModel_Hall.h"
+//#import "SearchNumbersListModel_Hall.h"
 #import "SearchNumbersDetailViewController.h"
 #import "LoginViewController.h"
 #import "ResourceModel_ChuangYe.h"
@@ -31,6 +31,11 @@
 #import "ProjectFooter.h"
 #import "ProjectAuditViewController.h"
 #import "ResourceModel_ChuangYe_second.h"
+#import "ServeProgressViewController.h"
+#import "TeamModel_ChuangYe.h"
+#import "CaredNumberListViewController.h"
+#import "SearchNumbersViewController.h"
+#import "AuditingLookDetailViewController.h"
 
 @interface MyChuangYeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -58,6 +63,7 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
+    [self.tableView.mj_header beginRefreshing];
 }
 -(NoDataView *)noDataView{
     if (!_noDataView) {
@@ -150,7 +156,7 @@
                 
                 if ([dic[@"code"] intValue]==200) {
                     for (NSDictionary *dict in dic[@"data"][@"records"]) {
-                        SearchNumbersListModel_Hall *model=[[SearchNumbersListModel_Hall alloc]initWithDictionary:dict];
+                        TeamModel_ChuangYe *model=[[TeamModel_ChuangYe alloc]initWithDictionary:dict];
                         [self.dataArr addObject:model];
                     }
                     
@@ -282,7 +288,7 @@
                 
                 if ([dic[@"code"] intValue]==200) {
                     for (NSDictionary *dict in dic[@"data"][@"records"]) {
-                        SearchNumbersListModel_Hall *model=[[SearchNumbersListModel_Hall alloc]initWithDictionary:dict];
+                        TeamModel_ChuangYe *model=[[TeamModel_ChuangYe alloc]initWithDictionary:dict];
                         [self.dataArr addObject:model];
                     }
                     
@@ -390,7 +396,7 @@
         [weakSelf getMoreDataWith:(int)weakSelf.index];
         
     }];
-    [self.tableView.mj_header beginRefreshing];
+    
 }
 -(void)topHeadSelectClick:(int)index{
     self.index=index;
@@ -452,6 +458,7 @@
         _tableView.dataSource=self;
         _tableView.backgroundColor=kBackgroundColor;
         _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
+        _tableView.tableHeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
         _tableView.tableFooterView=[UIView new];
     }
     return _tableView;
@@ -525,6 +532,28 @@
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
             cell.model=self.dataArr[indexPath.row];
+            WS(weakSelf);
+            [cell setTitleClickBlock:^(TeamModel_ChuangYe *model){
+                
+                if (model.state==1) {
+                    //点名字进详情
+                    SearchNumbersDetailViewController *detailVC=[SearchNumbersDetailViewController new];
+                    detailVC.Id=model.Id;
+                    [weakSelf.navigationController pushViewController:detailVC animated:YES];
+                }else if (model.state==2){
+                    //点名字进表单
+                    SearchNumbersViewController *vc=[SearchNumbersViewController new];
+                    vc.isRevise=YES;
+                    vc.teamId=model.Id;
+                    [weakSelf.navigationController pushViewController:vc animated:YES];
+                }else{
+                    //点名字进预览
+                    //model.url;
+                    AuditingLookDetailViewController *vc=[AuditingLookDetailViewController new];
+                    vc.url=model.url;
+                    [weakSelf.navigationController pushViewController:vc animated:YES];
+                }
+            }];
             return cell;
         }
             break;
@@ -571,7 +600,8 @@
             break;
         case 2:
         {
-            height=130;
+            TeamModel_ChuangYe *model=self.dataArr[indexPath.row];
+            height=[tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[TeamCell_ChuangYe class] contentViewWidth:kScreenWidth];
             return height;
         }
             break;
@@ -587,42 +617,91 @@
     }
     return 0;
 }
+/** 要改成按各个的状态 判断跳转到详情 还是 表单提交页 */
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (self.index) {
         case 0:
             {
                 ChuangYiModel_ChuangYe *model=self.dataArr[indexPath.row];
-                CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
-                detailVC.index=self.index;
+                if (model.statusId==1) {
+                    CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
+                    detailVC.index=self.index;
+                    
+                    detailVC.Id=model.Id;
+                    [self.navigationController pushViewController:detailVC animated:YES];
+                }else if (model.statusId==2){
+                    SubmitCreativityViewController *vc=[SubmitCreativityViewController new];
+                    vc.isRevise=YES;
+                    vc.ideaId=model.Id;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }else{
+                    //审核中,预览页
+                    AuditingLookDetailViewController *vc=[AuditingLookDetailViewController new];
+                    vc.url=model.url;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
                 
-                detailVC.Id=model.Id;
-                [self.navigationController pushViewController:detailVC animated:YES];
             }
             break;
         case 1:
         {
             ProjectModel_ChuangYe *model=self.dataArr[indexPath.row];
-            CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
-            detailVC.index=self.index;
+            if ([model.pstatus isEqualToString:@"1"]) {
+                //进详情
+                CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
+                detailVC.index=self.index;
+                
+                detailVC.Id=model.projectId;
+                [self.navigationController pushViewController:detailVC animated:YES];
+            }else if([model.pstatus isEqualToString:@"0"]){
+                //进表单修改
+                SubmitProjectViewController *vc=[SubmitProjectViewController new];
+                vc.isRevise=YES;
+                vc.projectId=model.projectId;
+                [self.navigationController pushViewController:vc animated:YES];
+            }else if([model.pstatus isEqualToString:@"2"]){
+                //预览
+                AuditingLookDetailViewController *vc=[AuditingLookDetailViewController new];
+                vc.url=model.url;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
             
-            detailVC.Id=model.projectId;
-            [self.navigationController pushViewController:detailVC animated:YES];
         }
             break;
         case 2:
         {
-            SearchNumbersListModel_Hall *model=self.dataArr[indexPath.row];
-            SearchNumbersDetailViewController *detailVC=[SearchNumbersDetailViewController new];
-            detailVC.Id=model.Id;
-            [self.navigationController pushViewController:detailVC animated:YES];
+            TeamModel_ChuangYe *model=self.dataArr[indexPath.row];
+            if (model.state==1) {
+                CaredNumberListViewController *vc=[CaredNumberListViewController new];
+                vc.title=model.title;
+                vc.teamId=model.Id;
+                [self.navigationController pushViewController:vc animated:YES];
+            }else if (model.state==2){
+                //拒绝的进表单
+                SearchNumbersViewController *vc=[SearchNumbersViewController new];
+                vc.teamId=model.Id;
+                vc.isRevise=YES;
+                [self.navigationController pushViewController:vc animated:YES];
+            }else{
+                //进预览
+                AuditingLookDetailViewController *vc=[AuditingLookDetailViewController new];
+                vc.url=model.url;
+                NSLog(@"url===%@",vc.url);
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+            //19345692367
         }
             break;
         case 3:
         {
-//            ResourceModel_ChuangYe_second *model=self.dataArr[indexPath.row];
-//            ServerDetailViewController *detailVC=[ServerDetailViewController new];
-//            detailVC.providerId=model.providerId;
-//            [self.navigationController pushViewController:detailVC animated:YES];
+            ResourceModel_ChuangYe_second *model=self.dataArr[indexPath.row];
+            ServeProgressViewController *detailVC=[ServeProgressViewController new];
+            detailVC.providerId=model.providerId;
+            detailVC.demandId=model.Id;
+            detailVC.userId=model.userId;
+            detailVC.title=model.title;
+            detailVC.isUser=YES;
+            [self.navigationController pushViewController:detailVC animated:YES];
         }
             break;
         default:

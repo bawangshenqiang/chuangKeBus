@@ -22,6 +22,7 @@
         if ([dic.allKeys containsObject:@"id"]) {
             self.projectId=[dic[@"id"] intValue];
         }
+        self.pstatus=dic[@"pstatus"];
         self.status=dic[@"status"];
         self.instructor=dic[@"instructor"];
         self.linkphone=dic[@"linkphone"];
@@ -33,6 +34,7 @@
                 [self.checkModels addObject:model];
             }
         }
+        self.url=dic[@"url"];
     }
     return self;
 }

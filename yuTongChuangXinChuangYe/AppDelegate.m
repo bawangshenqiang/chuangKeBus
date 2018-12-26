@@ -140,9 +140,23 @@ static BOOL isProduction = NO;//YES//NO
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     
+    NSString *path = [url absoluteString];
+    path = [path stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"%@", path);
+    
     return [WXApi handleOpenURL:url delegate:self];
 }
 -(BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options{
+    
+    NSString *path = [url absoluteString];
+    path = [path stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //NSLog(@"%@", path);
+    //file:///private/var/mobile/Containers/Data/Application/09047F64-02D3-496A-B12D-2E03B2656C3E/Documents/Inbox/副本-公众号-1.pdf
+    //file:///private/var/mobile/Containers/Data/Application/09047F64-02D3-496A-B12D-2E03B2656C3E/Documents/Inbox/公众号.pdf
+    //file:///private/var/mobile/Containers/Data/Application/09047F64-02D3-496A-B12D-2E03B2656C3E/Documents/Inbox/anti.zip
+    
+    //UploadPlanFileViewController
+    [kNotificationCenter postNotificationName:@"receivePlanfile" object:nil userInfo:@{@"path":path}];
     
     return [WXApi handleOpenURL:url delegate:self];
 }

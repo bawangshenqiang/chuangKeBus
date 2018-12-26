@@ -42,7 +42,7 @@
             [btn setImage:[UIImage imageNamed:imageArray[i]] forState:UIControlStateNormal];
             [btn setTitle:titleArr[i] forState:UIControlStateNormal];
             [btn setTitleColor:[UIColor colorWithHexString:@"#323232"] forState:UIControlStateNormal];
-            btn.titleLabel.font=[UIFont systemFontOfSize:16];
+            btn.titleLabel.font=[UIFont systemFontOfSize:14];
             [btn addTarget:self action:@selector(fourBtnClick:) forControlEvents:UIControlEventTouchUpInside];
             btn.tag=100+i;
             [bottomView addSubview:btn];

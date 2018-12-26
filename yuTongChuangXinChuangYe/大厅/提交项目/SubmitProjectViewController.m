@@ -16,6 +16,8 @@
 #import "CustomPickerView.h"
 #import "ClipViewController.h"
 #import "UIImage+fixOrientation.h"
+#import "UploadPlanFileViewController.h"
+#import "LookPlanFileViewController.h"
 
 typedef NS_ENUM(NSInteger,ChosePhotoType) {
     ChosePhotoTypeAlbum,//相册
@@ -33,6 +35,9 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
 @property(nonatomic,strong)NSString *username;
 @property(nonatomic,strong)NSString *intro;//简介
 @property(nonatomic,strong)NSDictionary *saveDic;//存到草稿里面的内容
+@property(nonatomic,strong)NSString *planname;
+@property(nonatomic,strong)NSString *planfile;
+@property(nonatomic,strong)NSString *filePath;
 @end
 
 @implementation SubmitProjectViewController
@@ -50,6 +55,8 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     self.status=0;
     self.username=@"";
     self.intro=@"";
+    self.planname=@"";
+    self.planfile=@"";
     
     UIBarButtonItem *leftBar=[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"fanhui"] style:UIBarButtonItemStylePlain target:self action:@selector(backToHomepage)];
     self.navigationItem.leftBarButtonItem=leftBar;
@@ -110,7 +117,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         [weakSelf saveDraft];
         
     }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:@"不保存退出" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf.navigationController popViewControllerAnimated:YES];
     }]];
     
@@ -198,10 +205,13 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         [SJTool showAlertWithText:@"请填写联系电话"];
         return;
     }
+    if (!self.planfile.length || !self.planname.length) {
+        [SJTool showAlertWithText:@"请上传商业计划书"];
+        return;
+    }
     photo=[NSString stringWithFormat:@"data@image/jpg;base64,%@",photo];
     
-    NSDictionary *param=@{@"id":@(self.projectId),@"user_token":user_token,@"title":cell0.textField.text,@"description":self.intro,@"content":self.content,@"appeal":cell2.textField.text,@"categoryId":@(self.catogaryID),@"cover":photo,@"linker":cell1_0.textField.text,@"linkphone":cell1_1.textField.text,@"planname":@"",@"planfile":@"",@"status":@(self.status),@"username":self.username};
-    NSLog(@"status==%d,username==%@",self.status,self.username);
+    NSDictionary *param=@{@"id":@(self.projectId),@"user_token":user_token,@"title":cell0.textField.text,@"description":self.intro,@"content":self.content,@"appeal":cell2.textField.text,@"categoryId":@(self.catogaryID),@"cover":photo,@"linker":cell1_0.textField.text,@"linkphone":cell1_1.textField.text,@"planname":self.planname,@"planfile":self.planfile,@"status":@(self.status),@"username":self.username};
     [TDHttpTools submitProjectWithParams:param success:^(id response) {
         NSDictionary *dic=[SJTool dictionaryWithResponse:response];
         NSLog(@"%@",[SJTool logDic:dic]);
@@ -222,10 +232,22 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
         _tableView.delegate=self;
         _tableView.dataSource=self;
         _tableView.backgroundColor=[UIColor whiteColor];
-        _tableView.tableFooterView=[UIView new];
+        _tableView.tableFooterView=[UIView new];//[self tableviewFooter];//
     }
     return _tableView;
 }
+//-(UIView *)tableviewFooter{
+//    UIView *footer=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 50)];
+//    footer.backgroundColor=kBackgroundColor;
+//    UILabel *lab=[[UILabel alloc]initWithFrame:CGRectMake(15, 5, kScreenWidth-30, 40)];
+//    lab.font=[UIFont systemFontOfSize:12];
+//    lab.textColor=[UIColor colorWithHexString:@"#989898"];
+//    lab.text=@"请使用电脑打开网址：***，登录后依次点击【个人创业面板- 创业大厅 - 项目计划】，提交该项目的商业计划书";
+//    lab.numberOfLines=0;
+//    [footer addSubview:lab];
+//
+//    return footer;
+//}
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 2;
 }
@@ -233,7 +255,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     if (section==0) {
         return 6;
     }else{
-        return 2;
+        return 3;
     }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -386,47 +408,67 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 break;
         }
     }else{
-        NSString *cellID=@"cellIdentifie5";
-        ApplySecondCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
-        if (cell==nil) {
-            cell=[[ApplySecondCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
-            cell.separatorInset=UIEdgeInsetsMake(0, 15, 0, 15);
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
-        }
-        switch (indexPath.row) {
-            case 0:
-                cell.topLab.text=@"联系人";
-                cell.textField.placeholder=@"请输入真实姓名";
-                if (self.saveDic) {
-                    cell.textField.text=self.saveDic[@"name"];
-                }
-                if (self.model) {
-                    cell.textField.text=self.model.linker;
-                }
-                break;
-            case 1:
-                cell.topLab.text=@"联系电话";
-                cell.textField.placeholder=@"请输入常用手机号";
-                if (self.saveDic) {
-                    cell.textField.text=self.saveDic[@"telephone"];
-                }
-                if (self.model) {
-                    cell.textField.text=self.model.linkphone;
-                }
-                cell.textField.keyboardType=UIKeyboardTypeNumberPad;
-                break;
-            default:
-                break;
+        if (indexPath.row<2) {
+            NSString *cellID=@"cellIdentifie5";
+            ApplySecondCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell==nil) {
+                cell=[[ApplySecondCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
+                cell.separatorInset=UIEdgeInsetsMake(0, 15, 0, 15);
+                cell.selectionStyle=UITableViewCellSelectionStyleNone;
+            }
+            switch (indexPath.row) {
+                case 0:
+                    cell.topLab.text=@"联系人";
+                    cell.textField.placeholder=@"请输入真实姓名";
+                    if (self.saveDic) {
+                        cell.textField.text=self.saveDic[@"name"];
+                    }
+                    if (self.model) {
+                        cell.textField.text=self.model.linker;
+                    }
+                    break;
+                case 1:
+                    cell.topLab.text=@"联系电话";
+                    cell.textField.placeholder=@"请输入常用手机号";
+                    if (self.saveDic) {
+                        cell.textField.text=self.saveDic[@"telephone"];
+                    }
+                    if (self.model) {
+                        cell.textField.text=self.model.linkphone;
+                    }
+                    cell.textField.keyboardType=UIKeyboardTypeNumberPad;
+                    break;
+                default:
+                    break;
+            }
+            
+            return cell;
+        }else{
+            static NSString *cellId=@"cellIdentifier6";
+            UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!cell) {
+                cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+                cell.separatorInset=UIEdgeInsetsMake(0, 15, 0, 15);
+                cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+            }
+            cell.textLabel.text=@"商业计划书";
+            if (!self.planname.length) {
+                cell.detailTextLabel.text=@"未上传";
+            }
+            
+            cell.textLabel.font=[UIFont systemFontOfSize:16];
+            cell.detailTextLabel.font=[UIFont systemFontOfSize:16];
+            
+            return cell;
         }
         
-        return cell;
     }
     return nil;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0 && indexPath.row==5) {
         return 105;
-    }else if (indexPath.section==0 && (indexPath.row==1 || indexPath.row==2)){
+    }else if ((indexPath.section==0 && (indexPath.row==1 || indexPath.row==2)) || (indexPath.section==1 && indexPath.row==2)){
         return 44;
     }else{
         return 60;
@@ -510,7 +552,56 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
                 break;
         }
         
+    }else{
+        if (indexPath.row==2) {
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            
+            if (self.planname.length) {
+                [self showAlertSecond];
+            }else{
+                UploadPlanFileViewController *vc=[UploadPlanFileViewController new];
+                WS(weakSelf);
+                __block UITableViewCell *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
+                [vc setCallBack:^(NSDictionary * _Nonnull dic) {
+                    NSData *data=dic[@"planfile"];
+                    NSString *base64=[data base64EncodedStringWithOptions:0];
+                    NSLog(@"文件:%@,大小:%ld",dic[@"planname"],data.length);
+                    weakSelf.planname=dic[@"planname"];
+                    weakSelf.filePath=dic[@"filePath"];
+                    weakSelf.planfile=base64;
+                    cell.detailTextLabel.text=dic[@"planname"];
+                }];
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+        }
     }
+}
+-(void)showAlertSecond{
+    __block UITableViewCell *cell=[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
+    UIAlertController *alert=[UIAlertController alertControllerWithTitle:@"选择方式" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    WS(weakSelf);
+    [alert addAction:[UIAlertAction actionWithTitle:@"查看" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        LookPlanFileViewController *vc=[LookPlanFileViewController new];
+        vc.title=weakSelf.planname;
+        vc.filePath=weakSelf.filePath;
+        [weakSelf.navigationController pushViewController:vc animated:YES];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"重新上传" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UploadPlanFileViewController *vc=[UploadPlanFileViewController new];
+        [vc setCallBack:^(NSDictionary * _Nonnull dic) {
+            NSData *data=dic[@"planfile"];
+            NSString *base64=[data base64EncodedStringWithOptions:0];
+            NSLog(@"文件:%@,大小:%ld",dic[@"planname"],data.length);
+            weakSelf.planname=dic[@"planname"];
+            weakSelf.filePath=dic[@"filePath"];
+            weakSelf.planfile=base64;
+            cell.detailTextLabel.text=dic[@"planname"];
+        }];
+        [weakSelf.navigationController pushViewController:vc animated:YES];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 //-(void)addPickView2{
 //

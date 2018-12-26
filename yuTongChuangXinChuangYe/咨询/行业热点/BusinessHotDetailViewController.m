@@ -68,6 +68,46 @@ WKNavigationDelegate>
 //    }
 //    [self.tableView reloadData];
 //}
+-(void)refreshCommentTableView{
+    _page=1;
+    NSString *timestamp=[SJTool getNowTimeTimestamp3];
+    NSString *access_token=[SJTool getToken];
+    NSString *user_token=@"";
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"]!=nil) {
+        user_token=[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"];
+    }
+    NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"user_token":user_token,@"informationId":@(self.Id),@"size":@(10),@"page":@(_page)};
+    [TDHttpTools informationDeatilWithParams:param success:^(id response) {
+        NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+        NSLog(@"%@",[SJTool logDic:dic]);
+        [self.dataArr removeAllObjects];
+        if ([dic[@"code"] intValue]==200) {
+            
+            self.shareTitle=dic[@"data"][@"title"];
+            self.shareContent=dic[@"data"][@"description"];
+            
+            //[self getUrlData:dic[@"data"][@"url"]];
+            self.collected=[dic[@"data"][@"collected"] boolValue];
+            [self.bottomView.praiseBtn setSelected:self.collected];
+            
+            for (NSDictionary *dict in dic[@"data"][@"comments"][@"records"]) {
+                CommentModel_video *model=[[CommentModel_video alloc]initWithDictionary:dict];
+                [self.dataArr addObject:model];
+            }
+            
+            
+        }else{
+            [SJTool showAlertWithText:dic[@"msg"]];
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView reloadData];
+        });
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+        [self.tableView.mj_header endRefreshing];
+    }];
+}
 -(void)getNewData{
     _page=1;
     NSString *timestamp=[SJTool getNowTimeTimestamp3];
@@ -270,7 +310,8 @@ WKNavigationDelegate>
         if ([dic[@"code"] intValue]==200) {
             [SVProgressHUD setMinimumDismissTimeInterval:1];
             [SVProgressHUD showSuccessWithStatus:dic[@"msg"]];
-            [self getNewData];
+            //[self getNewData];
+            [self refreshCommentTableView];
         }else{
             [SJTool showAlertWithText:dic[@"msg"]];
         }

@@ -297,7 +297,7 @@
 }
 -(UITableView *)tableView{
     if (!_tableView) {
-        _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, self.header.bottom, kScreenWidth, kTableViewHeight-40) style:UITableViewStylePlain];
+        _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, self.header.bottom+10, kScreenWidth, kTableViewHeight-40-10) style:UITableViewStylePlain];
         _tableView.delegate=self;
         _tableView.dataSource=self;
         _tableView.backgroundColor=kBackgroundColor;
@@ -343,10 +343,15 @@
             InterestCell_Public *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
             if (!cell) {
                 cell=[[InterestCell_Public alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
-                cell.backgroundColor=kBackgroundColor;
+                cell.backgroundColor=[UIColor whiteColor];
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
+            cell.indexPath=indexPath;
             cell.model=self.dataArr[indexPath.row];
+            
+            [cell setLookAllBtnBlock:^(NSIndexPath *indexPath){
+                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            }];
             return cell;
         }
             break;
@@ -440,6 +445,15 @@
         [self.navigationController pushViewController:detailVC animated:YES];
     }
 }
+//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+//    return 10;
+//}
+//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+//    return 0.01;
+//}
+//-(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
+//    view.tintColor=kBackgroundColor;
+//}
 /*
 #pragma mark - Navigation
 

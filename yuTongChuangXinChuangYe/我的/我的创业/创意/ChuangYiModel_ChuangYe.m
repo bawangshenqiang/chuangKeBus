@@ -21,6 +21,7 @@
         self.Id=[dic[@"id"] intValue];
         self.statusId=[dic[@"state"] intValue];
         self.username=dic[@"username"];
+        self.url=dic[@"url"];
     }
     return self;
 }

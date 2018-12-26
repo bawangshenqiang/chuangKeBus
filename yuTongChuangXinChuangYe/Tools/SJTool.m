@@ -402,7 +402,7 @@
  *  @return 返回值类型为BOOL
  
  */
-- (BOOL)urlValidation:(NSString *)string {
++ (BOOL)urlValidation:(NSString *)string {
     
     NSError *error;
     
@@ -436,11 +436,11 @@
     return NO;
 }
 
-//去设置页面
-+ (void)gotoSetting:(UIViewController *)vc{
+//去设置页面 打开对应的权限 @"设置-隐私-通讯录"
++ (void)gotoSetting:(UIViewController *)vc place:(NSString *)place{
     NSString *appName = [[NSBundle mainBundle].infoDictionary valueForKey:@"CFBundleDisplayName"];
     if (!appName) appName = [[NSBundle mainBundle].infoDictionary valueForKey:@"CFBundleName"];
-    NSString *message = [NSString stringWithFormat:@"请在%@的\"设置-隐私-通讯录\"选项中，\r允许%@访问你的通讯录。",[UIDevice currentDevice].model,appName];
+    NSString *message = [NSString stringWithFormat:@"请在%@的%@选项中，\r允许%@访问。",[UIDevice currentDevice].model,place,appName];
     
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
     

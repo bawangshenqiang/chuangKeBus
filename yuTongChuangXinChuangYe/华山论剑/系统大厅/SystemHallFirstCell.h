@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SystemHallFirstCell : UITableViewCell
 @property(nonatomic,strong)UIImageView *headIV;
 @property(nonatomic,strong)UILabel *titleLab;
+@property(nonatomic,strong)UILabel *nameLab;
 @end
 
 NS_ASSUME_NONNULL_END

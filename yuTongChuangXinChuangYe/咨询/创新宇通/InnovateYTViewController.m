@@ -163,7 +163,7 @@
     if (indexPath.row==0) {
         return 130;
     }
-    return 100;
+    return 115;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     DetailViewController *detailVC=[DetailViewController new];

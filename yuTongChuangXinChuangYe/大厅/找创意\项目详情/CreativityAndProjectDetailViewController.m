@@ -72,6 +72,89 @@ WKNavigationDelegate>
 //    }
 //    [self.tableView reloadData];
 //}
+-(void)refreshCommentTableView{
+    _page=1;
+    NSString *timestamp=[SJTool getNowTimeTimestamp3];
+    NSString *access_token=[SJTool getToken];
+    NSString *user_token=@"";
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"]!=nil) {
+        user_token=[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"];
+    }
+    
+    if (self.index==0) {
+        NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"user_token":user_token,@"ideaId":@(self.Id),@"size":@(10),@"page":@(_page)};
+        [TDHttpTools ideaDeatilWithParams:param success:^(id response) {
+            NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+            NSLog(@"%@",[SJTool logDic:dic]);
+            [self.dataArr removeAllObjects];
+            if ([dic[@"code"] intValue]==200) {
+                
+                self.shareTitle=dic[@"data"][@"title"];
+                self.shareContent=dic[@"data"][@"description"];
+                
+                //[self getUrlData:dic[@"data"][@"url"]];
+                self.praised=[dic[@"data"][@"praised"] boolValue];
+                [self.bottomView.praiseBtn setSelected:self.praised];
+                self.editable=[dic[@"data"][@"editable"] boolValue];
+                if (self.editable) {
+                    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"修改" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarClick)];
+                }else{
+                    self.navigationItem.rightBarButtonItem=nil;
+                }
+                for (NSDictionary *dict in dic[@"data"][@"comments"][@"records"]) {
+                    CommentModel_video *model=[[CommentModel_video alloc]initWithDictionary:dict];
+                    [self.dataArr addObject:model];
+                }
+                
+            }else{
+                [SJTool showAlertWithText:dic[@"msg"]];
+            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.tableView.mj_header endRefreshing];
+                [self.tableView reloadData];
+            });
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+            [self.tableView.mj_header endRefreshing];
+        }];
+    }else{
+        NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"user_token":user_token,@"projectId":@(self.Id),@"size":@(10),@"page":@(_page)};
+        [TDHttpTools projectDeatilWithParams:param success:^(id response) {
+            NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+            NSLog(@"%@",[SJTool logDic:dic]);
+            [self.dataArr removeAllObjects];
+            if ([dic[@"code"] intValue]==200) {
+                
+                self.shareTitle=dic[@"data"][@"title"];
+                self.shareContent=dic[@"data"][@"description"];
+                
+                //[self getUrlData:dic[@"data"][@"url"]];
+                self.praised=[dic[@"data"][@"praised"] boolValue];
+                [self.bottomView.praiseBtn setSelected:self.praised];
+                self.editable=[dic[@"data"][@"editable"] boolValue];
+                if (self.editable) {
+                    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"修改" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarClick)];
+                }else{
+                    self.navigationItem.rightBarButtonItem=nil;
+                }
+                for (NSDictionary *dict in dic[@"data"][@"comments"][@"records"]) {
+                    CommentModel_video *model=[[CommentModel_video alloc]initWithDictionary:dict];
+                    [self.dataArr addObject:model];
+                }
+                
+            }else{
+                [SJTool showAlertWithText:dic[@"msg"]];
+            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.tableView.mj_header endRefreshing];
+                [self.tableView reloadData];
+            });
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+            [self.tableView.mj_header endRefreshing];
+        }];
+    }
+}
 -(void)getNewData{
     _page=1;
     NSString *timestamp=[SJTool getNowTimeTimestamp3];
@@ -378,7 +461,8 @@ WKNavigationDelegate>
         if ([dic[@"code"] intValue]==200) {
             [SVProgressHUD setMinimumDismissTimeInterval:1];
             [SVProgressHUD showSuccessWithStatus:dic[@"msg"]];
-            [self getNewData];
+            //[self getNewData];
+            [self refreshCommentTableView];
         }else{
             [SJTool showAlertWithText:dic[@"msg"]];
         }
@@ -576,11 +660,11 @@ WKNavigationDelegate>
 }
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIButton *btn=[UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame=CGRectMake(0, 0, kScreenWidth, 30);
+    btn.frame=CGRectMake(0, 0, kScreenWidth, 40);
     [btn setTitle:@"加载更多" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor colorWithHexString:@"#989898"] forState:UIControlStateNormal];
     btn.titleLabel.font=[UIFont systemFontOfSize:13];
-    btn.backgroundColor=kBackgroundColor;
+    btn.backgroundColor=[UIColor whiteColor];//kBackgroundColor;
     [btn addTarget:self action:@selector(loadMoreData) forControlEvents:UIControlEventTouchUpInside];
     self.loadMoreBtn=btn;
     if (self.dataArr.count==0) {
@@ -588,16 +672,28 @@ WKNavigationDelegate>
     }else if (self.dataArr.count<10){
         [self.loadMoreBtn setTitle:@"没有更多了" forState:UIControlStateNormal];
     }
+    UIView *line=[[UIView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth-20, 0.5)];
+    line.backgroundColor=RGBAColor(204, 204, 204, 0.5);
+    [btn addSubview:line];
     return btn;
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    UIView *header=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 30)];
+    UIView *header=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 50)];
     header.backgroundColor=kBackgroundColor;
-    UILabel *lab=[[UILabel alloc]initWithFrame:CGRectMake(15, 0, 80, 30)];
-    lab.text=@"全部评论";
-    lab.font=[UIFont systemFontOfSize:13];
-    lab.textColor=[UIColor colorWithHexString:@"#989898"];
-    [header addSubview:lab];
+    UIView *white=[[UIView alloc]initWithFrame:CGRectMake(0, 10, kScreenWidth, 40)];
+    white.backgroundColor=[UIColor whiteColor];
+    [header addSubview:white];
+    
+    UILabel *lab=[[UILabel alloc]initWithFrame:CGRectMake(15, 15, 80, 15)];
+    lab.text=@"评论";
+    lab.font=[UIFont systemFontOfSize:14];
+    lab.textColor=RGBAColor(50, 50, 50, 1);
+    [white addSubview:lab];
+    //
+    UIView *line=[[UIView alloc]initWithFrame:CGRectMake(10, 39.5, kScreenWidth-20, 0.5)];
+    line.backgroundColor=RGBAColor(204, 204, 204, 0.5);
+    [white addSubview:line];
+    
 //    UIButton *sort=[UIButton buttonWithType:UIButtonTypeCustom];
 //    sort.frame=CGRectMake(kScreenWidth-85, 5, 70, 20);
 //    sort.titleLabel.font=[UIFont systemFontOfSize:13];
@@ -613,10 +709,10 @@ WKNavigationDelegate>
     return header;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 30;
+    return 40;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 30;
+    return 50;
 }
 //排序
 -(void)sortData:(UIButton *)btn{
@@ -649,7 +745,7 @@ WKNavigationDelegate>
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
         _tableView.scrollEnabled = NO;
-        
+        _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     }
     return _tableView;
 }

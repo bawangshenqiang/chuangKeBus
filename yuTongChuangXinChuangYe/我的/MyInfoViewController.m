@@ -22,7 +22,8 @@
 #import "HatchPersonViewController.h"
 #import "UserInfomationViewController.h"
 #import "TastCenterViewController.h"
-
+#import "ServerAuditingViewController.h"
+#import "ClientDemandListViewController.h"
 extern BOOL receiveMessage;
 
 @interface MyInfoViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -71,9 +72,9 @@ extern BOOL receiveMessage;
             [Account sharedAccount].message=[dic[@"data"][@"message"] intValue];
             [Account sharedAccount].photo=dic[@"data"][@"photo"];
             [Account sharedAccount].nickname=dic[@"data"][@"nickname"];
-            [Account sharedAccount].provider=[dic[@"data"][@"provider"] boolValue];
+            [Account sharedAccount].provider=[dic[@"data"][@"provider"] intValue];
             [self.topView.headerIV sd_setImageWithURL:[NSURL URLWithString:[Account sharedAccount].photo] placeholderImage:[UIImage imageNamed:@"mine_user"]];
-            
+            [self.tableView reloadData];
         }else{
             [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"TOKEN"];
             [[NSUserDefaults standardUserDefaults] synchronize];
@@ -100,6 +101,7 @@ extern BOOL receiveMessage;
         //设置
         SetViewController *setVC=[SetViewController new];
         [weakSelf.navigationController pushViewController:setVC animated:YES];
+        
     }];
     [self.topView setLoginClickBlock:^{
         //登录
@@ -136,6 +138,7 @@ extern BOOL receiveMessage;
             [weakSelf.navigationController pushViewController:myChuangyeVC animated:YES];
         }
     }];
+    //下面的四个按钮
     [self.topView setThreeBtnClickBlock:^(NSInteger index) {
         //NSLog(@"tag:%d",(int)index);
         if ([Account sharedAccount]==nil) {
@@ -206,7 +209,8 @@ extern BOOL receiveMessage;
         cell=[[SystemTableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
         cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     }
-    NSArray *arr=@[@"加入服务商",@"检查更新",@"关于我们",@"建议反馈"];
+    NSString *string=[Account sharedAccount].provider==1?@"客户需求":@"加入服务商";
+    NSArray *arr=@[string,@"检查更新",@"关于我们",@"建议反馈"];
     cell.titleLab.text=arr[indexPath.row];
     if (indexPath.row==arr.count-1) {
         cell.separatorLine.hidden=YES;
@@ -238,12 +242,17 @@ extern BOOL receiveMessage;
                 UINavigationController *loginNavi=[[UINavigationController alloc]initWithRootViewController:loginVC];
                 [self presentViewController:loginNavi animated:YES completion:nil];
             }else{
-                if ([Account sharedAccount].provider) {
-                    //给服务商展示的沟通列表
-                    
-                }else{
+                if ([Account sharedAccount].provider==0) {
                     JoinServerViewController *joinVC=[JoinServerViewController new];
                     [self.navigationController pushViewController:joinVC animated:YES];
+                }else if ([Account sharedAccount].provider==1){
+                    //给服务商展示的沟通列表
+                    ClientDemandListViewController *vc=[ClientDemandListViewController new];
+                    [self.navigationController pushViewController:vc animated:YES];
+                }else if ([Account sharedAccount].provider==2){
+                    //审核中页面
+                    ServerAuditingViewController *serverVC=[ServerAuditingViewController new];
+                    [self.navigationController pushViewController:serverVC animated:YES];
                 }
                 
             }

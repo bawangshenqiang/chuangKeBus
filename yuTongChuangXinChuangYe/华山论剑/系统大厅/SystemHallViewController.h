@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SystemHallViewController : UIViewController
 @property(nonatomic,assign)int themeId;
 @property(nonatomic,strong)NSMutableArray *themeArr;
+@property(nonatomic,strong)NSString *name;
 @end
 
 NS_ASSUME_NONNULL_END

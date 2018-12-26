@@ -431,7 +431,7 @@
             HuaShanTitleCell_HallFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId1];
             if (!cell) {
                 cell=[[HuaShanTitleCell_HallFirst alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId1];
-                cell.backgroundColor=kBackgroundColor;
+                cell.backgroundColor=[UIColor whiteColor];
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
             if (self.dataArr.count>0) {
@@ -525,7 +525,7 @@
         }
             break;
         default:
-            return 100;
+            return 115;
             break;
     }
     return 0;

@@ -45,13 +45,18 @@
         self.falseTV.layer.borderWidth=0.5;
         self.falseTV.layer.borderColor=[UIColor colorWithHexString:@"#cccccc"].CGColor;
         self.falseTV.layer.masksToBounds=YES;
-        [self.falseTV setTitle:@"写评论" forState:UIControlStateNormal];
-        [self.falseTV setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
-        self.falseTV.titleLabel.font=[UIFont systemFontOfSize:14];
-        self.falseTV.contentHorizontalAlignment=UIControlContentHorizontalAlignmentLeft;
+//        [self.falseTV setTitle:@"写评论" forState:UIControlStateNormal];
+//        [self.falseTV setTitleColor:[UIColor colorWithHexString:@"#cccccc"] forState:UIControlStateNormal];
+//        self.falseTV.titleLabel.font=[UIFont systemFontOfSize:14];
+//        self.falseTV.contentHorizontalAlignment=UIControlContentHorizontalAlignmentLeft;
         [self.falseTV addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.falseTV];
-        
+        //
+        UILabel *title=[[UILabel alloc]initWithFrame:CGRectMake(10, 0, 90, 30)];
+        title.text=@"写评论...";
+        title.font=[UIFont systemFontOfSize:14];
+        title.textColor=RGBAColor(204, 204, 204, 1);
+        [self.falseTV addSubview:title];
         
         //
         self.praiseBtn=[UIButton buttonWithType:UIButtonTypeCustom];

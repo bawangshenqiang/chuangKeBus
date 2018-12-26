@@ -18,7 +18,7 @@
         [self addSubview:topBackground];
        //
         UIView *bottomBackground=[[UIView alloc]initWithFrame:CGRectMake(0, topBackground.bottom, frame.size.width, 44)];
-        bottomBackground.backgroundColor=kThemeColor;//[UIColor whiteColor];
+        bottomBackground.backgroundColor=[UIColor whiteColor];//kThemeColor;//
         [self addSubview:bottomBackground];
         //
         UIButton *outBig=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -30,7 +30,7 @@
         outBig.titleLabel.font=[UIFont systemFontOfSize:13];
         
         outBig.backgroundColor=RGBAColor(247, 247, 247, 1);
-        outBig.layer.cornerRadius=2;
+        outBig.layer.cornerRadius=5;
         outBig.layer.masksToBounds=YES;
         [outBig addTarget:self action:@selector(choseClick) forControlEvents:UIControlEventTouchUpInside];
         [bottomBackground addSubview:outBig];
@@ -49,14 +49,14 @@
         
         //
         outBig.sd_layout
-        .leftSpaceToView(bottomBackground, 10)
-        .topSpaceToView(bottomBackground, 7)
-        .widthIs(frame.size.width-50)
-        .heightIs(30);
+        .leftSpaceToView(bottomBackground, 11)
+        .topSpaceToView(bottomBackground, 8)
+        .widthIs(frame.size.width-71)
+        .heightIs(28);
         
         outBig.imageView.sd_layout
         .leftSpaceToView(outBig, 8)
-        .topSpaceToView(outBig, 8)
+        .topSpaceToView(outBig, 7)
         .widthIs(14)
         .heightIs(14);
         
@@ -64,13 +64,13 @@
         .leftSpaceToView(outBig.imageView, 9)
         .topEqualToView(outBig)
         .widthIs(160)
-        .heightIs(30);
+        .heightIs(28);
         
         
         self.messageBtn.sd_layout
         .leftSpaceToView(outBig, 0)
         .topSpaceToView(bottomBackground, 7)
-        .widthIs(40)
+        .widthIs(60)
         .heightIs(30);
         
         self.redDot.sd_layout

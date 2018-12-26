@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SectionHeader_HallSecond : UITableViewHeaderFooterView
 @property(nonatomic,strong)UILabel *titleLab;
+@property(nonatomic,copy)void (^moreBtnBlock)(void);
 @end
 
 NS_ASSUME_NONNULL_END

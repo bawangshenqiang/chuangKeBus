@@ -12,11 +12,13 @@
 -(instancetype)initWithDictionary:(NSDictionary *)dic{
     if (self=[super init]) {
         self.Id=[dic[@"id"] intValue];
-        self.findTeamUserId=[dic[@"findTeamUserId"] intValue];
+        self.findTeamUserId=[dic[@"teamId"] intValue];
         self.title=dic[@"title"];
-        self.photo=dic[@"photo"];
-        self.nickname=dic[@"nickname"];
+        self.job=dic[@"job"];
+        self.descriptions=dic[@"description"];
         self.create_time=dic[@"create_time"];
+        self.linker=dic[@"linker"];
+        self.linkphone=dic[@"linkphone"];
     }
     return self;
 }

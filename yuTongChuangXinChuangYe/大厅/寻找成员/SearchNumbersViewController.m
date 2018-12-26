@@ -128,7 +128,7 @@
         [weakSelf saveDraft];
         
     }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:@"不保存退出" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf.navigationController popViewControllerAnimated:YES];
     }]];
     

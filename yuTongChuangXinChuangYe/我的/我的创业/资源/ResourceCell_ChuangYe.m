@@ -18,10 +18,11 @@
         [self.contentView addSubview:self.outBig];
         //
         self.leftIV=[[UIImageView alloc]init];
+        self.leftIV.image=[UIImage imageNamed:@"entrepreneurship_user"];
         [self.outBig addSubview:self.leftIV];
         //
         self.nameBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-        [self.nameBtn setTitleColor:[UIColor colorWithHexString:@"#323232"] forState:UIControlStateNormal];
+        [self.nameBtn setTitleColor:RGBAColor(102, 102, 102, 1) forState:UIControlStateNormal];
         self.nameBtn.titleLabel.font=[UIFont systemFontOfSize:13];
         self.nameBtn.contentHorizontalAlignment=UIControlContentHorizontalAlignmentLeft;
         [self.nameBtn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
@@ -30,23 +31,24 @@
         self.statusLab=[[UILabel alloc]init];
         self.statusLab.font=[UIFont systemFontOfSize:13];
         self.statusLab.textAlignment=NSTextAlignmentRight;
-        self.statusLab.textColor=RGBAColor(238, 160, 75, 1);
+        self.statusLab.textColor=RGBAColor(255, 150, 0, 1);
         [self.outBig addSubview:self.statusLab];
         //
         self.needExplain=[[UILabel alloc]init];
         self.needExplain.numberOfLines=3;
         self.needExplain.font=[UIFont systemFontOfSize:15];
+        self.needExplain.textColor=RGBAColor(65, 65, 65, 1);
         [self.outBig addSubview:self.needExplain];
         //
         self.progressLab=[[UILabel alloc]init];
         self.progressLab.font=[UIFont systemFontOfSize:15];
-        self.progressLab.textColor=kThemeColor;//RGBAColor(55, 105, 182, 1);
+        self.progressLab.textColor=RGBAColor(0, 92, 175, 1);
         [self.outBig addSubview:self.progressLab];
         //
         self.timeLab=[[UILabel alloc]init];
         self.timeLab.font=[UIFont systemFontOfSize:13];
         self.timeLab.textAlignment=NSTextAlignmentRight;
-        self.timeLab.textColor=[UIColor colorWithHexString:@"#323232"];
+        self.timeLab.textColor=RGBAColor(102, 102, 102, 1);
         [self.outBig addSubview:self.timeLab];
         //
         self.leftIV.sd_layout
@@ -103,7 +105,7 @@
 }
 -(void)setModel:(ResourceModel_ChuangYe_second *)model{
     _model=model;
-    [self.leftIV sd_setImageWithURL:[NSURL URLWithString:_model.logo] placeholderImage:nil];
+    //[self.leftIV sd_setImageWithURL:[NSURL URLWithString:_model.logo] placeholderImage:nil];
     [self.nameBtn setTitle:[NSString stringWithFormat:@"%@ >",_model.title] forState:UIControlStateNormal];
     self.statusLab.text=_model.pstatus;
     self.needExplain.text=_model.demand;

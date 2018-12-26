@@ -296,9 +296,9 @@ BOOL receiveMessage;
 //        return 3;
 //    }
     if (section==1) {
-        return self.starProjectData.count;
-    }else if (section==3){
         return self.informationData.count;
+    }else if (section==3){
+        return self.starProjectData.count;
     }else{
         return 1;
     }
@@ -378,15 +378,15 @@ BOOL receiveMessage;
 //                }
 //                return cell;
 //            }
-            static NSString *cellId1=@"cellIdentifier1";
-            Hall_CreativityListCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId1];
+            NSString *cellId=@"cellIdentifier3";
+            InformationListCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
             if (!cell) {
-                cell=[[Hall_CreativityListCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId1];
+                cell=[[InformationListCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
                 cell.backgroundColor=kBackgroundColor;
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
-            if (self.starProjectData.count>0) {
-                cell.model=self.starProjectData[indexPath.row];
+            if (self.informationData.count>0) {
+                cell.model=self.informationData[indexPath.row];
             }
             return cell;
         }
@@ -429,17 +429,18 @@ BOOL receiveMessage;
             break;
         case 3:
         {
-            NSString *cellId=@"cellIdentifier3";
-            InformationListCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
+            static NSString *cellId1=@"cellIdentifier1";
+            Hall_CreativityListCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId1];
             if (!cell) {
-                cell=[[InformationListCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+                cell=[[Hall_CreativityListCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId1];
                 cell.backgroundColor=kBackgroundColor;
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
             }
-            if (self.informationData.count>0) {
-                cell.model=self.informationData[indexPath.row];
+            if (self.starProjectData.count>0) {
+                cell.model=self.starProjectData[indexPath.row];
             }
             return cell;
+            
         }
             break;
         default:
@@ -501,9 +502,11 @@ BOOL receiveMessage;
     if (indexPath.section==0) {
         return 60;
     }else if (indexPath.section==2){
-        return 150;
+        return 179;
     }else if (indexPath.section==4){
         return 140;
+    }else if (indexPath.section==1){
+        return 115;
     }else{
         return 100;
     }
@@ -518,7 +521,7 @@ BOOL receiveMessage;
             header=[[SectionHeader_HallSecond alloc]initWithReuseIdentifier:@"header"];
         }
         //NSArray *images=@[@"hall_hottest",@"hall_forum",@"hall_star"];
-        NSArray *titles=@[@"明星项目",@"课程",@"行业热点",@"服务商"];//@[@"今日最热",@"华山论剑",@"明星项目"];
+        NSArray *titles=@[@"行业热点",@"课程",@"明星项目",@"服务商"];//@[@"今日最热",@"华山论剑",@"明星项目"];
         //header.leftIV.image=[UIImage imageNamed:images[section-1]];
         header.titleLab.text=titles[section-1];
         return header;
@@ -593,16 +596,17 @@ BOOL receiveMessage;
     if (indexPath.section==0) {
         
     }else if (indexPath.section==1) {
+        InformationListModel *model=self.informationData[indexPath.row];
+        BusinessHotDetailViewController *detailVC=[BusinessHotDetailViewController new];
+        detailVC.Id=model.Id;
+        [self.navigationController pushViewController:detailVC animated:YES];
+    }else if (indexPath.section==3){
         CreativityAndProjectDetailViewController *detailVC=[CreativityAndProjectDetailViewController new];
         detailVC.index=1;
         SearchCreativityListModel *model=self.starProjectData[indexPath.row];
         detailVC.Id=model.Id;
         [self.navigationController pushViewController:detailVC animated:YES];
-    }else if (indexPath.section==3){
-        InformationListModel *model=self.informationData[indexPath.row];
-        BusinessHotDetailViewController *detailVC=[BusinessHotDetailViewController new];
-        detailVC.Id=model.Id;
-        [self.navigationController pushViewController:detailVC animated:YES];
+        
     }else{
         
     }

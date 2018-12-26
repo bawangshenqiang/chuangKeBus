@@ -155,7 +155,7 @@
         [weakSelf getNewDataWithCategoryId:weakSelf.categoryId];
         
     }];
-    self.tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
+    self.tableView.mj_footer = [MJRefreshAutoFooter footerWithRefreshingBlock:^{
         
         [weakSelf getMoreDataWithCategoryId:weakSelf.categoryId];
         
@@ -212,7 +212,7 @@
 }
 -(UITableView *)tableView{
     if (!_tableView) {
-        _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, self.header.bottom+5, kScreenWidth, kTableViewHeight-40-5) style:UITableViewStylePlain];
+        _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, self.header.bottom+10, kScreenWidth, kTableViewHeight-40-10) style:UITableViewStylePlain];
         _tableView.delegate=self;
         _tableView.dataSource=self;
         _tableView.backgroundColor=kBackgroundColor;
@@ -250,7 +250,7 @@
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 100;
+    return 115;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     BusinessHotDetailViewController *detailVC=[BusinessHotDetailViewController new];

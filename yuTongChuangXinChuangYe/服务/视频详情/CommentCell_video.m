@@ -14,20 +14,23 @@
     [self.headIV sd_setImageWithURL:[NSURL URLWithString:_model.photo] placeholderImage:[UIImage imageNamed:@"hall_user"]];
     self.nameLab.text=_model.nickname;
     self.timeLab.text=_model.create_time;
-    self.detailLab.text=_model.detail;
-    self.line.backgroundColor=RGBAColor(145, 165, 165, 0.5);
+    //1.去掉首尾空格和换行符
+    _model.detail = [_model.detail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    //2.去掉所有换行符（空格是\r）
+    self.detailLab.text=[_model.detail stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    self.line.backgroundColor=RGBAColor(165, 165, 165, 0.5);
     [self setupAutoHeightWithBottomView:self.line bottomMargin:0];
 }
 - (UIImageView *)headIV{
     if (!_headIV) {
-        _headIV=[[UIImageView alloc]initWithFrame:CGRectMake(10, 15, 30, 30)];
+        _headIV=[[UIImageView alloc]initWithFrame:CGRectMake(10, 15, 35, 35)];
         [self.contentView addSubview:_headIV];
     }
     return _headIV;
 }
 -(UILabel *)nameLab{
     if (!_nameLab) {
-        _nameLab=[[UILabel alloc]initWithFrame:CGRectMake(self.headIV.right+10, 15, kScreenWidth-60, 15)];
+        _nameLab=[[UILabel alloc]initWithFrame:CGRectMake(self.headIV.right+10, 15, kScreenWidth-65, 15)];
         _nameLab.font=[UIFont systemFontOfSize:14];
         _nameLab.textColor=[UIColor colorWithHexString:@"#989898"];
         [self.contentView addSubview:_nameLab];
@@ -36,7 +39,7 @@
 }
 -(UILabel *)timeLab{
     if (!_timeLab) {
-        _timeLab=[[UILabel alloc]initWithFrame:CGRectMake(self.headIV.right+10, self.nameLab.bottom, kScreenWidth-60, 15)];
+        _timeLab=[[UILabel alloc]initWithFrame:CGRectMake(self.headIV.right+10, self.nameLab.bottom+5, kScreenWidth-65, 15)];
         _timeLab.font=[UIFont systemFontOfSize:10];
         _timeLab.textColor=[UIColor colorWithHexString:@"#cccccc"];
         [self.contentView addSubview:_timeLab];

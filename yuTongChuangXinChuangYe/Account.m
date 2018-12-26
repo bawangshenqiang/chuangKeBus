@@ -33,7 +33,10 @@ static Account *_account;
                 _account.provinceId=[dic[@"provinceId"] intValue];
                 _account.cityId=[dic[@"cityId"] intValue];
                 _account.message=[dic[@"message"] intValue];
-                _account.provider=[dic[@"provider"] boolValue];
+                _account.provider=[dic[@"provider"] intValue];
+                _account.providerId=[dic[@"providerId"] intValue];
+                _account.wxbind=[dic[@"wxbind"] boolValue];
+                _account.wxname=dic[@"wxname"];
             }
             
         }

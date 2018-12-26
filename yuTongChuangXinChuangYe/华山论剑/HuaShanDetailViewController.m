@@ -75,6 +75,57 @@ WKNavigationDelegate>
 //    }
 //    [self.tableView reloadData];
 //}
+-(void)refreshCommentTableView{
+    _page=1;
+    NSString *timestamp=[SJTool getNowTimeTimestamp3];
+    NSString *access_token=[SJTool getToken];
+    NSString *user_token=@"";
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"]!=nil) {
+        user_token=[[NSUserDefaults standardUserDefaults] objectForKey:@"TOKEN"];
+    }
+    NSDictionary *param=@{@"timestamp":timestamp,@"access_token":access_token,@"user_token":user_token,@"postId":@(self.postId),@"size":@(10),@"page":@(_page)};
+    [TDHttpTools postDeatilWithParams:param success:^(id response) {
+        NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+        NSLog(@"%@",[SJTool logDic:dic]);
+        [self.dataArr removeAllObjects];
+        if ([dic[@"code"] intValue]==200) {
+            self.shareTitle=dic[@"data"][@"title"];
+            self.shareContent=dic[@"data"][@"description"];
+            
+            //[self getUrlData:dic[@"data"][@"url"]];
+            self.praised=[dic[@"data"][@"praised"] boolValue];
+            self.collected=[dic[@"data"][@"collected"] boolValue];
+            [self.headerView.praiseBtn setSelected:self.praised];
+            [self.headerView.collectBtn setSelected:self.collected];
+            self.praises=[dic[@"data"][@"praises"] intValue];
+            self.commentsize=[dic[@"data"][@"commentsize"] intValue];
+            self.collects=[dic[@"data"][@"collects"] intValue];
+            self.headerView.praiseLab.text=[NSString stringWithFormat:@"%d",self.praises];
+            self.headerView.collectLab.text=[NSString stringWithFormat:@"%d",self.collects];
+            self.headerView.commentLab.text=[NSString stringWithFormat:@"%d",self.commentsize];
+            self.editable=[dic[@"data"][@"editable"] boolValue];
+            if (self.editable) {
+                self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"修改" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarClick)];
+            }else{
+                self.navigationItem.rightBarButtonItem=nil;
+            }
+            for (NSDictionary *dict in dic[@"data"][@"comments"][@"records"]) {
+                CommentModel_video *model=[[CommentModel_video alloc]initWithDictionary:dict];
+                [self.dataArr addObject:model];
+            }
+            
+        }else{
+            [SJTool showAlertWithText:dic[@"msg"]];
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView reloadData];
+        });
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+        [self.tableView.mj_header endRefreshing];
+    }];
+}
 -(void)getNewData{
     _page=1;
     NSString *timestamp=[SJTool getNowTimeTimestamp3];
@@ -240,7 +291,8 @@ WKNavigationDelegate>
         if ([dic[@"code"] intValue]==200) {
             [SVProgressHUD setMinimumDismissTimeInterval:1];
             [SVProgressHUD showSuccessWithStatus:dic[@"msg"]];
-            [self getNewData];
+            //[self getNewData];
+            [self refreshCommentTableView];
         }else{
             [SJTool showAlertWithText:dic[@"msg"]];
         }

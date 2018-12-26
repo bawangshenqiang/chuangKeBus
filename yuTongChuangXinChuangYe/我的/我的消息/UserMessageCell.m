@@ -38,15 +38,15 @@
         .leftSpaceToView(self.contentView, 10)
         .topEqualToView(self.contentView)
         .widthIs(kScreenWidth-20);
-        [_outBig setupAutoHeightWithBottomView:_titleLab bottomMargin:10];
+        [_outBig setupAutoHeightWithBottomView:_titleLab bottomMargin:15];
         _outBig.sd_cornerRadius=@(5);
         
         _headIV.sd_layout
         .leftSpaceToView(self.outBig, 10)
-        .topSpaceToView(self.outBig, 10)
-        .widthIs(24)
-        .heightIs(24);
-        _headIV.sd_cornerRadius=@(12);
+        .topSpaceToView(self.outBig, 15)
+        .widthIs(30)
+        .heightIs(30);
+        _headIV.sd_cornerRadius=@(15);
         
         _nameLab.sd_layout
         .leftSpaceToView(self.headIV, 10)
@@ -56,7 +56,7 @@
         
         _timeLab.sd_layout
         .leftSpaceToView(self.headIV, 10)
-        .topSpaceToView(self.nameLab, 0)
+        .topSpaceToView(self.nameLab, 5)
         .heightIs(10);
         [_timeLab setSingleLineAutoResizeWithMaxWidth:140];
         

@@ -404,5 +404,44 @@ typedef NS_ENUM(NSInteger , RequestMethodType) {
  *  任务中心
  */
 +(void)taskCenterWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  完成任务
+ */
++(void)completejobWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  车票记录
+ */
++(void)ticketRecordWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  排行榜
+ */
++(void)rankingListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  服务商需求详情
+ */
++(void)serverDemandDetailWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  评价服务商
+ */
++(void)gotoEvaluateWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  客户需求列表
+ */
++(void)clientDemandListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  服务商回复需求
+ */
++(void)providerReplyDemandWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  服务商确认服务完成
+ */
++(void)providerCompleteWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+/**
+ *  感兴趣成员列表
+ */
++(void)caredNumberListWithParams:(NSDictionary *)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure;
+
+
+
 
 @end

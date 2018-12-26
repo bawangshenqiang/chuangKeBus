@@ -24,6 +24,9 @@
 #import "SearchViewController.h"
 #import "LoginViewController.h"
 
+#import "ServeHomeCourseCell.h"
+#import "ServeHomeServiceCell.h"
+
 extern BOOL receiveMessage;
 
 @interface ServeFirstViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -198,27 +201,29 @@ extern BOOL receiveMessage;
     return 2;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section==0) {
-        if (self.dataArr1.count<=2) {
-            return 1;
-        }else if (self.dataArr1.count==3){
-            return 2;
-        }else{
-            return 3;
-        }
-    }else{
-        if (self.dataArr2.count<=2) {
-            return 1;
-        }else if (self.dataArr2.count==3){
-            return 2;
-        }else{
-            return 3;
-        }
-    }
-    return 3;
+//    if (section==0) {
+//        if (self.dataArr1.count<=2) {
+//            return 1;
+//        }else if (self.dataArr1.count==3){
+//            return 2;
+//        }else{
+//            return 3;
+//        }
+//    }else{
+//        if (self.dataArr2.count<=2) {
+//            return 1;
+//        }else if (self.dataArr2.count==3){
+//            return 2;
+//        }else{
+//            return 3;
+//        }
+//    }
+//    return 3;
+    return 1;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0) {
+        /**
         if (indexPath.row==0) {
             NSString *cellID1=@"cellIdentifier1";
             StarCourseCell_ServeFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellID1];
@@ -249,7 +254,22 @@ extern BOOL receiveMessage;
             
             return cell;
         }
+        */
+        NSString *cellID1=@"cellIdentifier1";
+        ServeHomeCourseCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID1];
+        if (!cell) {
+            cell=[[ServeHomeCourseCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID1];
+            cell.backgroundColor=[UIColor whiteColor];
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        }
+        cell.courseArr=self.dataArr1;
+        WS(weakSelf);
+        [cell setSelectAitemBlock:^(NSInteger courseId) {
+            [weakSelf gotoDetailWith:(int)courseId];
+        }];
+        return cell;
     }else{
+        /**
         if (indexPath.row==0) {
             NSString *cellID3=@"cellIdentifier3";
             HotServeCell_ServeFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellID3];
@@ -282,7 +302,23 @@ extern BOOL receiveMessage;
             
             return cell;
         }
-        
+        */
+        NSString *cellID1=@"cellIdentifier2";
+        ServeHomeServiceCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID1];
+        if (!cell) {
+            cell=[[ServeHomeServiceCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID1];
+            cell.backgroundColor=[UIColor whiteColor];
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        }
+        cell.serviceArr=self.dataArr2;
+        WS(weakSelf);
+        [cell setSelectAitemBlock:^(NSInteger providerId) {
+            ServerDetailViewController *detailVC=[ServerDetailViewController new];
+            
+            detailVC.providerId=providerId;
+            [weakSelf.navigationController pushViewController:detailVC animated:YES];
+        }];
+        return cell;
     }
     
 }
@@ -293,33 +329,53 @@ extern BOOL receiveMessage;
     [self.navigationController pushViewController:videoDetail animated:YES];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    if (indexPath.section==0) {
+//        if (indexPath.row==0) {
+//            return 170;
+//        }else{
+//            return 100;
+//        }
+//    }else{
+//        if (indexPath.row==0) {
+//            return 120;
+//        }else{
+//            return 85;
+//        }
+//    }
+    CGFloat width=(kScreenWidth-40)/2;
+    CGFloat height1=(width*25/33+40);
+    CGFloat height2=(width*150/325+25);
+    
     if (indexPath.section==0) {
-        if (indexPath.row==0) {
-            return 170;
-        }else{
-            return 100;
-        }
+        return 2*height1+30;
     }else{
-        if (indexPath.row==0) {
-            return 120;
-        }else{
-            return 85;
-        }
+        return 2*height2+40;
     }
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    SectionHeader_HallFirst *header=[tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
-    if (!header) {
-        header=[[SectionHeader_HallFirst alloc]initWithReuseIdentifier:@"header"];
+//    SectionHeader_HallFirst *header=[tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
+//    if (!header) {
+//        header=[[SectionHeader_HallFirst alloc]initWithReuseIdentifier:@"header"];
+//    }
+//    NSArray *images=@[@"serve_starclass",@"hall_hottest"];
+//    NSArray *titles=@[@"明星课程",@"热门服务"];
+//    header.leftIV.image=[UIImage imageNamed:images[section]];
+//    header.titleLab.text=titles[section];
+//    return header;
+    UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 40)];
+    label.backgroundColor=[UIColor whiteColor];
+    label.font=[UIFont boldSystemFontOfSize:16];
+    label.textAlignment=NSTextAlignmentCenter;
+    label.textColor=RGBAColor(102, 102, 102, 1);
+    if (section==0) {
+        label.text=@"明星课程";
+    }else{
+        label.text=@"热门服务";
     }
-    NSArray *images=@[@"serve_starclass",@"hall_hottest"];
-    NSArray *titles=@[@"明星课程",@"热门服务"];
-    header.leftIV.image=[UIImage imageNamed:images[section]];
-    header.titleLab.text=titles[section];
-    return header;
+    return label;
 }
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
-    view.tintColor=kBackgroundColor;
+    view.tintColor=[UIColor whiteColor];//kBackgroundColor;
 }
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section{
     view.tintColor=kBackgroundColor;
@@ -328,25 +384,25 @@ extern BOOL receiveMessage;
     return 40;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (section==0) {
-        return 5;
-    }
+    
     return 0.01;
 }
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section==0 && indexPath.row!=0) {
-        VideoDetailViewController *detailVC=[VideoDetailViewController new];
-        StarCourseModel_Serve *model=self.dataArr1[indexPath.row+1];
-        detailVC.courseId=model.Id;
-        [self.navigationController pushViewController:detailVC animated:YES];
-        
-    }else if (indexPath.section==1 && indexPath.row!=0){
-        ServerDetailViewController *detailVC=[ServerDetailViewController new];
-        StarCourseModel_Serve *model=self.dataArr2[indexPath.row+1];
-        detailVC.providerId=model.Id;
-        [self.navigationController pushViewController:detailVC animated:YES];
-    }
-}
+//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+//    if (indexPath.section==0 && indexPath.row!=0) {
+//        VideoDetailViewController *detailVC=[VideoDetailViewController new];
+//        StarCourseModel_Serve *model=self.dataArr1[indexPath.row+1];
+//        detailVC.courseId=model.Id;
+//        [self.navigationController pushViewController:detailVC animated:YES];
+//
+//    }else if (indexPath.section==1 && indexPath.row!=0){
+//        ServerDetailViewController *detailVC=[ServerDetailViewController new];
+//        StarCourseModel_Serve *model=self.dataArr2[indexPath.row+1];
+//        detailVC.providerId=model.Id;
+//        [self.navigationController pushViewController:detailVC animated:YES];
+//    }
+//}
+
+
 /*
 #pragma mark - Navigation
 

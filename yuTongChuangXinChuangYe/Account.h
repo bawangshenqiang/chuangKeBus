@@ -24,8 +24,13 @@
 @property(nonatomic,copy)NSString *telephone;
 
 @property(nonatomic,assign)int message;//消息数
-
-@property(nonatomic,assign)BOOL provider;//是否加入了服务商
+/** 服务商状态 0-暂未加入 1-审核通过 2-审核中 */
+@property(nonatomic,assign)int provider;
+@property(nonatomic,assign)int providerId;
+/** 微信绑定 */
+@property(nonatomic,assign)BOOL wxbind;
+/** 微信昵称 */
+@property(nonatomic,copy)NSString *wxname;
 
 +(Account *)sharedAccount;
 -(void)logout;

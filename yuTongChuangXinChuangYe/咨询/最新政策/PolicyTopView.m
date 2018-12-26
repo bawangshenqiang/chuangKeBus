@@ -47,7 +47,7 @@
             btn.imageView.sd_layout
             .centerYEqualToView(btn)
             .widthIs(15)
-            .heightIs(14)
+            .heightIs(15)
             .centerXIs(btn.centerX-10-15);
             btn.titleLabel.sd_layout
             .centerYEqualToView(btn)

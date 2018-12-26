@@ -11,202 +11,171 @@
 @implementation TeamCell_ChuangYe
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.outBig=[[UIView alloc]init];
         self.outBig.backgroundColor=[UIColor whiteColor];
-        self.topTitle.text=@"这家公司要用设计+AI创造新时代！这家公司要用设计+AI创造新时代！这家公司要用设计+AI创造新时代！";
-        self.flag1IV.image=[UIImage imageNamed:@"team_name"];
-        self.flag1Lab.text=@"藤顺娟娟";
-        self.flag2IV.image=[UIImage imageNamed:@"team_position"];
-        self.flag2Lab.text=@"企业极人事";
-        self.flag3IV.image=[UIImage imageNamed:@"team_industry"];
-        self.flag3Lab.text=@"教育";
-        self.timeLab.text=@"20分钟前";
-        self.separatorLine.backgroundColor=RGBAColor(145, 165, 165, 0.5);
-        self.statusCircle.backgroundColor=[UIColor colorWithHexString:@"#00e01a"];
-        self.statusLab.text=@"审核通过";
-        self.checkIdea.text=@"审核意见：祝您成功找到合适的成员";
+        self.outBig.layer.cornerRadius=5;
+        self.outBig.layer.masksToBounds=YES;
+        [self.contentView addSubview:self.outBig];
+        //
+        self.title=[UIButton buttonWithType:UIButtonTypeCustom];
+        self.title.frame=CGRectMake(12, 20, kScreenWidth-20-24-10, 14);
+        self.title.contentHorizontalAlignment=UIControlContentHorizontalAlignmentLeft;
+        self.title.titleLabel.font=[UIFont systemFontOfSize:16];
+        [self.title setTitleColor:RGBAColor(51, 51, 51, 1) forState:UIControlStateNormal];
+        [self.title addTarget:self action:@selector(titleClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.outBig addSubview:self.title];
+        //
+        self.flagIV=[[UIImageView alloc]initWithFrame:CGRectMake(self.title.right, 20, 10, 16)];
+        self.flagIV.image=[UIImage imageNamed:@"team_arrow"];
+        [self.outBig addSubview:self.flagIV];
+        //
+        self.statusLab=[[UILabel alloc]init];
+        self.statusLab.text=@"审核状态:";
+        self.statusLab.font=[UIFont systemFontOfSize:14];
+        self.statusLab.textColor=RGBAColor(102, 102, 102, 1);
+        [self.outBig addSubview:self.statusLab];
+        //
+        self.status=[[UILabel alloc]init];
+        self.status.font=[UIFont systemFontOfSize:14];
+        self.status.textColor=RGBAColor(0, 92, 175, 1);
+        [self.outBig addSubview:self.status];
+        //
+        self.checkIdeaLab=[[UILabel alloc]init];
+        self.checkIdeaLab.text=@"审核意见:";
+        self.checkIdeaLab.font=[UIFont systemFontOfSize:14];
+        self.checkIdeaLab.textColor=RGBAColor(102, 102, 102, 1);
+        [self.outBig addSubview:self.checkIdeaLab];
+        //
+        self.checkIdea=[[UILabel alloc]init];
+        self.checkIdea.font=[UIFont systemFontOfSize:14];
+        self.checkIdea.textColor=RGBAColor(51, 51, 51, 1);
+        self.checkIdea.numberOfLines=0;
+        [self.outBig addSubview:self.checkIdea];
+        //
+        self.careLab=[[UILabel alloc]init];
+        self.careLab.font=[UIFont systemFontOfSize:12];
+        self.careLab.textColor=RGBAColor(255, 150, 0, 1);
+        [self.outBig addSubview:self.careLab];
+        //
+        self.timeLab=[[UILabel alloc]init];
+        self.timeLab.textAlignment=NSTextAlignmentRight;
+        self.timeLab.font=[UIFont systemFontOfSize:12];
+        self.timeLab.textColor=RGBAColor(102, 102, 102, 1);
+        [self.outBig addSubview:self.timeLab];
+        //
+        self.lookLab=[[UILabel alloc]init];
+        self.lookLab.text=@"查看名单 >>";
+        self.lookLab.font=[UIFont systemFontOfSize:14];
+        self.lookLab.textColor=RGBAColor(0, 92, 175, 1);
+        [self.outBig addSubview:self.lookLab];
+        //
+        self.statusLab.sd_layout
+        .leftSpaceToView(self.outBig, 12)
+        .topSpaceToView(self.title, 15)
+        .heightIs(14);
+        [self.statusLab setSingleLineAutoResizeWithMaxWidth:100];
+        self.status.sd_layout
+        .leftSpaceToView(self.statusLab, 5)
+        .topEqualToView(self.statusLab)
+        .heightIs(14)
+        .widthIs(100);
+        self.checkIdeaLab.sd_layout
+        .leftSpaceToView(self.outBig, 12)
+        .topSpaceToView(self.statusLab, 20)
+        .heightIs(14);
+        [self.checkIdeaLab setSingleLineAutoResizeWithMaxWidth:100];
+        self.checkIdea.sd_layout
+        .topEqualToView(self.checkIdeaLab)
+        .leftSpaceToView(self.checkIdeaLab, 5)
+        .rightSpaceToView(self.outBig, 12)
+        .autoHeightRatio(0);
+        //
+        self.careLab.sd_layout
+        .leftEqualToView(self.statusLab)
+        .topSpaceToView(self.checkIdea, 20)
+        .widthIs((kScreenWidth-20-24)/2)
+        .autoHeightRatio(0);
+        self.timeLab.sd_layout
+        .rightSpaceToView(self.outBig, 12)
+        .topEqualToView(self.careLab)
+        .widthIs((kScreenWidth-20-24)/2)
+        .autoHeightRatio(0);
+        self.lookLab.sd_layout
+        .leftEqualToView(self.statusLab)
+        .topSpaceToView(self.careLab, 20)
+        .heightIs(14);
+        [self.lookLab setSingleLineAutoResizeWithMaxWidth:120];
+        //
+        self.outBig.sd_layout
+        .leftSpaceToView(self.contentView, 10)
+        .topSpaceToView(self.contentView, 10)
+        .rightSpaceToView(self.contentView, 10);
+        [self.outBig setupAutoHeightWithBottomViewsArray:@[self.timeLab,self.lookLab] bottomMargin:20];
     }
     return self;
 }
--(void)setModel:(SearchNumbersListModel_Hall *)model{
+-(void)titleClick{
+    if (self.titleClickBlock) {
+        self.titleClickBlock(_model);
+    }
+}
+-(void)setModel:(TeamModel_ChuangYe *)model{
     _model=model;
-    self.topTitle.text=_model.title;
-    self.flag1Lab.text=_model.name;
-    self.flag2Lab.text=_model.job;
-    self.flag3Lab.text=_model.category;
-    self.timeLab.text=_model.create_time;
-    self.statusLab.text=_model.status;
-    self.checkIdea.text=[NSString stringWithFormat:@"审核意见：%@",_model.note];
-}
-- (UIView *)outBig{
-    if (!_outBig) {
-        _outBig=[[UIView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth-20, 120)];
-        //_outBig.backgroundColor=[UIColor whiteColor];
-        _outBig.layer.cornerRadius=5;
-        _outBig.layer.masksToBounds=YES;
-        [self.contentView addSubview:_outBig];
+    if (_model.state==0||_model.state==3) {
+        //审核中
+        [self.title setTitle:_model.title forState:UIControlStateNormal];
+        self.status.text=_model.status;
+        self.status.textColor=RGBAColor(255, 150, 0, 1);
+        self.checkIdeaLab.hidden=YES;
+        self.checkIdea.hidden=YES;
+        self.careLab.hidden=YES;
+        self.timeLab.text=_model.create_time;
+        self.lookLab.hidden=YES;
+        self.timeLab.sd_resetLayout
+        .rightSpaceToView(self.outBig, 12)
+        .topSpaceToView(self.status, 20)
+        .widthIs((kScreenWidth-20-24)/2)
+        .autoHeightRatio(0);
+        [self.outBig setupAutoHeightWithBottomView:self.timeLab bottomMargin:20];
+    }else if (_model.state==2){
+        //未通过
+        [self.title setTitle:_model.title forState:UIControlStateNormal];
+        self.status.text=_model.status;
+        self.status.textColor=RGBAColor(255, 0, 0, 1);
+        self.checkIdeaLab.hidden=NO;
+        self.checkIdea.hidden=NO;
+        self.checkIdea.text=_model.note;
+        self.careLab.hidden=YES;
+        self.timeLab.text=_model.create_time;
+        self.lookLab.hidden=YES;
+        self.timeLab.sd_resetLayout
+        .rightSpaceToView(self.outBig, 12)
+        .topSpaceToView(self.checkIdea, 20)
+        .widthIs((kScreenWidth-20-24)/2)
+        .autoHeightRatio(0);
+        [self.outBig setupAutoHeightWithBottomView:self.timeLab bottomMargin:20];
+    }else if (_model.state==1){
+        //已通过
+        [self.title setTitle:_model.title forState:UIControlStateNormal];
+        self.status.text=_model.status;
+        self.status.textColor=RGBAColor(0, 92, 175, 1);
+        self.checkIdeaLab.hidden=NO;
+        self.checkIdea.hidden=NO;
+        self.checkIdea.text=_model.note;
+        self.careLab.hidden=NO;
+        self.careLab.text=[NSString stringWithFormat:@"已有%d人感兴趣",_model.talks];
+        self.timeLab.text=_model.create_time;
+        self.lookLab.hidden=NO;
+        self.timeLab.sd_resetLayout
+        .rightSpaceToView(self.outBig, 12)
+        .topEqualToView(self.careLab)
+        .widthIs((kScreenWidth-20-24)/2)
+        .autoHeightRatio(0);
+        [self.outBig setupAutoHeightWithBottomView:self.lookLab bottomMargin:20];
     }
-    return _outBig;
+    [self setupAutoHeightWithBottomView:self.outBig bottomMargin:0];
 }
--(UILabel *)topTitle{
-    if (!_topTitle) {
-        _topTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 0, self.outBig.width-20, 45)];
-        _topTitle.numberOfLines=2;
-        _topTitle.font=[UIFont systemFontOfSize:15];
-        _topTitle.textColor=[UIColor colorWithHexString:@"#232323"];
-        [self.outBig addSubview:_topTitle];
-    }
-    return _topTitle;
-}
--(UIImageView *)flag1IV{
-    if (!_flag1IV) {
-        _flag1IV=[[UIImageView alloc]init];
-        //_flag1IV.image=[UIImage imageNamed:@"team_name"];
-        [self.outBig addSubview:_flag1IV];
-        _flag1IV.sd_layout
-        .leftEqualToView(self.topTitle)
-        .topSpaceToView(self.topTitle, 7)
-        .widthIs(10)
-        .heightIs(10);
-    }
-    return _flag1IV;
-}
--(UILabel *)flag1Lab{
-    if (!_flag1Lab) {
-        _flag1Lab=[[UILabel alloc]init];
-        _flag1Lab.font=[UIFont systemFontOfSize:10];
-        _flag1Lab.textColor=[UIColor colorWithHexString:@"#989898"];
-        [self.outBig addSubview:_flag1Lab];
-        _flag1Lab.sd_layout
-        .leftSpaceToView(self.flag1IV, 5)
-        .centerYEqualToView(self.flag1IV)
-        .heightIs(10);
-        [_flag1Lab setSingleLineAutoResizeWithMaxWidth:120];
-    }
-    return _flag1Lab;
-}
--(UIImageView *)flag2IV{
-    if (!_flag2IV) {
-        _flag2IV=[[UIImageView alloc]init];
-        //_flag2IV.image=[UIImage imageNamed:@"team_position"];
-        [self.outBig addSubview:_flag2IV];
-        _flag2IV.sd_layout
-        .leftSpaceToView(self.flag1Lab, 10)
-        .topSpaceToView(self.topTitle, 7)
-        .widthIs(5)
-        .heightIs(10);
-    }
-    return _flag2IV;
-}
--(UILabel *)flag2Lab{
-    if (!_flag2Lab) {
-        _flag2Lab=[[UILabel alloc]init];
-        _flag2Lab.font=[UIFont systemFontOfSize:10];
-        _flag2Lab.textColor=[UIColor colorWithHexString:@"#989898"];
-        [self.outBig addSubview:_flag2Lab];
-        _flag2Lab.sd_layout
-        .leftSpaceToView(self.flag2IV, 5)
-        .centerYEqualToView(self.flag2IV)
-        .heightIs(10);
-        [_flag2Lab setSingleLineAutoResizeWithMaxWidth:120];
-    }
-    return _flag2Lab;
-}
--(UIImageView *)flag3IV{
-    if (!_flag3IV) {
-        _flag3IV=[[UIImageView alloc]init];
-        //_flag3IV.image=[UIImage imageNamed:@"team_industry"];
-        [self.outBig addSubview:_flag3IV];
-        _flag3IV.sd_layout
-        .leftSpaceToView(self.flag2Lab, 10)
-        .topSpaceToView(self.topTitle, 7)
-        .widthIs(5)
-        .heightIs(10);
-    }
-    return _flag3IV;
-}
--(UILabel *)flag3Lab{
-    if (!_flag3Lab) {
-        _flag3Lab=[[UILabel alloc]init];
-        _flag3Lab.font=[UIFont systemFontOfSize:10];
-        _flag3Lab.textColor=[UIColor colorWithHexString:@"#989898"];
-        [self.outBig addSubview:_flag3Lab];
-        _flag3Lab.sd_layout
-        .leftSpaceToView(self.flag3IV, 5)
-        .centerYEqualToView(self.flag3IV)
-        .heightIs(10);
-        [_flag3Lab setSingleLineAutoResizeWithMaxWidth:120];
-    }
-    return _flag3Lab;
-}
--(UILabel *)timeLab{
-    if (!_timeLab) {
-        _timeLab=[[UILabel alloc]init];
-        _timeLab.font=[UIFont systemFontOfSize:10];
-        _timeLab.textAlignment=NSTextAlignmentRight;
-        _timeLab.textColor=[UIColor colorWithHexString:@"#989898"];
-        [self.outBig addSubview:_timeLab];
-        _timeLab.sd_layout
-        .rightSpaceToView(self.outBig, 10)
-        .centerYEqualToView(self.flag1Lab)
-        .heightIs(10);
-        [_timeLab setSingleLineAutoResizeWithMaxWidth:120];
-    }
-    return _timeLab;
-}
--(UIView *)separatorLine{
-    if (!_separatorLine) {
-        _separatorLine=[[UIView alloc]init];
-        _separatorLine.backgroundColor=RGBAColor(145, 165, 165, 0.5);
-        [self.outBig addSubview:_separatorLine];
-        _separatorLine.sd_layout
-        .leftEqualToView(self.topTitle)
-        .rightEqualToView(self.topTitle)
-        .topSpaceToView(self.flag1IV, 7.5)
-        .heightIs(0.5);
-    }
-    return _separatorLine;
-}
--(UILabel *)statusCircle{
-    if (!_statusCircle) {
-        _statusCircle=[[UILabel alloc]init];
-        [self.outBig addSubview:_statusCircle];
-        _statusCircle.sd_layout
-        .leftSpaceToView(self.outBig, 10)
-        .topSpaceToView(self.separatorLine, 11)
-        .widthIs(8)
-        .heightIs(8);
-        _statusCircle.sd_cornerRadius=@(4);
-    }
-    return _statusCircle;
-}
--(UILabel *)statusLab{
-    if (!_statusLab) {
-        _statusLab=[[UILabel alloc]init];
-        _statusLab.font=[UIFont systemFontOfSize:13];
-        _statusLab.textColor=[UIColor colorWithHexString:@"#323232"];
-        [self.outBig addSubview:_statusLab];
-        _statusLab.sd_layout
-        .leftSpaceToView(self.statusCircle, 5)
-        .topSpaceToView(self.separatorLine, 5)
-        .rightEqualToView(self.topTitle)
-        .heightIs(20);
-    }
-    return _statusLab;
-}
--(UILabel *)checkIdea{
-    if (!_checkIdea) {
-        _checkIdea=[[UILabel alloc]init];
-        _checkIdea.font=[UIFont systemFontOfSize:13];
-        _checkIdea.textColor=[UIColor colorWithHexString:@"#323232"];
-        [self.outBig addSubview:_checkIdea];
-        _checkIdea.sd_layout
-        .leftSpaceToView(self.outBig, 10)
-        .topSpaceToView(self.statusLab, 0)
-        .rightSpaceToView(self.outBig, 10)
-        .heightIs(20);
-    }
-    return _checkIdea;
-}
+
 
 - (void)awakeFromNib {
     [super awakeFromNib];

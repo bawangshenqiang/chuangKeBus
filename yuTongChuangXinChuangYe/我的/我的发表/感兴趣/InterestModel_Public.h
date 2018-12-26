@@ -12,11 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface InterestModel_Public : NSObject
 @property(nonatomic,assign)int Id;
-@property(nonatomic,assign)int findTeamUserId;//伙伴ID
+@property(nonatomic,assign)int findTeamUserId;//团队ID
 @property(nonatomic,strong)NSString *title;
-@property(nonatomic,strong)NSString *photo;
-@property(nonatomic,strong)NSString *nickname;
+@property(nonatomic,strong)NSString *job;
+@property(nonatomic,strong)NSString *linker;
+@property(nonatomic,strong)NSString *linkphone;
+@property(nonatomic,strong)NSString *descriptions;//个人简介
 @property(nonatomic,strong)NSString *create_time;
+@property(nonatomic,assign)BOOL showAll;
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 @end
 

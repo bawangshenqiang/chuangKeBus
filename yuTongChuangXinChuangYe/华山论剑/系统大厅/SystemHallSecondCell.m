@@ -22,12 +22,12 @@
         [self.contentView addSubview:self.leftLab];
         //
         self.titleLab=[[UILabel alloc]initWithFrame:CGRectMake(self.leftLab.right+10, 0, kScreenWidth-70, 45)];
-        self.titleLab.font=[UIFont systemFontOfSize:16];
+        self.titleLab.font=[UIFont systemFontOfSize:15];
         [self.contentView addSubview:self.titleLab];
         //
-        self.line=[[UIView alloc]initWithFrame:CGRectMake(10, 44.5, kScreenWidth-20, 0.5)];
-        self.line.backgroundColor=RGBAColor(145, 165, 165, 0.5);
-        [self.contentView addSubview:self.line];
+//        self.line=[[UIView alloc]initWithFrame:CGRectMake(10, 44.5, kScreenWidth-20, 0.5)];
+//        self.line.backgroundColor=RGBAColor(165, 165, 165, 0.5);
+//        [self.contentView addSubview:self.line];
     }
     return self;
 }

@@ -233,12 +233,20 @@
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.avPlayerVC.player pause];
+    self.avPlayerVC.player=nil;
+    [self.avPlayerVC removeFromParentViewController];
+    [self.avPlayerVC.view removeFromSuperview];
+    self.avPlayerVC=nil;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor=[UIColor whiteColor];//kBackgroundColor;
     
     //注册观察键盘的变化
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transformView:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transformView:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadHeight) name:@"changeHeight" object:nil];
     
@@ -264,6 +272,8 @@
     //解决1.AVPlayerViewController作为属性
     //解决2:使用addChildViewController，AVPlayerViewController作为子视图控制器
     //[self addChildViewController:avPlayerVC];
+    
+    
     [self.view addSubview:self.avPlayerVC.view];
     
     //返回按钮
@@ -508,7 +518,7 @@
 //                return self.model.cellHeight;
 //            }
             //self.cellHight=self.model.cellHeight;
-            NSLog(@"cell height === %f",self.model.cellHeight);
+            //NSLog(@"cell height === %f",self.model.cellHeight);
             return self.model.cellHeight;
             break;
         case 1:
@@ -648,6 +658,7 @@
 }
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    NSLog(@"控制器销毁");
 }
 /*
 #pragma mark - Navigation

@@ -176,6 +176,7 @@ extern BOOL receiveMessage;
         systemVC.title=dic[@"name"];
         systemVC.themeId=[dic[@"id"] intValue];
         systemVC.themeArr=weakSelf.themeArr;
+        
         [weakSelf.navigationController pushViewController:systemVC animated:YES];
     }];
     
@@ -186,7 +187,7 @@ extern BOOL receiveMessage;
         [weakSelf getNewData];
         
     }];
-    self.tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
+    self.tableView.mj_footer = [MJRefreshAutoFooter footerWithRefreshingBlock:^{//MJRefreshBackFooter
         
         [weakSelf getMoreData];
         
@@ -272,9 +273,11 @@ extern BOOL receiveMessage;
         NSDictionary *dic=weakSelf.themeArr[index];
         //NSLog(@"%@",dic[@"name"]);
         SystemHallViewController *systemVC=[SystemHallViewController new];
-        systemVC.title=dic[@"name"];
+        //systemVC.title=dic[@"name"];
+        systemVC.name=dic[@"name"];
         systemVC.themeId=[dic[@"id"] intValue];
         systemVC.themeArr=weakSelf.themeArr;
+        
         [weakSelf.navigationController pushViewController:systemVC animated:YES];
     }];
     return header;
@@ -300,7 +303,7 @@ extern BOOL receiveMessage;
     HuaShanTitleCell_HallFirst *cell=[tableView dequeueReusableCellWithIdentifier:cellId2];
     if (!cell) {
         cell=[[HuaShanTitleCell_HallFirst alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId2];
-        cell.backgroundColor=kBackgroundColor;
+        cell.backgroundColor=[UIColor whiteColor];
         cell.selectionStyle=UITableViewCellSelectionStyleNone;
     }
     if (self.dataArr.count>0) {
