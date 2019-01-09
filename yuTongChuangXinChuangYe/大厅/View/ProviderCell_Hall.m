@@ -31,7 +31,7 @@
             [self.scrollView addSubview:bgView];
             
             UIImageView *topIV=[[UIImageView alloc]initWithFrame:CGRectMake(12, 20, 80, 40)];
-            [topIV sd_setImageWithURL:[NSURL URLWithString:model.picture] placeholderImage:[UIImage imageNamed:@"entrepreneurship"]];
+            [topIV sd_setImageWithURL:[NSURL URLWithString:model.picture] placeholderImage:[UIImage imageNamed:@"all_nopictures"]];
             topIV.layer.borderWidth=0.5;
             topIV.layer.borderColor=RGBAColor(165, 165, 165, 0.5).CGColor;
             [bgView addSubview:topIV];

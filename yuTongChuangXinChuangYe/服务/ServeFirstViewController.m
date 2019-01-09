@@ -255,17 +255,20 @@ extern BOOL receiveMessage;
             return cell;
         }
         */
-        NSString *cellID1=@"cellIdentifier1";
-        ServeHomeCourseCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID1];
+        NSString *cellID1=@"cellIdentifier2";
+        ServeHomeServiceCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID1];
         if (!cell) {
-            cell=[[ServeHomeCourseCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID1];
+            cell=[[ServeHomeServiceCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID1];
             cell.backgroundColor=[UIColor whiteColor];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
         }
-        cell.courseArr=self.dataArr1;
+        cell.serviceArr=self.dataArr2;
         WS(weakSelf);
-        [cell setSelectAitemBlock:^(NSInteger courseId) {
-            [weakSelf gotoDetailWith:(int)courseId];
+        [cell setSelectAitemBlock:^(NSInteger providerId) {
+            ServerDetailViewController *detailVC=[ServerDetailViewController new];
+            
+            detailVC.providerId=providerId;
+            [weakSelf.navigationController pushViewController:detailVC animated:YES];
         }];
         return cell;
     }else{
@@ -303,22 +306,20 @@ extern BOOL receiveMessage;
             return cell;
         }
         */
-        NSString *cellID1=@"cellIdentifier2";
-        ServeHomeServiceCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID1];
+        NSString *cellID1=@"cellIdentifier1";
+        ServeHomeCourseCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID1];
         if (!cell) {
-            cell=[[ServeHomeServiceCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID1];
+            cell=[[ServeHomeCourseCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID1];
             cell.backgroundColor=[UIColor whiteColor];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
         }
-        cell.serviceArr=self.dataArr2;
+        cell.courseArr=self.dataArr1;
         WS(weakSelf);
-        [cell setSelectAitemBlock:^(NSInteger providerId) {
-            ServerDetailViewController *detailVC=[ServerDetailViewController new];
-            
-            detailVC.providerId=providerId;
-            [weakSelf.navigationController pushViewController:detailVC animated:YES];
+        [cell setSelectAitemBlock:^(NSInteger courseId) {
+            [weakSelf gotoDetailWith:(int)courseId];
         }];
         return cell;
+        
     }
     
 }
@@ -347,9 +348,10 @@ extern BOOL receiveMessage;
     CGFloat height2=(width*150/325+25);
     
     if (indexPath.section==0) {
-        return 2*height1+30;
-    }else{
         return 2*height2+40;
+    }else{
+        return 2*height1+30;
+        
     }
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -368,9 +370,9 @@ extern BOOL receiveMessage;
     label.textAlignment=NSTextAlignmentCenter;
     label.textColor=RGBAColor(102, 102, 102, 1);
     if (section==0) {
-        label.text=@"明星课程";
+        label.text=@"热门资源";
     }else{
-        label.text=@"热门服务";
+        label.text=@"明星课程";
     }
     return label;
 }

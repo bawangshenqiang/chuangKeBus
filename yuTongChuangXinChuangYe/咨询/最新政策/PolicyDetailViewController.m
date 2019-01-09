@@ -104,6 +104,7 @@
     [self.bottomView.praiseBtn setImage:[UIImage imageNamed:@"systemhall_collect"] forState:UIControlStateNormal];
     [self.bottomView.praiseBtn setImage:[UIImage imageNamed:@"systemhall_collect_nor"] forState:UIControlStateSelected];
     self.bottomView.interestBtn.hidden=YES;
+    self.bottomView.interestLab.hidden=YES;
     [self.view addSubview:self.bottomView];
     WS(weakSelf);
     //实际是收藏按钮
@@ -118,7 +119,7 @@
     }];
     
     [self.bottomView setSharedBtnBlock:^{
-        weakSelf.sharedView=[[CustomSharedView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight/3)];
+        weakSelf.sharedView=[[CustomSharedView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight/4)];
         weakSelf.sharedView.url=weakSelf.shareUrl;
         weakSelf.sharedView.title=weakSelf.shareTitle;
         weakSelf.sharedView.content=weakSelf.shareContent;

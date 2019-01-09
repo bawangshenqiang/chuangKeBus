@@ -19,6 +19,7 @@
         self.job=dic[@"job"];
         self.status=dic[@"status"];
         self.note=dic[@"note"];
+        self.url=dic[@"url"];
     }
     return self;
 }

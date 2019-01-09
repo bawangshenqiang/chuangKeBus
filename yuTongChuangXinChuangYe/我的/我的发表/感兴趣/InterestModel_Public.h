@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *descriptions;//个人简介
 @property(nonatomic,strong)NSString *create_time;
 @property(nonatomic,assign)BOOL showAll;
+@property (nonatomic, assign, readonly) BOOL shouldShowMoreButton;
+
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 @end
 

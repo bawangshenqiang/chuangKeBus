@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)UILabel *interestLab;
 @property(nonatomic,strong)UIButton *sharedBtn;
 @property(nonatomic,copy)void (^sharedBtnBlock)(void);
+
 @end
 
 NS_ASSUME_NONNULL_END

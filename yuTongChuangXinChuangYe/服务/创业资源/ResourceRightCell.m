@@ -19,7 +19,7 @@
 }
 -(void)setModel:(ResourceRightModel *)model{
     _model=model;
-    [self.leftIV sd_setImageWithURL:[NSURL URLWithString:_model.logo] placeholderImage:[UIImage imageNamed:@"entrepreneurship"]];
+    [self.leftIV sd_setImageWithURL:[NSURL URLWithString:_model.logo] placeholderImage:[UIImage imageNamed:@"all_nopictures"]];
     self.titleLab.text=_model.title;
     self.subTitleLab.text=_model.descriptions;
 }

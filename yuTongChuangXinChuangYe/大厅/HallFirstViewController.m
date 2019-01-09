@@ -40,6 +40,10 @@
 #import "ProviderCell_Hall.h"
 #import "Hall_CreativityListCell.h"
 
+#import "BusinessHotViewController.h"
+#import "BusinessCourseViewController.h"
+#import "GotoSearchThreeViewController.h"
+
 BOOL receiveMessage;
 
 @interface HallFirstViewController ()<UITableViewDelegate,UITableViewDataSource,SDCycleScrollViewDelegate>
@@ -285,7 +289,7 @@ BOOL receiveMessage;
     return self.header;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 5;
+    return 4;//5;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
 //    if (section==0) {
@@ -456,6 +460,7 @@ BOOL receiveMessage;
 //                cell.model_starProject=self.starProjectData[indexPath.row];
 //            }
 //            return cell;
+            /**
             static NSString *cellId=@"cellIdentifier4";
             ProviderCell_Hall *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
             if (!cell) {
@@ -476,6 +481,7 @@ BOOL receiveMessage;
                 [weakSelf.navigationController pushViewController:detailVC animated:YES];
             }];
             return cell;
+            */
         }
             break;
     }
@@ -503,9 +509,11 @@ BOOL receiveMessage;
         return 60;
     }else if (indexPath.section==2){
         return 179;
-    }else if (indexPath.section==4){
-        return 140;
-    }else if (indexPath.section==1){
+    }
+//    else if (indexPath.section==4){
+//        return 140;
+//    }
+    else if (indexPath.section==1){
         return 115;
     }else{
         return 100;
@@ -521,12 +529,39 @@ BOOL receiveMessage;
             header=[[SectionHeader_HallSecond alloc]initWithReuseIdentifier:@"header"];
         }
         //NSArray *images=@[@"hall_hottest",@"hall_forum",@"hall_star"];
-        NSArray *titles=@[@"行业热点",@"课程",@"明星项目",@"服务商"];//@[@"今日最热",@"华山论剑",@"明星项目"];
+        NSArray *titles=@[@"行业热点",@"课程",@"明星项目"];//,@"服务商"//@[@"今日最热",@"华山论剑",@"明星项目"];
         //header.leftIV.image=[UIImage imageNamed:images[section-1]];
         header.titleLab.text=titles[section-1];
+        WS(weakSelf);
+        [header setMoreBtnBlock:^{
+            [weakSelf jumpToListWith:section-1];
+        }];
         return header;
     }
     
+}
+-(void)jumpToListWith:(NSInteger)index{
+    switch (index) {
+        case 0:
+        {
+            BusinessHotViewController *listVC=[BusinessHotViewController new];
+            [self.navigationController pushViewController:listVC animated:YES];
+        }
+            break;
+        case 1:
+        {
+            BusinessCourseViewController *listVC=[BusinessCourseViewController new];
+            [self.navigationController pushViewController:listVC animated:YES];
+        }
+            break;
+        default:
+        {
+            GotoSearchThreeViewController *listVC=[GotoSearchThreeViewController new];
+            listVC.index=1;
+            [self.navigationController pushViewController:listVC animated:YES];
+        }
+            break;
+    }
 }
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
     view.tintColor=kBackgroundColor;

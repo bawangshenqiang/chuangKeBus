@@ -673,9 +673,11 @@
     return nil;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([self.module isEqualToString:@"行业热点"]||[self.module isEqualToString:@"创新宇通"]||[self.module isEqualToString:@"创意"]||[self.module isEqualToString:@"项目"]||[self.module isEqualToString:@"创业课程"]) {
-        return 100;
-    }else if ([self.module isEqualToString:@"政策"]||[self.module isEqualToString:@"团队"]){
+    if ([self.module isEqualToString:@"行业热点"]||[self.module isEqualToString:@"创新宇通"]||[self.module isEqualToString:@"创意"]||[self.module isEqualToString:@"项目"]) {
+        return 115;//100;
+    }else if ([self.module isEqualToString:@"政策"]||[self.module isEqualToString:@"创业课程"]){
+        return 100;//75;
+    }else if ([self.module isEqualToString:@"团队"]){
         return 75;
     }else if ([self.module isEqualToString:@"服务商"]){
         return 85;

@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *linker;
 @property(nonatomic,strong)NSString *linkphone;
 @property(nonatomic,assign)BOOL showAll;
+@property (nonatomic, assign, readonly) BOOL shouldShowMoreButton;
+
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 @end
 

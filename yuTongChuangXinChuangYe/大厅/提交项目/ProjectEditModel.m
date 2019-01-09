@@ -24,6 +24,8 @@
         
         self.status=[dic[@"status"] intValue];
         self.username=dic[@"username"];
+        self.planfile=dic[@"planfile"];
+        self.planname=dic[@"planname"];
     }
     return self;
 }

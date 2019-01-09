@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *linkphone;
 @property(nonatomic,assign)int status;
 @property(nonatomic,strong)NSString *username;
+@property(nonatomic,strong)NSString *planfile;
+@property(nonatomic,strong)NSString *planname;
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 @end
 

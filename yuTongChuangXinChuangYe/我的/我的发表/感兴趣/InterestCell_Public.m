@@ -7,6 +7,7 @@
 //
 
 #import "InterestCell_Public.h"
+CGFloat maxContentLabelHeight2 = 0;
 
 @implementation InterestCell_Public
 
@@ -18,23 +19,40 @@
     self.position.text=_model.job;
     self.userinfo.text=_model.descriptions;
     
-    if (_model.showAll) {
-        self.allBtn.selected=YES;
-        self.userinfo.sd_resetLayout
-        .leftSpaceToView(self.contentView, 39)
-        .topSpaceToView(self.position, 53)
-        .rightSpaceToView(self.contentView, 12)
-        .autoHeightRatio(0);
-        [self.userinfo setMaxNumberOfLinesToShow:0];
+    if (_model.shouldShowMoreButton) {
+        self.allBtn.sd_layout.heightIs(15);
+        self.allBtn.hidden=NO;
+        if (_model.showAll) {
+            [self.allBtn setTitle:@"收起" forState:UIControlStateNormal];
+            self.userinfo.sd_layout.maxHeightIs(MAXFLOAT);
+            
+        }else{
+            [self.allBtn setTitle:@"全部" forState:UIControlStateNormal];
+            self.userinfo.sd_layout.maxHeightIs(maxContentLabelHeight2);
+        }
+        
     }else{
-        self.allBtn.selected=NO;
-        self.userinfo.sd_resetLayout
-        .leftSpaceToView(self.contentView, 39)
-        .topSpaceToView(self.position, 53)
-        .rightSpaceToView(self.contentView, 12)
-        .autoHeightRatio(0);
-        [self.userinfo setMaxNumberOfLinesToShow:3];
+        self.allBtn.sd_layout.heightIs(0);
+        self.allBtn.hidden=YES;
+        
     }
+//    if (_model.showAll) {
+//        self.allBtn.selected=YES;
+//        self.userinfo.sd_resetLayout
+//        .leftSpaceToView(self.contentView, 39)
+//        .topSpaceToView(self.position, 53)
+//        .rightSpaceToView(self.contentView, 12)
+//        .autoHeightRatio(0);
+//        [self.userinfo setMaxNumberOfLinesToShow:0];
+//    }else{
+//        self.allBtn.selected=NO;
+//        self.userinfo.sd_resetLayout
+//        .leftSpaceToView(self.contentView, 39)
+//        .topSpaceToView(self.position, 53)
+//        .rightSpaceToView(self.contentView, 12)
+//        .autoHeightRatio(0);
+//        [self.userinfo setMaxNumberOfLinesToShow:3];
+//    }
     
     [self setupAutoHeightWithBottomView:self.separater bottomMargin:0];
 }
@@ -93,27 +111,32 @@
         self.userinfo.textColor=RGBAColor(51, 51, 51, 1);
         self.userinfo.numberOfLines=0;
         [self.contentView addSubview:self.userinfo];
+        if (maxContentLabelHeight2 == 0) {
+            maxContentLabelHeight2 = self.userinfo.font.lineHeight * 3;
+        }
+        
         self.userinfo.sd_layout
         .leftSpaceToView(self.contentView, 39)
         .topSpaceToView(lab2, 18)
         .rightSpaceToView(self.contentView, 12)
         .autoHeightRatio(0);
-        [self.userinfo setMaxNumberOfLinesToShow:3];
+        //[self.userinfo setMaxNumberOfLinesToShow:3];
         //
         self.allBtn=[UIButton buttonWithType:UIButtonTypeCustom];
         [self.allBtn setTitle:@"全部" forState:UIControlStateNormal];
         [self.allBtn setTitleColor:kThemeColor forState:UIControlStateNormal];
-        [self.allBtn setTitle:@"收起" forState:UIControlStateSelected];
-        [self.allBtn setTitleColor:kThemeColor forState:UIControlStateSelected];
-        self.allBtn.selected=NO;
+//        [self.allBtn setTitle:@"收起" forState:UIControlStateSelected];
+//        [self.allBtn setTitleColor:kThemeColor forState:UIControlStateSelected];
+//        self.allBtn.selected=NO;
         self.allBtn.titleLabel.font=[UIFont systemFontOfSize:14];
         [self.allBtn addTarget:self action:@selector(allBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.allBtn];
         //
         self.allBtn.sd_layout
         .rightEqualToView(self.userinfo)
-        .topSpaceToView(self.userinfo, 5);
-        [self.allBtn setupAutoSizeWithHorizontalPadding:0 buttonHeight:15];
+        .topSpaceToView(self.userinfo, 5)
+        .widthIs(30);
+        //[self.allBtn setupAutoSizeWithHorizontalPadding:0 buttonHeight:15];
         //
         self.separater=[[UIView alloc]init];
         self.separater.backgroundColor=kBackgroundColor;

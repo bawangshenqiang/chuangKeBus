@@ -17,6 +17,7 @@
         self.Id=[dic[@"id"] intValue];
         self.create_time=dic[@"create_time"];
         self.descriptions=dic[@"description"];
+        self.url=dic[@"url"];
     }
     return self;
 }

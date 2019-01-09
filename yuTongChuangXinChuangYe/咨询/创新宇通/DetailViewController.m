@@ -84,7 +84,7 @@
 }
 //分享
 -(void)rightBarClick{
-    self.sharedView=[[CustomSharedView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight/3)];
+    self.sharedView=[[CustomSharedView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight/4)];
     self.sharedView.url=self.shareUrl;
     self.sharedView.title=self.shareTitle;
     self.sharedView.content=self.shareContent;

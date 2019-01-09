@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSString *create_time;
 @property(nonatomic,strong)NSString *status;
 @property(nonatomic,strong)NSString *note;
+@property(nonatomic,strong)NSString *url;
+
 -(instancetype)initWithDictionary:(NSDictionary *)dic;
 @end
 

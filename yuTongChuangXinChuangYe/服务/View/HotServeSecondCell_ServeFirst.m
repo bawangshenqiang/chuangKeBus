@@ -23,7 +23,7 @@
     _model=model;
     self.outBig.backgroundColor=[UIColor whiteColor];
     self.leftIV.frame=CGRectMake(10, 10, 120, 60);
-    [self.leftIV sd_setImageWithURL:[NSURL URLWithString:_model.picture] placeholderImage:[UIImage imageNamed:@"entrepreneurship"]];
+    [self.leftIV sd_setImageWithURL:[NSURL URLWithString:_model.picture] placeholderImage:[UIImage imageNamed:@"all_nopictures"]];
     self.topLab.text=_model.title;
     self.bottomLab.text=_model.descripetions;
 }
@@ -31,7 +31,7 @@
     _hallModel=hallModel;
     self.outBig.backgroundColor=[UIColor whiteColor];
     self.leftIV.frame=CGRectMake(10, 5, 110, 70);
-    [self.leftIV sd_setImageWithURL:[NSURL URLWithString:_hallModel.cover] placeholderImage:[UIImage imageNamed:@"entrepreneurship"]];
+    [self.leftIV sd_setImageWithURL:[NSURL URLWithString:_hallModel.cover] placeholderImage:[UIImage imageNamed:@"all_nopictures"]];
     self.topLab.text=_hallModel.title;
     self.bottomLab.text=_hallModel.descriptions;
 }

@@ -87,12 +87,16 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
             NSLog(@"%@",[SJTool logDic:dic]);
             if ([dic[@"code"] intValue]==200) {
                 self.model=[[ProjectEditModel alloc]initWithDictionary:dic[@"data"]];
-                [self.tableView reloadData];
+                
                 self.content=self.model.content;
                 self.catogaryID=self.model.categoryId;
                 self.status=self.model.status;
                 self.username=self.model.username;
                 self.intro=self.model.descriptions;
+                self.planname=self.model.planname;
+                self.planfile=self.model.planfile;
+                
+                [self.tableView reloadData];
             }else{
                 [SJTool showAlertWithText:dic[@"msg"]];
             }
@@ -212,6 +216,7 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
     photo=[NSString stringWithFormat:@"data@image/jpg;base64,%@",photo];
     
     NSDictionary *param=@{@"id":@(self.projectId),@"user_token":user_token,@"title":cell0.textField.text,@"description":self.intro,@"content":self.content,@"appeal":cell2.textField.text,@"categoryId":@(self.catogaryID),@"cover":photo,@"linker":cell1_0.textField.text,@"linkphone":cell1_1.textField.text,@"planname":self.planname,@"planfile":self.planfile,@"status":@(self.status),@"username":self.username};
+    NSLog(@"param===%@",param);
     [TDHttpTools submitProjectWithParams:param success:^(id response) {
         NSDictionary *dic=[SJTool dictionaryWithResponse:response];
         NSLog(@"%@",[SJTool logDic:dic]);
@@ -454,6 +459,8 @@ typedef NS_ENUM(NSInteger,ChosePhotoType) {
             cell.textLabel.text=@"商业计划书";
             if (!self.planname.length) {
                 cell.detailTextLabel.text=@"未上传";
+            }else{
+                cell.detailTextLabel.text=self.planname;
             }
             
             cell.textLabel.font=[UIFont systemFontOfSize:16];

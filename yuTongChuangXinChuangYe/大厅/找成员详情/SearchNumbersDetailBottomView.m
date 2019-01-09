@@ -16,7 +16,7 @@
         self.backgroundColor=kBackgroundColor;
         //
         self.praiseBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-        self.praiseBtn.frame=CGRectMake((kScreenWidth-3*30)/4, 10, 30, 30);
+        self.praiseBtn.frame=CGRectMake(kScreenWidth/6-20, 10, 30, 30);//(kScreenWidth-3*30)/4
         [self.praiseBtn setImage:[UIImage imageNamed:@"project_snap"] forState:UIControlStateNormal];
         [self.praiseBtn setImage:[UIImage imageNamed:@"project_snap_nor"] forState:UIControlStateSelected];
         [self.praiseBtn addTarget:self action:@selector(praiseBtnClick) forControlEvents:UIControlEventTouchUpInside];
@@ -29,19 +29,20 @@
         [self addSubview:self.countLab];
         //
         self.interestBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-        self.interestBtn.frame=CGRectMake(self.praiseBtn.right+(kScreenWidth-3*30)/4, 10, 30, 30);
+        self.interestBtn.frame=CGRectMake(kScreenWidth/2-40, 10, 30, 30);//self.praiseBtn.right+(kScreenWidth-3*30)/4-20
         [self.interestBtn setImage:[UIImage imageNamed:@"member_beinterestedin"] forState:UIControlStateNormal];
         [self.interestBtn setImage:[UIImage imageNamed:@"member_beinterestedin_nor"] forState:UIControlStateSelected];
         [self.interestBtn addTarget:self action:@selector(interestBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.interestBtn];
         //
-        self.interestLab=[[UILabel alloc]initWithFrame:CGRectMake(self.interestBtn.right, 10, 60, 30)];
+        self.interestLab=[[UILabel alloc]initWithFrame:CGRectMake(self.interestBtn.right, 10, 50, 30)];
         self.interestLab.font=[UIFont systemFontOfSize:12];
         self.interestLab.textColor=kThemeColor;
         [self addSubview:self.interestLab];
+        self.interestLab.text=@"感兴趣";
         //
         self.sharedBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-        self.sharedBtn.frame=CGRectMake(self.interestBtn.right+(kScreenWidth-3*30)/4, 10, 30, 30);
+        self.sharedBtn.frame=CGRectMake(kScreenWidth*5/6-20, 10, 30, 30);//self.interestBtn.right+(kScreenWidth-3*30)/4
         [self.sharedBtn setImage:[UIImage imageNamed:@"project_reposter"] forState:UIControlStateNormal];
         [self.sharedBtn addTarget:self action:@selector(sharedBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.sharedBtn];
@@ -61,6 +62,7 @@
     //self.interestBtn.selected=!self.interestBtn.isSelected;
     //已经感兴趣的不能再次取消感兴趣
     if (self.interestBtn.isSelected==YES) {
+        [SJTool showAlertWithText:@"不能取消感兴趣"];
         return;
     }
     if (self.interestBtnBlock) {

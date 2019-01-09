@@ -7,8 +7,14 @@
 //
 
 #import "CaredNumberListModel.h"
+extern const CGFloat contentLabelFontSize;
+extern CGFloat maxContentLabelHeight;
 
 @implementation CaredNumberListModel
+{
+    CGFloat _lastContentWidth;
+}
+
 -(instancetype)initWithDictionary:(NSDictionary *)dic{
     if (self=[super init]) {
         self.Id=[dic[@"id"] intValue];
@@ -21,4 +27,25 @@
     }
     return self;
 }
+@synthesize descriptions = _descriptions;
+
+-(void)setDescriptions:(NSString *)descriptions{
+    _descriptions=descriptions;
+}
+-(NSString *)descriptions{
+    
+    CGFloat contentW = kScreenWidth-51;
+    if (contentW != _lastContentWidth) {
+        _lastContentWidth = contentW;
+        CGRect textRect = [_descriptions boundingRectWithSize:CGSizeMake(contentW, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:contentLabelFontSize]} context:nil];
+        if (textRect.size.height > maxContentLabelHeight) {
+            _shouldShowMoreButton = YES;
+        } else {
+            _shouldShowMoreButton = NO;
+        }
+    }
+    return _descriptions;
+}
+
+
 @end

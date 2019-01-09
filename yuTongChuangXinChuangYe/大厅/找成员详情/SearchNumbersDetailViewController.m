@@ -69,7 +69,7 @@
             self.cared=[dic[@"data"][@"cared"] boolValue];
             [self.bottomView.interestBtn setSelected:self.cared];
             self.cares=[dic[@"data"][@"cares"] intValue];
-            self.bottomView.interestLab.text=[NSString stringWithFormat:@"%d",self.cares];
+            //self.bottomView.interestLab.text=[NSString stringWithFormat:@"%d",self.cares];
             self.editable=[dic[@"data"][@"editable"] boolValue];
             if (self.editable) {
                 self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"修改" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarClick)];
@@ -148,8 +148,8 @@
             [caredVC setCallBackBlock:^{
                 if (weakSelf.bottomView.interestBtn.isSelected==NO) {
                     weakSelf.bottomView.interestBtn.selected=YES;
-                    int count=[weakSelf.bottomView.interestLab.text intValue];
-                    weakSelf.bottomView.interestLab.text=[NSString stringWithFormat:@"%d",count+1];
+                    //int count=[weakSelf.bottomView.interestLab.text intValue];
+                    //weakSelf.bottomView.interestLab.text=[NSString stringWithFormat:@"%d",count+1];
                 }
             }];
             [weakSelf presentViewController:navi animated:YES completion:nil];
@@ -157,7 +157,7 @@
         }
     }];
     [self.bottomView setSharedBtnBlock:^{
-        weakSelf.sharedView=[[CustomSharedView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight/3)];
+        weakSelf.sharedView=[[CustomSharedView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight/4)];
         weakSelf.sharedView.url=weakSelf.shareUrl;
         weakSelf.sharedView.title=weakSelf.shareTitle;
         weakSelf.sharedView.content=weakSelf.shareContent;

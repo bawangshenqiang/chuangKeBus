@@ -24,8 +24,23 @@
         [self.titleLab setSingleLineAutoResizeWithMaxWidth:100];
         //
         //加一个更多的按钮
+        UIButton *more=[UIButton buttonWithType:UIButtonTypeCustom];
+        [more setTitle:@"更多" forState:UIControlStateNormal];
+        [more setTitleColor:kThemeColor forState:UIControlStateNormal];
+        more.titleLabel.font=[UIFont systemFontOfSize:13];
+        [more addTarget:self action:@selector(moreClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.contentView addSubview:more];
+        more.sd_layout
+        .rightSpaceToView(self.contentView, 12)
+        .centerYEqualToView(self.titleLab);
+        [more setupAutoSizeWithHorizontalPadding:0 buttonHeight:20];
     }
     return self;
+}
+-(void)moreClick{
+    if (self.moreBtnBlock) {
+        self.moreBtnBlock();
+    }
 }
 /*
 // Only override drawRect: if you perform custom drawing.

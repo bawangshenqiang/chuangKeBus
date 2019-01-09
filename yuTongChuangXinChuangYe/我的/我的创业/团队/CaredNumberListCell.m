@@ -8,6 +8,9 @@
 
 #import "CaredNumberListCell.h"
 
+const CGFloat contentLabelFontSize = 14;
+CGFloat maxContentLabelHeight = 0; // 根据具体font而定
+
 @implementation CaredNumberListCell
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
@@ -67,31 +70,35 @@
         [self.contentView addSubview:lab2];
         //
         self.userinfo=[[UILabel alloc]init];
-        self.userinfo.font=[UIFont systemFontOfSize:14];
+        self.userinfo.font=[UIFont systemFontOfSize:contentLabelFontSize];
         self.userinfo.textColor=RGBAColor(51, 51, 51, 1);
         self.userinfo.numberOfLines=0;
         [self.contentView addSubview:self.userinfo];
+        if (maxContentLabelHeight == 0) {
+            maxContentLabelHeight = self.userinfo.font.lineHeight * 3;
+        }
         self.userinfo.sd_layout
         .leftSpaceToView(self.contentView, 39)
         .topSpaceToView(lab2, 18)
         .rightSpaceToView(self.contentView, 12)
         .autoHeightRatio(0);
-        [self.userinfo setMaxNumberOfLinesToShow:3];
+        //[self.userinfo setMaxNumberOfLinesToShow:3];
         //
         self.allBtn=[UIButton buttonWithType:UIButtonTypeCustom];
         [self.allBtn setTitle:@"全部" forState:UIControlStateNormal];
         [self.allBtn setTitleColor:kThemeColor forState:UIControlStateNormal];
-        [self.allBtn setTitle:@"收起" forState:UIControlStateSelected];
-        [self.allBtn setTitleColor:kThemeColor forState:UIControlStateSelected];
-        self.allBtn.selected=NO;
+        //[self.allBtn setTitle:@"收起" forState:UIControlStateSelected];
+        //[self.allBtn setTitleColor:kThemeColor forState:UIControlStateSelected];
+        //self.allBtn.selected=NO;
         self.allBtn.titleLabel.font=[UIFont systemFontOfSize:14];
         [self.allBtn addTarget:self action:@selector(allBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.allBtn];
         //
         self.allBtn.sd_layout
         .rightEqualToView(self.userinfo)
-        .topSpaceToView(self.userinfo, 5);
-        [self.allBtn setupAutoSizeWithHorizontalPadding:0 buttonHeight:15];
+        .topSpaceToView(self.userinfo, 5)
+        .widthIs(30);
+        //[self.allBtn setupAutoSizeWithHorizontalPadding:0 buttonHeight:15];
     }
     return self;
 }
@@ -111,25 +118,43 @@
     self.timeLab.text=_model.create_time;
     self.position.text=_model.job;
     self.userinfo.text=_model.descriptions;
-    if (_model.showAll) {
-        self.allBtn.selected=YES;
-        self.userinfo.sd_resetLayout
-        .leftSpaceToView(self.contentView, 39)
-        .topSpaceToView(self.position, 53)
-        .rightSpaceToView(self.contentView, 12)
-        .autoHeightRatio(0);
-        [self.userinfo setMaxNumberOfLinesToShow:0];
-    }else{
-        self.allBtn.selected=NO;
-        self.userinfo.sd_resetLayout
-        .leftSpaceToView(self.contentView, 39)
-        .topSpaceToView(self.position, 53)
-        .rightSpaceToView(self.contentView, 12)
-        .autoHeightRatio(0);
-        [self.userinfo setMaxNumberOfLinesToShow:3];
-    }
     
-    [self setupAutoHeightWithBottomView:self.allBtn bottomMargin:10];
+    if (_model.shouldShowMoreButton) {
+        self.allBtn.sd_layout.heightIs(15);
+        self.allBtn.hidden=NO;
+        if (_model.showAll) {
+            [self.allBtn setTitle:@"收起" forState:UIControlStateNormal];
+            self.userinfo.sd_layout.maxHeightIs(MAXFLOAT);
+            
+        }else{
+            [self.allBtn setTitle:@"全部" forState:UIControlStateNormal];
+            self.userinfo.sd_layout.maxHeightIs(maxContentLabelHeight);
+        }
+        [self setupAutoHeightWithBottomView:self.allBtn bottomMargin:10];
+    }else{
+        self.allBtn.sd_layout.heightIs(0);
+        self.allBtn.hidden=YES;
+        [self setupAutoHeightWithBottomView:self.userinfo bottomMargin:10];
+    }
+//    if (_model.showAll) {
+//        self.allBtn.selected=YES;
+//        self.userinfo.sd_resetLayout
+//        .leftSpaceToView(self.contentView, 39)
+//        .topSpaceToView(self.position, 53)
+//        .rightSpaceToView(self.contentView, 12)
+//        .autoHeightRatio(0);
+//        [self.userinfo setMaxNumberOfLinesToShow:0];
+//    }else{
+//        self.allBtn.selected=NO;
+//        self.userinfo.sd_resetLayout
+//        .leftSpaceToView(self.contentView, 39)
+//        .topSpaceToView(self.position, 53)
+//        .rightSpaceToView(self.contentView, 12)
+//        .autoHeightRatio(0);
+//        [self.userinfo setMaxNumberOfLinesToShow:3];
+//    }
+    
+    //[self setupAutoHeightWithBottomView:self.allBtn bottomMargin:10];
 }
 -(void)teleBtnClick{
     if (self.teleBtnBlock) {

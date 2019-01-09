@@ -31,7 +31,9 @@
  */
 +(void)requestWithMethodType:(RequestMethodType)methodType Url:(NSString *)urlString params:(id)params success:(void (^)(id response))success failure:(void (^)(NSError *error))failure{
     
-    [SVProgressHUD showWithStatus:@""];
+    
+    [SVProgressHUD show];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeNone];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     

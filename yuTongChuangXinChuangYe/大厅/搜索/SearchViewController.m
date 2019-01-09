@@ -462,14 +462,14 @@ static NSString *const HistoryCellID = @"HistoryCellID";
         [searTXT addObject:seaTxt];
     }
     
-    if(searTXT.count > 15)
+    if(searTXT.count > 10)
     {
         [searTXT removeObjectAtIndex:0];
     }
     //将上述数据全部存储到NSUserDefaults中
     self.history=searTXT;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:self.history forKey:@"searchHistory"];
+    
+    [userDefaultes setObject:self.history forKey:@"searchHistory"];
 }
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     

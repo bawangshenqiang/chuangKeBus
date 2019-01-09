@@ -615,7 +615,7 @@ WKNavigationDelegate>
         [weakSelf.bottomView.textView becomeFirstResponder];
     }];
     [header setSharedBtnBlock:^{
-        weakSelf.sharedView=[[CustomSharedView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight/3)];
+        weakSelf.sharedView=[[CustomSharedView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight/4)];
         weakSelf.sharedView.url=weakSelf.shareUrl;
         weakSelf.sharedView.title=weakSelf.shareTitle;
         weakSelf.sharedView.content=weakSelf.shareContent;

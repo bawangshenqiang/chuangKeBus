@@ -15,6 +15,8 @@
 #import "MyInfoViewController.h"
 #import "RDVTabBarItem.h"
 
+#import "LLFullScreenAdView.h"
+
 #import <AVFoundation/AVFoundation.h>
 
 #import "lzhThirdPartLoginClass.h"
@@ -45,6 +47,16 @@ static BOOL isProduction = NO;//YES//NO
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self setupViewControllers];
+    [self.window makeKeyAndVisible];
+    
+    [self addADView];       // 添加广告图
+    [self getADImageURL];
+    
+    //
+    [self customNaviBar];
     
     if (@available(iOS 11.0, *)) {
         UITableView.appearance.estimatedRowHeight = 0;
@@ -121,16 +133,63 @@ static BOOL isProduction = NO;//YES//NO
             
         }
     }
-    //
-    [self customNaviBar];
     
-    [self setupViewControllers];
+    
+    
     
     
     [lzhThirdPartLoginClass initThirdPartyLogin:self];
     
     
     return YES;
+}
+/** 添加广告图 */
+- (void)addADView
+{
+    LLFullScreenAdView *adView = [[LLFullScreenAdView alloc] init];
+    adView.tag = 10;
+    adView.duration = 3;
+    adView.waitTime = 3;//经测试，此处的时间需要大于网络请求的时间，否则广告页不显示
+    adView.skipType = SkipButtonTypeCircleAnimationTest;//圆形的动画跳过
+    adView.adImageTapBlock = ^(NSString *content) {
+        NSLog(@"%@", content);
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.baidu.com"]];
+    };
+    
+    [self.window addSubview:adView];
+}
+
+/** 获取广告图URL */
+- (void)getADImageURL
+{
+    // 此处推荐使用tag来获取adView，勿使用全局变量。因为在AppDelegate中将其设为全局变量时，不会被释放
+    LLFullScreenAdView *adView = (LLFullScreenAdView *)[self.window viewWithTag:10];
+    
+    // 模拟从服务器上获取广告图URL
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        NSString *urlString = @"http://s8.mogucdn.com/p2/170223/28n_4eb3la6b6b0h78c23d2kf65dj1a92_750x1334.jpg";
+        
+        [adView reloadAdImageWithUrl:urlString]; // 加载广告图
+    });
+    /**
+    NSDictionary *param=@{@"module":@"project"};
+    [TDHttpTools getCatogaryWithParams:param success:^(id response) {
+        NSDictionary *dic=[SJTool dictionaryWithResponse:response];
+        NSLog(@"%@",[SJTool logDic:dic]);
+        
+        if ([dic[@"code"] intValue]==200) {
+            NSString *url=dic[@"data"][@"url"];
+            if (url.length) {
+               [adView reloadAdImageWithUrl:url]; // 加载广告图
+            }
+        }else{
+            
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    */
 }
 //9.0前的方法，为了适配低版本 保留
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
@@ -162,6 +221,7 @@ static BOOL isProduction = NO;//YES//NO
 }
 
 -(void)setupViewControllers{
+    
     
     InformationFirstViewController *homeVC=[[InformationFirstViewController alloc]init];
     UINavigationController *homeNavi=[[UINavigationController alloc]initWithRootViewController:homeVC];

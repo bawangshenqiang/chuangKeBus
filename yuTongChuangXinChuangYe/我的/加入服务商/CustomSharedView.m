@@ -73,7 +73,7 @@
     [self dismiss];
     
     //后期换成logo
-    NSString *image=@"http://118.25.54.108:9999/static/upload/image/20180903/2fb7074b-9bf6-4cda-af39-d1ebfdc70f1c.png";
+    NSString *image=@"yutong_logo";
     
     NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
     [shareParams SSDKSetupShareParamsByText:self.content

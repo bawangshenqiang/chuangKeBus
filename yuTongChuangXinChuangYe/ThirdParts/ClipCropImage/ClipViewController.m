@@ -186,7 +186,7 @@ static const CGFloat kClipH = 180;  //裁剪框-高
 #pragma mark - 让图片自适应裁剪框的大小
 -(void)makeImageViewFrameAdaptToClipFrame
 {
-    CGFloat width = _imageView.mj_h ;
+    CGFloat width = _imageView.mj_w ;//原来是_imageView.mj_h
     CGFloat height = _imageView.mj_h;
     if(height < _clipH)
     {
